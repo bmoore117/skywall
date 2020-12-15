@@ -866,6 +866,50 @@
                     "filterMode" : "STANDARD"
                 }
             ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "43d1a87c-c48f-427f-b2d2-bd3ac814cb74",
+            "name" : "Stripe",
+            "hosts" : [
+                {
+                    "host" : "stripe.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "3300e84e-2a04-4652-be97-76246551f3a6",
+            "name" : "Binance",
+            "hosts" : [
+                {
+                    "host" : "binance.us",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "dn-staticdown.qbox.me",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "static.geetest.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "7ffffc4f-a1c4-4ebd-a636-81e8b6864943",
+            "name" : "NC State Government",
+            "hosts" : [
+                {
+                    "host" : "ncdot.gov",
+                    "filterMode" : "STANDARD"
+                }
+            ]
         }
     ],
     "definedPhrases" : [
