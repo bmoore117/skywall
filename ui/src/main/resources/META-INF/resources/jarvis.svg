@@ -1,0 +1,134 @@
+<svg width="300px" height="300px" viewBox="0 0 240 240" version="1.1" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Bottt</title>
+    <desc>Created with botttsgenerator.com</desc>
+    <g id="Bottt" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Circle">
+            <defs>
+                <circle id="Circle-path-1" cx="120" cy="120" r="120"></circle>
+                <path d="M12,160 C12,226.27417 65.72583,280 132,280 C198.27417,280 252,226.27417 252,160 L264,160 L264,-1.42108547e-14 L-3.19744231e-14,-1.42108547e-14 L-3.19744231e-14,160 L12,160 Z"
+                      id="Circle-path-2"></path>
+                <path d="M124,144.610951 L124,163 L128,163 L128,163 C167.764502,163 200,195.235498 200,235 L200,244 L0,244 L0,235 C-4.86974701e-15,195.235498 32.235498,163 72,163 L72,163 L76,163 L76,144.610951 C58.7626345,136.422372 46.3722246,119.687011 44.3051388,99.8812385 C38.4803105,99.0577866 34,94.0521096 34,88 L34,74 C34,68.0540074 38.3245733,63.1180731 44,62.1659169 L44,56 L44,56 C44,25.072054 69.072054,5.68137151e-15 100,0 L100,0 L100,0 C130.927946,-5.68137151e-15 156,25.072054 156,56 L156,62.1659169 C161.675427,63.1180731 166,68.0540074 166,74 L166,88 C166,94.0521096 161.51969,99.0577866 155.694861,99.8812385 C153.627775,119.687011 141.237365,136.422372 124,144.610951 Z"
+                      id="Circle-path-3"></path>
+            </defs>
+            <g>
+                <g id="Circle" stroke-width="1" fill-rule="evenodd">
+                    <mask id="Circle-main-1" fill="white">
+                        <use xlink:href="#Circle-path-1"></use>
+                    </mask>
+                    <use id="Circle-Background" fill="#E6E6E6" xlink:href="#Circle-path-1"></use>
+                    <g id="GrayDark" mask="url(#Circle-main-1)" fill="#424242">
+                        <rect id="🖍Color" x="0" y="0" width="240" height="240"></rect>
+                    </g>
+                </g>
+                <mask id="Circle-main-2" fill="white">
+                    <use xlink:href="#Circle-path-1"></use>
+                </mask>
+                <g id="Bottt" stroke-width="1" fill-rule="evenodd" mask="url(#Circle-main-2)">
+                    <g id="Bottt/Head" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+                       transform="translate(30.000000, 33.000000)">
+                        <g id="Sides" transform="translate(0.000000, 66.000000)">
+                            <g id="Sides/Square" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <path d="M11.5374834,16 L24.4625166,16 C28.4743509,16 29.929139,16.4177153 31.3958057,17.2020972 C32.8624723,17.9864791 34.0135209,19.1375277 34.7979028,20.6041943 C35.5822847,22.070861 36,23.5256491 36,27.5374834 L36,48.4625166 C36,52.4743509 35.5822847,53.929139 34.7979028,55.3958057 C34.0135209,56.8624723 32.8624723,58.0135209 31.3958057,58.7979028 C29.929139,59.5822847 28.4743509,60 24.4625166,60 L11.5374834,60 C7.52564907,60 6.070861,59.5822847 4.60419433,58.7979028 C3.13752767,58.0135209 1.98647908,56.8624723 1.20209717,55.3958057 C0.41771525,53.929139 1.80555915e-16,52.4743509 -3.10752092e-16,48.4625166 L3.10752092e-16,27.5374834 C-1.80555915e-16,23.5256491 0.41771525,22.070861 1.20209717,20.6041943 C1.98647908,19.1375277 3.13752767,17.9864791 4.60419433,17.2020972 C6.070861,16.4177153 7.52564907,16 11.5374834,16 Z M127.537483,16 L140.462517,16 C144.474351,16 145.929139,16.4177153 147.395806,17.2020972 C148.862472,17.9864791 150.013521,19.1375277 150.797903,20.6041943 C151.582285,22.070861 152,23.5256491 152,27.5374834 L152,48.4625166 C152,52.4743509 151.582285,53.929139 150.797903,55.3958057 C150.013521,56.8624723 148.862472,58.0135209 147.395806,58.7979028 C145.929139,59.5822847 144.474351,60 140.462517,60 L127.537483,60 C123.525649,60 122.070861,59.5822847 120.604194,58.7979028 C119.137528,58.0135209 117.986479,56.8624723 117.202097,55.3958057 C116.417715,53.929139 116,52.4743509 116,48.4625166 L116,27.5374834 C116,23.5256491 116.417715,22.070861 117.202097,20.6041943 C117.986479,19.1375277 119.137528,17.9864791 120.604194,17.2020972 C122.070861,16.4177153 123.525649,16 127.537483,16 Z"
+                                      id="Sides/Square-path"></path>
+                                <g id="Ears" transform="translate(14.000000, 0.000000)">
+                                    <mask id="Sides/Square-mask" fill="white">
+                                        <use xlink:href="#Sides/Square-path"></use>
+                                    </mask>
+                                    <use fill="#0076DE" xlink:href="#Sides/Square-path"></use>
+                                    <g id="BlueGrey" mask="url(#Sides/Square-mask)" fill="#607D8B">
+                                        <g transform="translate(-14.000000, 0.000000)">
+                                            <rect x="0" y="0" width="180" height="76"></rect>
+                                        </g>
+                                    </g>
+                                    <rect id="Shadow" fill-opacity="0.1" fill="#000000" mask="url(#Sides/Square-mask)"
+                                          x="-14" y="38" width="180" height="38"></rect>
+                                </g>
+                            </g>
+                        </g>
+                        <g id="Top" transform="translate(41.000000, 0.000000)">
+                            <g id="Top/Antenna" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <path d="M10,31 L10,0 L14,0 L14,31 L22,31 C23.1045695,31 24,31.8954305 24,33 L24,47 L0,47 L0,33 C-1.3527075e-16,31.8954305 0.8954305,31 2,31 L10,31 Z"
+                                      id="Top/Antenna-path"></path>
+                                <g id="Antenna" transform="translate(38.000000, 5.000000)">
+                                    <mask id="Top/Antenna-mask" fill="white">
+                                        <use xlink:href="#Top/Antenna-path"></use>
+                                    </mask>
+                                    <use fill="#E1E6E8" xlink:href="#path-1"></use>
+                                    <g id="Red" mask="url(#Top/Antenna-mask)" fill="#F44336">
+                                        <g transform="translate(-38.000000, -5.000000)">
+                                            <rect x="0" y="0" width="100" height="52"></rect>
+                                        </g>
+                                    </g>
+                                    <rect id="Lite" fill-opacity="0.2" fill="#FFFFFF" mask="url(#mask-2)" x="0" y="31"
+                                          width="24" height="16"></rect>
+                                </g>
+                                <circle id="Beep-Boop" fill="#FFE65C" cx="50" cy="8" r="8"></circle>
+                                <circle id="Beep-Boop" fill="#FFFFFF" cx="53" cy="5" r="3"></circle>
+                            </g>
+                        </g>
+                        <g id="Face" transform="translate(25.000000, 44.000000)">
+                            <g id="Face/Square-03" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <path d="M18,-2.7000624e-13 L112,-2.91322522e-13 C121.941125,-2.93148677e-13 130,8.0588745 130,18 L130,45.1482908 C130,49.6830734 129.22888,54.1848394 127.719613,58.4610955 L110.238555,107.990762 C107.698575,115.187372 100.896418,120 93.2647285,120 L36.7352715,120 C29.1035817,120 22.3014253,115.187372 19.7614455,107.990762 L2.28038666,58.4610955 C0.771119772,54.1848394 1.50531546e-15,49.6830734 -7.10542736e-15,45.1482908 L-9.9475983e-14,18 C-1.18352406e-13,8.0588745 8.0588745,-2.86048235e-13 18,-3.05533376e-13 Z"
+                                      id="Face/Square-03-path-1"></path>
+                                <mask id="Face/Square-03-mask-1" fill="white">
+                                    <use xlink:href="#Face/Square-03-path-1"></use>
+                                </mask>
+                                <use id="Shape" fill="#0076DE" xlink:href="#Face/Square-03-path-1"></use>
+                                <g id="Blue" mask="url(#Face/Square-03-mask-1)" fill="#2196F3">
+                                    <g transform="translate(-2.000000, -2.000000)">
+                                        <rect x="0" y="0" width="134" height="124"></rect>
+                                    </g>
+                                </g>
+                                <g id="Texture/Circuits" mask="url(#Face/Square-03-mask-1)" stroke="none"
+                                   stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <path d="M72.4160437,34 L23,34 L19,34 L19,0 L23,0 L23,30 L72.4160437,30 C73.1876003,28.2340952 74.949681,27 77,27 C79.7614237,27 82,29.2385763 82,32 C82,34.7614237 79.7614237,37 77,37 C74.949681,37 73.1876003,35.7659048 72.4160437,34 Z M11,0 L15,0 L15,18 L11,18 L11,0 Z"
+                                          id="Beep-Boop" fill-opacity="0.1" fill="#000000"></path>
+                                    <path d="M122,34.5839563 L122,60 L141,60 L141,64 L122,64 L118,64 L118,34.5839563 C116.234095,33.8123997 115,32.050319 115,30 C115,27.2385763 117.238576,25 120,25 C122.761424,25 125,27.2385763 125,30 C125,32.050319 123.765905,33.8123997 122,34.5839563 Z"
+                                          id="Beep-Boop" fill-opacity="0.2" fill="#FFFFFF"></path>
+                                    <path d="M114,68 L141,68 L141,72 L114,72 L110,72 L110,46 L114,46 L114,68 Z"
+                                          id="Beep-Boop" fill-opacity="0.2" fill="#000000"></path>
+                                    <path d="M15,103.583956 L15,129 L34,129 L34,133 L15,133 L11,133 L11,103.583956 C9.23409522,102.8124 8,101.050319 8,99 C8,96.2385763 10.2385763,94 13,94 C15.7614237,94 18,96.2385763 18,99 C18,101.050319 16.7659048,102.8124 15,103.583956 Z"
+                                          id="Beep-Boop" fill-opacity="0.2" fill="#000000"
+                                          transform="translate(21.000000, 113.500000) scale(-1, 1) translate(-21.000000, -113.500000) "></path>
+                                </g>
+                            </g>
+                        </g>
+                        <g id="Mouth" transform="translate(52.000000, 124.000000)" >
+                            <g id="Mouth/Grill-03" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect id="Kiss-The-Robot-Beep-Boop" fill-opacity="0.2" fill="#000000" x="4" y="5"
+                                      width="68" height="22" rx="5"></rect>
+                                <rect id="Kiss-The-Robot-Beep-Boop" fill="#FFFFFF" x="8" y="9" width="60" height="14"
+                                      rx="2"></rect>
+                                <rect id="Bender-Teeth" fill-opacity="0.1" fill="#000000" x="18" y="9" width="4"
+                                      height="14"></rect>
+                                <rect id="Bender-Teeth" fill-opacity="0.1" fill="#000000" x="42" y="9" width="4"
+                                      height="14"></rect>
+                                <rect id="Bender-Teeth" fill-opacity="0.1" fill="#000000" x="30" y="9" width="4"
+                                      height="14"></rect>
+                                <rect id="Bender-Teeth" fill-opacity="0.1" fill="#000000" x="54" y="9" width="4"
+                                      height="14"></rect>
+                            </g>
+                        </g>
+                        <g id="Eyes" transform="translate(38.000000, 76.000000)">
+                            <g id="Eyes/Shades" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <path d="M82.8310869,34 C78.274254,34.204594 75.2818899,35.6397034 73.8539945,38.3053279 C72.6354507,40.5801306 70.2641433,41.9999868 67.6835279,41.9999882 L52,42 L36.9013298,41.9999891 C34.0681565,41.9999875 31.4462964,40.5014832 30.0083339,38.0603493 C28.5305922,35.551685 25.5841186,34.1982352 21.1689131,34 L8,34 C3.581722,34 5.41083001e-16,30.418278 0,26 L0,8 C-5.41083001e-16,3.581722 3.581722,8.11624501e-16 8,0 L96,0 C100.418278,-8.11624501e-16 104,3.581722 104,8 L104,26 C104,30.418278 100.418278,34 96,34 L82.8310869,34 Z"
+                                      id="Eyes/Shades-path"></path>
+                                <mask id="Eyes/Shades-mask" fill="white">
+                                    <use xlink:href="#Eyes/Shades-path"></use>
+                                </mask>
+                                <use id="Container" fill-opacity="0.8" fill="#000000"
+                                     xlink:href="#Eyes/Shades-path"></use>
+                                <path d="M74.8310869,24 C70.2742542,24.204594 67.2818901,25.6397032 65.8539947,28.3053276 C64.6854389,30.4868112 62.4567598,31.8820547 60,31.9928601 L60,32 L44.9013298,31.9999891 C42.0681565,31.9999875 39.4462964,30.5014832 38.0083339,28.0603493 C36.5305922,25.551685 33.5841186,24.1982352 29.1689131,24 L17,24 C14.2385763,24 12,21.7614237 12,19 L12,17 C12,14.2385763 14.2385763,12 17,12 L87,12 C89.7614237,12 92,14.2385763 92,17 L92,19 C92,21.7614237 89.7614237,24 87,24 L74.8310869,24 Z"
+                                      id="Aww-Yeahh" fill="#FF3D3D" mask="url(#Eyes/Shades-mask)"></path>
+                                <path d="M39,-4 L50,-4 L30,42 L19,42 L39,-4 Z M28,-4 L32,-4 L12,42 L8,42 L28,-4 Z"
+                                      id="Highlight" fill-opacity="0.2" fill="#FFFFFF"
+                                      mask="url(#Eyes/Shades-mask)"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

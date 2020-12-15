@@ -1,0 +1,48 @@
+For core product, need:
+
+    * whitelisterer - perhaps a containerized environment or something where we can observe all the requests made by navigating to a page, so that everything can be whitelisted in one go.
+        - identify certificate pinning cases
+        - docker is probably the solution here - looks like on linux access requires root or the docker group, like windows. Have a chrome
+          container, use your crawler, visit ~5 pages, get hostnames. Bit more work to check them against certificate pinning.
+        - alternate solution, which also handles certificate pinning, blank logs and pop open website in new tab of current browser. Then gather all hostnames from logs.
+          Methinks this doesn't actually work: by stripping images from that first html response, most filterConfig are lost.
+          Counterpoint: do we actually need to delete img src? the content itself is surely fetched in a separate request, already blocked by the content-type branch.
+          Leave src in place, open site in new window, gather URLs from logs. In this system css parsing listed below shouldn't be needed: the request will simply be observed and gathered
+    * css-parsing - for background-image url detection
+        - make it transitive: get initial whitelisted html or css response, then any linked stylesheet paths get added to dynamically discovered filterConfig, such that any urls in the stylesheets
+          are allowed as well
+    * UI & lifecycle stabilization - what happens to hanging workflows? Are UI lifecycle issues - updating, session cleaning, finally resolved?
+    * base proxy improvements - HTTP/2 connections for google and bing search. Performance in general. Official windows support.
+    * cross-platform support: in theory this should work equally well in any environment, e.g. linux, mac, windows, docker VM, etc.
+    * installer
+    * password recovery - could recommend pluckeye
+    * testing with VPNs and other proxies - do they bypass? Is not having admin good enough?
+        - https://support.microsoft.com/en-gb/help/4019502/how-to-use-the-settings-app-group-policy-on-windows-10 : shows how to block settings app proxies
+        - https://social.technet.microsoft.com/wiki/contents/articles/5156.how-to-force-proxy-settings-via-group-policy.aspx - block IE proxy settings
+        - https://www.experts-exchange.com/questions/28975724/Prevent-users-from-changing-proxy-settings-in-Windows-10-Settings-app-Edge-browser.html - general approach, registry ACL for proxy settings, needed if no admin?
+    * admin mode - can files be hidden if user has admin? Can uninstall be suitably protected?
+    * local group policy and local security policy, and equivalents on other OSes
+    * testing and verification for all the above
+    * direct website blocking - for sites that are too dangerous i.e. disboard for pron use on phone
+    * allow instant ignore-host whitelist if already in standard bypass - allow instant correction of sites protected by certificate pinning.
+
+New prioritized list:
+    whitelisterer
+    blocking
+        - performant approach: tokenize html page, perhaps even to the ngram level, and then do set intersection with block words/phrases
+          https://stackoverflow.com/questions/58238184/fastest-way-to-check-if-a-string-contains-a-string-from-a-list
+    add free ssl bypass / ignored filterConfig whitelisting if already in standard bypass
+
+For full ecosystem, need:
+    * android and iOS equivalents. Some version of an app blocker combined with pluckeye, with delay mechanisms for all.
+
+Then need:
+    * marketing campaign - 4chan, reddit, youtube, etc.
+
+
+The above is a lengthy list - kickstarter?
+
+    if kickstarter, quit job?
+    what about revenue projections?
+    how to run open source project?
+    how to monetize open source project if we decided to run it as one? is monetization possible?

@@ -1,0 +1,6 @@
+under the admin account for filtering, ben-local, use pipx according to this guide:
+https://docs.mitmproxy.org/stable/overview-installation/ - Installation from the Python Package Index (PyPI)
+
+
+run winsw.exe -install
+make sure python is allowed through the firewall - both public and private. Otherwise transparent mode won't work on public networks.

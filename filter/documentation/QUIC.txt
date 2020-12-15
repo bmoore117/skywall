@@ -1,0 +1,3 @@
+Google properties will use QUIC, which is a protocol that is not intercepted by MITM - as bitdefender remarks. Simply create a firewall rule for it, blocking udp ports 80 and 443.
+
+https://www.bitdefender.com/support/how-to-disable-quic-protocol-in-google-chrome-1669.html

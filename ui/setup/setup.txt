@@ -1,0 +1,11 @@
+Copy winsw.exe and winsw.xml to the user folder you have created, preferably ben-local.
+
+.\winsw.exe install
+
+Launch chrome, go to any website (drudgereport). Get stopped by invalid cert, click in address bar and do cert download
+procedure. Install to trusted root.
+
+The deal with certs is mitmproxy generates a new CA on a per-user basis: if you run as LocalSystem, that's one CA, if
+you run as ben-local, that's another.
+
+Just do the normal cert import procedure for the user the service is running as

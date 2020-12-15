@@ -1,0 +1,15 @@
+studies show nofap - that porn harms relationships and more importantly prevents them from forming, keeping us in little artificially calm bubbles.
+it's particularly bad for men. It can cause impotence, and is embarrassing for them to talk about.
+
+There are not really any good products on the market to address it.
+
+Parental control software is not made for adults - not made to self-administer, requires someone else to run it.
+Many folks don't have someone to fill that role, or don't want to have to come out about this to someone, and potentially be made fun of.
+
+Generational perspectives, where older generations don't realize the scale of the issue and don't know how to help.
+
+Most technology approaches are also not sophisticated enough. Simple keyword filtering can never block everything, AI tools are better but few and far between,
+and still are inadequate since almost anything can set off someone's erotic imagination, not just porn.
+
+Something self-administerable is needed, which can block everything. Mitmproxy can do this, and combine it with delay controls and no admin.
+

@@ -1,0 +1,11 @@
+<service>
+	<id>SkyWall Filter</id>
+	<name>SkyWall Filter</name>
+	<description>Delay-based internet filter, based on mitmproxy</description>
+	<executable>powershell</executable>
+	<arguments>-File launchProxy.ps1</arguments>
+	<logpath>C:\Users\Public\Documents\skywall-logs\filter</logpath>
+	<log mode="roll-by-time">
+		<pattern>yyyy-MM-dd</pattern>
+	</log>
+</service>

@@ -1,0 +1,8 @@
+1.  testing framework - spin everything up, assert responses match. Use junit, mock WinUtils, turn it into a spring
+    service if need be. The main focus is to ensure NLP and flow haven't been broken.
+
+2.  show unblocked urls
+
+3.  hall pass
+
+4.  credentials
