@@ -3,4 +3,5 @@ cd .\ui
 
 cd ..\filter
 .\deploy.ps1
+Unblock-File -Path C:\Users\skywall\skywall\launchProxy.ps1
 cd ..
