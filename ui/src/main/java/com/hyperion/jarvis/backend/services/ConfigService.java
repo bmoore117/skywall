@@ -201,7 +201,7 @@ public class ConfigService {
 
     public void writeFilterConfig(FilterConfig filterConfig) {
         try {
-            Files.write(Paths.get(FILTER_CONFIG_LOCATION), mapper.writer(printer)
+            Files.write(Paths.get(FILTER_CONFIG_LOCATION + File.separator + FILTER_FILE_NAME), mapper.writer(printer)
                     .writeValueAsString(filterConfig).getBytes());
         } catch (IOException e) {
             log.error("Error writing config", e);
