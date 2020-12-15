@@ -25,7 +25,7 @@ $onNetworkChange = New-CimInstance -CimClass $networkChangeClass -Property @{ Su
 $restartSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries
 Register-ScheduledTask -Action $restartAction -Trigger $onNetworkChange -TaskName "Restart SkyWall on Network Change" -Principal $principal -Settings $restartSettings
 
-.\buildAndDeploy.ps1
+.\deploy.ps1
 
 cp -Recurse .\ui\data C:\Users\skywall\skywall\
 cp -Recurse .\filter\filter C:\Users\skywall\skywall\
