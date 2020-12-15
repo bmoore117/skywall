@@ -954,8 +954,8 @@
             "phrase" : "goddess ling"
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "DISABLED",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "52730756-6277-48e4-a4a8-f7795cdf58c4",
             "phrase" : "transgender(?!.safespace|bathroom)"
         },
