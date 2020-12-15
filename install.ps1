@@ -1,4 +1,9 @@
-﻿$null = New-Item -Type Directory -Force -Path C:\Users\skywall\skywall
+﻿if ($env:USERNAME -ne "skywall") {
+    Write-Host "Script must be run as skywall user created by createUser.ps1"
+    exit
+}
+
+$null = New-Item -Type Directory -Force -Path C:\Users\skywall\skywall
 
 Write-Host "Copying dist files"
 cp -Recurse .\dist C:\Users\skywall\skywall\
