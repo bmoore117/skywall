@@ -1,6 +1,10 @@
 ﻿Stop-Service -Name "SkyWall UI"
 Stop-Service -Name "SkyWall Filter"
 
+# Remove WinDivert driver
+# https://docs.microsoft.com/en-us/windows-hardware/drivers/ifs/using-an-inf-file-to-uninstall-a-file-system-filter-driver
+Get-CimInstance Win32_SystemDriver -Filter "name='WinDivert1.3'" | Invoke-CimMethod -MethodName Delete
+
 cd C:\Users\skywall\skywall
 .\skywall-ui.exe uninstall
 .\skywall-filter.exe uninstall

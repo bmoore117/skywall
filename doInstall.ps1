@@ -1,5 +1,5 @@
 ﻿if ($env:USERNAME -ne "skywall") {
-    Write-Host "Script must be run as skywall user created by createUser.ps1"
+    Write-Host "Script must be run as skywall user created by createUser.ps1. Start by running install.cmd as admin"
     exit
 }
 
