@@ -54,3 +54,5 @@ while ((Test-Path -Path "C:\WINDOWS\system32\config\systemprofile\.mitmproxy") -
 }
 certutil -addstore root C:\WINDOWS\system32\config\systemprofile\.mitmproxy\mitmproxy-ca-cert.cer
 
+Write-Host "Install completed, exiting in 5 seconds"
+Start-Sleep -Seconds 5
