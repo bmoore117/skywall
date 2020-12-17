@@ -9,4 +9,4 @@ Add-LocalGroupMember -Group "Administrators" -Member "skywall"
 
 $cred = New-Object System.Management.Automation.PSCredential ("skywall", $password)
 $cwd = Get-Location
-Start-Process powershell.exe -WorkingDirectory $cwd -ArgumentList "-File",".\doInstall.ps1"
+Start-Process powershell.exe -WorkingDirectory $cwd.Path -ArgumentList "-File",".\doInstall.ps1" -Credential $cred -Verb RunAs
