@@ -70,8 +70,8 @@ public class MainView extends AppLayout {
         HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "Jarvis logo"));
-        logoLayout.add(new H1("Jarvis"));
+        logoLayout.add(new Image("images/logo.png", "SkyWall logo"));
+        logoLayout.add(new H1("SkyWall"));
         layout.add(logoLayout, menu);
         return layout;
     }
