@@ -3,6 +3,8 @@
     exit
 }
 
+cd C:\Users\Public\skywall
+
 $null = New-Item -Type Directory -Force -Path C:\Users\skywall\skywall
 
 Write-Host "Copying dist files"
