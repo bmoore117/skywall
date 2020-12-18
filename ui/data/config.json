@@ -173,7 +173,7 @@
         },
         {
             "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : null,
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
             "id" : "1d884053-f52c-4b09-a29f-94ef097cdd1f",
             "name" : "General",
             "hosts" : [
@@ -307,6 +307,10 @@
                 },
                 {
                     "host" : "yardhouse.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "wework.com",
                     "filterMode" : "STANDARD"
                 }
             ]
@@ -881,7 +885,7 @@
         },
         {
             "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "lastActivationStatus" : "DISABLED",
             "id" : "3300e84e-2a04-4652-be97-76246551f3a6",
             "name" : "Binance",
             "hosts" : [
@@ -901,13 +905,25 @@
         },
         {
             "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
             "id" : "7ffffc4f-a1c4-4ebd-a636-81e8b6864943",
             "name" : "NC State Government",
             "hosts" : [
                 {
                     "host" : "ncdot.gov",
                     "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "2fe85cfa-68f9-45bd-824c-53c8bde9db94",
+            "name" : "AMD",
+            "hosts" : [
+                {
+                    "host" : "amd.com",
+                    "filterMode" : "PASSTHROUGH"
                 }
             ]
         }

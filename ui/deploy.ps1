@@ -1,6 +1,5 @@
 cp .\dist\SkyWall.jar C:\Users\skywall\skywall\
 cp .\setup\winsw.xml C:\Users\skywall\skywall\skywall-ui.xml
-cp .\setup\winsw.exe C:\Users\skywall\skywall\skywall-ui.exe
 if (Get-Service "SkyWall UI" -ErrorAction SilentlyContinue) {
     cp C:\Users\skywall\skywall\data\config.json .\data\config.json
     cp C:\Users\skywall\skywall\filter\hosts.json ..\filter\filter\hosts.json
