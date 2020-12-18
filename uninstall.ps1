@@ -1,9 +1,8 @@
 ﻿Stop-Service -Name "SkyWall UI"
 Stop-Service -Name "SkyWall Filter"
 
-# Remove WinDivert driver
-# https://docs.microsoft.com/en-us/windows-hardware/drivers/ifs/using-an-inf-file-to-uninstall-a-file-system-filter-driver
-Get-CimInstance Win32_SystemDriver -Filter "name='WinDivert1.3'" | Invoke-CimMethod -MethodName Delete
+# the method used in pydivert - WinDivert is a hidden service that does not show up in services.msc
+sc.exe stop WinDivert1.3
 
 cd C:\Users\skywall\skywall
 .\skywall-ui.exe uninstall
@@ -25,3 +24,5 @@ $path = $path.Replace(";C:\Users\skywall\skywall\dist\Python39\Scripts", "");
 
 Get-ChildItem Cert:\LocalMachine\Root |Where-Object { $_.Subject -match 'mitmproxy' } | Remove-Item
 Remove-Item C:\Windows\System32\config\systemprofile\.mitmproxy\ -Recurse
+
+Write-Host "Uninstall completed successfully"
