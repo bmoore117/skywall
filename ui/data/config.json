@@ -926,6 +926,18 @@
                     "filterMode" : "PASSTHROUGH"
                 }
             ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "8add613b-c658-43d4-90dc-9ad62de7c05b",
+            "name" : "League of Legends",
+            "hosts" : [
+                {
+                    "host" : "leagueoflegends.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
         }
     ],
     "definedPhrases" : [

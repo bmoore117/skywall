@@ -172,7 +172,8 @@
         "lastpass.com",
         "171.162.(.*)",
         "newrelic.com",
-        "riotcdn.net"
+        "riotcdn.net",
+        "leagueoflegends.com"
     ],
     "blockedPhrases" : [
         "ladyboy",
