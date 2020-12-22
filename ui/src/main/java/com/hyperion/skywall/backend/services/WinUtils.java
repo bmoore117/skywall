@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class WinUtils {
@@ -145,6 +148,23 @@ public class WinUtils {
             return Arrays.stream(returnVal.split(",")).map(Double::valueOf).toArray(Double[]::new);
         } else {
             return new Double[0];
+        }
+    }
+
+    public List<String> toggleStrictMode(boolean on, List<String> usersToReEnable) throws IOException, InterruptedException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.directory(new File("scripts"));
+
+        if (on) {
+            builder.command("powershell.exe", "-File", "toggleStrictMode.ps1", "-mode", "on");
+        } else {
+            builder.command("powershell.exe", "-File", "toggleStrictMode.ps1", "-mode", "off", String.join("~,~", usersToReEnable));
+        }
+        String returnVal = runProcForOutput(builder);
+        if (!returnVal.isBlank()) {
+            return Arrays.stream(returnVal.split("~,~")).collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
         }
     }
 }

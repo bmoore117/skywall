@@ -13,6 +13,8 @@ public class Config {
 
     private Delay delay;
     private Boolean hallPassUsed;
+    private Boolean strictModeEnabled;
+    private List<String> formerAdminUsers;
     private List<Job> pendingJobs;
     private List<Job> retryJobs;
     private Bedtimes bedtimes;
@@ -24,12 +26,14 @@ public class Config {
     public Config() {
         delay = Delay.ZERO;
         hallPassUsed = false;
+        strictModeEnabled = false;
         pendingJobs = new ArrayList<>();
         retryJobs = new ArrayList<>();
         knownLocations = new ArrayList<>();
         definedServices = new ArrayList<>();
         definedPhrases = new ArrayList<>();
         blockedHosts = new ArrayList<>();
+        formerAdminUsers = new ArrayList<>();
     }
 
     public Boolean isHallPassUsed() {
@@ -42,6 +46,18 @@ public class Config {
 
     public void setHallPassUsed(Boolean hallPassUsed) {
         this.hallPassUsed = hallPassUsed;
+    }
+
+    public Boolean isStrictModeEnabled() {
+        if (strictModeEnabled == null) {
+            return false;
+        }
+
+        return strictModeEnabled;
+    }
+
+    public void setStrictModeEnabled(Boolean strictModeEnabled) {
+        this.strictModeEnabled = strictModeEnabled;
     }
 
     public Delay getDelay() {
@@ -127,5 +143,16 @@ public class Config {
 
     public void setBlockedHosts(List<BlockedHost> blockedHosts) {
         this.blockedHosts = blockedHosts;
+    }
+
+    public List<String> getFormerAdminUsers() {
+        if (this.formerAdminUsers == null) {
+            this.formerAdminUsers = new ArrayList<>();
+        }
+        return formerAdminUsers;
+    }
+
+    public void setFormerAdminUsers(List<String> formerAdminUsers) {
+        this.formerAdminUsers = formerAdminUsers;
     }
 }

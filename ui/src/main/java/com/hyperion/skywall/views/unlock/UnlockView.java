@@ -79,6 +79,7 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
     private final Button save;
     private final Button unlock;
     private final Button activate;
+    private final Button toggleStrictMode;
     private final Button getCurrentLocation;
     private final Button abortDelayChange;
     private final Button toggleFilter;
@@ -257,6 +258,17 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
             }
         });
 
+        toggleStrictMode = new Button();
+        toggleStrictMode.addClickListener(e -> configService.withTransaction(config -> {
+            try {
+                List<String> formerAdminUsers = winUtils.toggleStrictMode(!config.isStrictModeEnabled(),
+                        config.getFormerAdminUsers());
+                config.setFormerAdminUsers(formerAdminUsers);
+            } catch (InterruptedException | IOException ex) {
+                showNotification("Error enabling strict mode");
+            }
+        }));
+
         Tabs sections = new Tabs();
         sections.setWidthFull();
         Map<Tab, Component> tabsToPages = new HashMap<>();
@@ -321,6 +333,14 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         restartFilter.getElement().getStyle().set("width", "20%");
         utilityButtonRow.setVerticalComponentAlignment(Alignment.END, toggleFilter);
         utilityButtonRow.setVerticalComponentAlignment(Alignment.END, restartFilter);
+
+        H3 strictMode = new H3("Strict Mode");
+        page.add(strictMode);
+        Label strictModeLabel = new Label("The default mode of operation does not guard the config files for skywall. If you are computer savvy enough to find them, you should consider running with strict mode enabled. Strict mode protects the files so you can't access them by removing administrator access for all accounts except the skywall service account. When delay is zero, the skywall account will have a password of " + ConfigService.STOCK_PASSWORD + " and can be used for tasks requiring admin access, but when it is above zero, it will be randomised. You thus effectively become a guest of your own PC: you cannot edit the skywall files, you cannot uninstall skywall, or in general do anything that would get you access to the files. You can still whitelist and make changes within the skywall software as normal, subject to the delay.");
+        page.add(strictModeLabel);
+        page.add(new Html("<br />"));
+        toggleStrictMode.getElement().getStyle().set("width", "20%");
+        page.add(toggleStrictMode);
 
         H3 hallPass = new H3("Weekend Hall Pass");
         page.add(hallPass);
@@ -392,6 +412,16 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         boolean afterFiveOnFriday = EnumSet.of(DayOfWeek.FRIDAY).contains(now.getDayOfWeek()) && now.isAfter(fivePMOnFriday);
 
         activate.setEnabled(!configService.isHallPassUsed() && (isWeekend || afterFiveOnFriday));
+
+        if (configService.getConfig().isStrictModeEnabled()) {
+            toggleStrictMode.setText("Disable Strict Mode");
+            if (configService.getDelaySeconds() > 0) {
+                toggleStrictMode.setEnabled(false);
+            }
+        } else {
+            toggleStrictMode.setText("Enable Strict Mode");
+            toggleStrictMode.setEnabled(true);
+        }
     }
 
     private void populateForm(Location value) {

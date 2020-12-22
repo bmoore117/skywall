@@ -17,4 +17,4 @@ error-screenshots/
 webpack.generated.js
 
 filter/hosts.json
-scripts/
+ui/scripts/
