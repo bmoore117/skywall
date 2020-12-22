@@ -193,7 +193,6 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         binder = new Binder<>(Location.class);
 
         // Bind fields. This where you'd define e.g. validation rules
-        //binder.bindInstanceFields(this);
         binder.forField(name).asRequired("Mandatory field")
                 .withValidator(Objects::nonNull, "Mandatory field").bind(Location::getName, Location::setName);
         binder.forField(latitude).asRequired("Mandatory field")
