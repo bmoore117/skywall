@@ -12,7 +12,6 @@ import java.util.Set;
 public class Config {
 
     private Delay delay;
-    private Set<Credentials> credentials;
     private Boolean hallPassUsed;
     private List<Job> pendingJobs;
     private List<Job> retryJobs;
@@ -25,7 +24,6 @@ public class Config {
     public Config() {
         delay = Delay.ZERO;
         hallPassUsed = false;
-        credentials = new HashSet<>();
         pendingJobs = new ArrayList<>();
         retryJobs = new ArrayList<>();
         knownLocations = new ArrayList<>();
@@ -55,17 +53,6 @@ public class Config {
 
     public void setDelay(Delay delay) {
         this.delay = delay;
-    }
-
-    public Set<Credentials> getCredentials() {
-        if (credentials == null) {
-            credentials = new HashSet<>();
-        }
-        return credentials;
-    }
-
-    public void setCredentials(Set<Credentials> credentials) {
-        this.credentials = credentials;
     }
 
     public List<Job> getPendingJobs() {

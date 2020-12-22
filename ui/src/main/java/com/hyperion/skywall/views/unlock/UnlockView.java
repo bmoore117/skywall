@@ -9,12 +9,16 @@ import com.hyperion.skywall.backend.services.ConfigService;
 import com.hyperion.skywall.backend.services.JobRunner;
 import com.hyperion.skywall.backend.services.WinUtils;
 import com.hyperion.skywall.views.main.MainView;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Label;
@@ -25,8 +29,11 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.provider.Query;
@@ -40,9 +47,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -70,6 +78,7 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
 
     private final Button save;
     private final Button unlock;
+    private final Button activate;
     private final Button getCurrentLocation;
     private final Button abortDelayChange;
     private final Button toggleFilter;
@@ -237,9 +246,44 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
             }
         });
 
-        add(createFormLayout());
-        add(new Hr());
-        add(knownLocations);
+        activate = new Button("Activate Weekend Hall Pass");
+        activate.addClickListener(buttonClickEvent -> {
+            SetDelayJob job = new SetDelayJob(null, null, Delay.ZERO);
+            boolean result = jobRunner.runJob(job);
+            if (result) {
+                showNotification("Password changed to stock value of " + ConfigService.STOCK_PASSWORD);
+                activate.setEnabled(false);
+            } else {
+                showNotification("Check logs for error");
+            }
+        });
+
+        Tabs sections = new Tabs();
+        sections.setWidthFull();
+        Map<Tab, Component> tabsToPages = new HashMap<>();
+
+        Tab delayTab = new Tab("Delay & Filter Control");
+        Div delayPage = generateDelayPage();
+        tabsToPages.put(delayTab, delayPage);
+
+        Tab gpsTab = new Tab("GPS Unlock");
+        tabsToPages.put(gpsTab, generateGPSPage());
+
+        VerticalLayout tabActivePage = new VerticalLayout();
+        tabActivePage.setPadding(false);
+        tabActivePage.add(delayPage);
+
+        sections.add(delayTab, gpsTab);
+        sections.setFlexGrowForEnclosedTabs(1);
+        sections.addSelectedChangeListener(event -> {
+            Component selectedPage = tabsToPages.get(sections.getSelectedTab());
+            selectedPage.setVisible(true);
+            tabActivePage.removeAll();
+            tabActivePage.add(selectedPage);
+        });
+
+        add(sections);
+        add(tabActivePage);
     }
 
     @Autowired
@@ -249,33 +293,53 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         this.winUtils = applicationContext.getBean(WinUtils.class);
     }
 
-    private FormLayout createFormLayout() {
-        FormLayout formLayout = new FormLayout();
+    private Div generateDelayPage() {
+        Div page = new Div();
         H3 delayTitle = new H3("Delay");
-        formLayout.add(delayTitle, 2);
-        Label label = new Label("This program is controlled by a delay: you can add a new website at any time but it will only take effect after the current delay. If you set the delay to zero in a moment of weakness but rally and decide not to, abort changes using the button below. When delay is zero, you can also turn the filter off completely, and it will stay that way until you either turn it back on from this screen, raise the delay from zero, or take some other action to turn it on, such as activating a service from the whitelisting screen");
-        formLayout.add(label, 2);
-        HorizontalLayout fiveColumnRow = new HorizontalLayout();
-        fiveColumnRow.setPadding(false);
-        fiveColumnRow.setSpacing(true);
-        fiveColumnRow.setWidthFull();
-        fiveColumnRow.add(delay, saveDelay, abortDelayChange, toggleFilter, restartFilter);
+        page.add(delayTitle);
+        Label label = new Label("This program is controlled by a delay: you can add a new website at any time but it will only take effect after the current delay. If you set the delay to zero in a moment of weakness but rally and decide not to, abort changes using the button below.");
+        page.add(label);
+        HorizontalLayout buttonRow = new HorizontalLayout();
+        buttonRow.setPadding(false);
+        buttonRow.setSpacing(true);
+        buttonRow.setWidthFull();
+        buttonRow.add(delay, saveDelay, abortDelayChange);
         delay.getElement().getStyle().set("width", "20%");
         saveDelay.getElement().getStyle().set("width", "20%");
         abortDelayChange.getElement().getStyle().set("width", "20%");
+        buttonRow.setVerticalComponentAlignment(Alignment.END, saveDelay);
+        buttonRow.setVerticalComponentAlignment(Alignment.END, abortDelayChange);
+        page.add(buttonRow);
+
+        H3 utility = new H3("Utility");
+        page.add(utility);
+        Label utilityLabel = new Label("Below are some useful functions for controlling the filter. When delay is zero, you can turn the filter off completely, and it will stay that way until you either turn it back on from this screen, raise the delay from zero, or take some other action to turn it on, such as activating a service from the whitelisting screen");
+        page.add(utilityLabel);
+        HorizontalLayout utilityButtonRow = new HorizontalLayout();
+        page.add(utilityButtonRow);
+        utilityButtonRow.add(toggleFilter, restartFilter);
         toggleFilter.getElement().getStyle().set("width", "20%");
         restartFilter.getElement().getStyle().set("width", "20%");
-        fiveColumnRow.setVerticalComponentAlignment(Alignment.END, saveDelay);
-        fiveColumnRow.setVerticalComponentAlignment(Alignment.END, abortDelayChange);
-        fiveColumnRow.setVerticalComponentAlignment(Alignment.END, toggleFilter);
-        fiveColumnRow.setVerticalComponentAlignment(Alignment.END, restartFilter);
-        formLayout.add(fiveColumnRow, 2);
+        utilityButtonRow.setVerticalComponentAlignment(Alignment.END, toggleFilter);
+        utilityButtonRow.setVerticalComponentAlignment(Alignment.END, restartFilter);
 
-        formLayout.add(new Hr(), 2);
+        H3 hallPass = new H3("Weekend Hall Pass");
+        page.add(hallPass);
+        Label hallPassLabel = new Label("On weekends, you can set delay to 0 once for free. Weekends are defined as any time past 5 pm on Friday, and before Monday");
+        page.add(hallPassLabel);
+        page.add(new Html("<br />"));
+        activate.getElement().getStyle().set("width", "20%");
+        page.add(activate);
+
+        return page;
+    }
+
+    private Div generateGPSPage() {
+        Div page = new Div();
         H3 gpsUnlockTitle = new H3("GPS-Based Unlocking");
-        formLayout.add(gpsUnlockTitle, 2);
+        page.add(gpsUnlockTitle);
         Label info = new Label("Click to get your current location. Then save to add a new trusted location from which you can instantly unlock your device. Simply click the unlock button when you are in the same general area as a trusted location; if you are close enough, delay will automatically be set to 0");
-        formLayout.add(info, 2);
+        page.add(info);
         HorizontalLayout row1 = new HorizontalLayout();
         row1.setPadding(false);
         row1.setSpacing(true);
@@ -285,7 +349,7 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         save.getStyle().set("width", "33%");
         unlock.getStyle().set("width", "33%");
         row1.setWidthFull();
-        formLayout.add(row1, 2);
+        page.add(row1);
         HorizontalLayout row2 = new HorizontalLayout();
         row2.setPadding(false);
         row2.setSpacing(true);
@@ -294,9 +358,10 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         latitude.getStyle().set("width", "33%");
         longitude.getStyle().set("width", "33%");
         row2.setWidthFull();
-        formLayout.add(row2, 2);
-
-        return formLayout;
+        page.add(row2);
+        page.add(new Hr());
+        page.add(knownLocations);
+        return page;
     }
 
     private boolean inTrustedLocation(Location location) {
@@ -319,6 +384,15 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
             toggleFilter.setText("Turn Filter On");
         }
         abortDelayChange.setEnabled(jobRunner.pendingDelayChangeExists());
+
+        LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
+        boolean isWeekend = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY)
+                .contains(now.getDayOfWeek());
+
+        LocalDateTime fivePMOnFriday = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 17, 0);
+        boolean afterFiveOnFriday = EnumSet.of(DayOfWeek.FRIDAY).contains(now.getDayOfWeek()) && now.isAfter(fivePMOnFriday);
+
+        activate.setEnabled(!configService.isHallPassUsed() && (isWeekend || afterFiveOnFriday));
     }
 
     private void populateForm(Location value) {

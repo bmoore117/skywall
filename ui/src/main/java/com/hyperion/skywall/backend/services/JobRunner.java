@@ -409,19 +409,14 @@ public class JobRunner {
     private void resetPasswordAndRestart() {
         String password = winUtils.generatePassword();
         if (winUtils.changeLocalAdminPassword(password) == 0) {
-            configService.getLocalAdmin().ifPresent(admin -> {
-                admin.setPassword(password);
-                configService.writeFile();
-            });
-        }
-
-        // kinda tough to test - could comment out above, in the end may always be safest to go for the restart
-        //if (winUtils.areAdminProcessesRunning()) {
-        try {
-            log.info("Attempting restart");
-            winUtils.restartComputer();
-        } catch (IOException | InterruptedException e) {
-            log.error("Error while attempting restart", e);
+            // kinda tough to test - could comment out above, in the end may always be safest to go for the restart
+            //if (winUtils.areAdminProcessesRunning()) {
+            try {
+                log.info("Attempting restart");
+                winUtils.restartComputer();
+            } catch (IOException | InterruptedException e) {
+                log.error("Error while attempting restart", e);
+            }
         }
     }
 }

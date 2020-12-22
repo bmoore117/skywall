@@ -103,12 +103,6 @@ public class ConfigService {
         return returnVal;
     }
 
-    public Optional<Credentials> getLocalAdmin() {
-        return config.getCredentials().stream()
-                .filter(entry -> entry.getTag().endsWith("local"))
-                .findFirst();
-    }
-
     public boolean isHallPassUsed() {
         return config.isHallPassUsed();
     }
@@ -116,20 +110,6 @@ public class ConfigService {
     public void setHallPassUsed(boolean used) {
         config.setHallPassUsed(used);
         writeFile();
-    }
-
-    public void setCredentials(Credentials credentials) {
-        config.getCredentials().remove(credentials);
-        config.getCredentials().add(credentials);
-        writeFile();
-    }
-
-    public List<Credentials> getCredentials() {
-        if (config.getCredentials() == null) {
-            return Collections.emptyList();
-        } else {
-            return new ArrayList<>(config.getCredentials());
-        }
     }
 
     public boolean isEnabled() {

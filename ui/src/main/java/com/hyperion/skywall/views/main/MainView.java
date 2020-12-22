@@ -1,7 +1,6 @@
 package com.hyperion.skywall.views.main;
 
 import com.hyperion.skywall.views.block.BlockView;
-import com.hyperion.skywall.views.home.HomeView;
 import com.hyperion.skywall.views.job.JobView;
 import com.hyperion.skywall.views.log.LogView;
 import com.hyperion.skywall.views.unlock.UnlockView;
@@ -87,7 +86,6 @@ public class MainView extends AppLayout {
 
     private Component[] createMenuItems() {
         return new Tab[] {
-                createTab("Home", HomeView.class),
                 createTab("Unlock & Delay", UnlockView.class),
                 createTab("Apps & Websites", WhitelistView.class),
                 createTab("Blocking", BlockView.class),
