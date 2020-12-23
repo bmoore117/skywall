@@ -61,6 +61,8 @@ import java.util.stream.Collectors;
 public class UnlockView extends VerticalLayout implements AfterNavigationObserver {
 
     private static final Logger log = LoggerFactory.getLogger(UnlockView.class);
+    public static final String DISABLE_STRICT_MODE = "Disable Strict Mode";
+    public static final String ENABLE_STRICT_MODE = "Enable Strict Mode";
 
     private ConfigService configService;
     private JobRunner jobRunner;
@@ -264,6 +266,12 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
                 List<String> formerAdminUsers = winUtils.toggleStrictMode(!config.isStrictModeEnabled(),
                         config.getFormerAdminUsers());
                 config.setFormerAdminUsers(formerAdminUsers);
+                config.setStrictModeEnabled(!config.isStrictModeEnabled());
+                if (config.isStrictModeEnabled()) {
+                    toggleStrictMode.setText(DISABLE_STRICT_MODE);
+                } else {
+                    toggleStrictMode.setText(ENABLE_STRICT_MODE);
+                }
             } catch (InterruptedException | IOException ex) {
                 showNotification("Error enabling strict mode");
             }
@@ -414,12 +422,12 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         activate.setEnabled(!configService.isHallPassUsed() && (isWeekend || afterFiveOnFriday));
 
         if (configService.getConfig().isStrictModeEnabled()) {
-            toggleStrictMode.setText("Disable Strict Mode");
+            toggleStrictMode.setText(DISABLE_STRICT_MODE);
             if (configService.getDelaySeconds() > 0) {
                 toggleStrictMode.setEnabled(false);
             }
         } else {
-            toggleStrictMode.setText("Enable Strict Mode");
+            toggleStrictMode.setText(ENABLE_STRICT_MODE);
             toggleStrictMode.setEnabled(true);
         }
     }
