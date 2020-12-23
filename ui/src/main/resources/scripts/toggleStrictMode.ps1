@@ -13,7 +13,7 @@ if ($mode -eq "on") {
     foreach ($user in $users) {
         if ($user.Enabled -eq $true) {
             Remove-LocalGroupMember -Group "Administrators" -Member $user.Name
-            $returnUsers.Add($user.Name)
+            $returnUsers.Add($user.Name) > $null # suppress index being printed to output
         }
     }
     Write-Host $($returnUsers -join "~,~")
