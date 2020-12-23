@@ -5,6 +5,7 @@
     "retryJobs" : [ ],
     "bedtimes" : null,
     "knownLocations" : [ ],
+    "formerAdminUsers": [ ],
     "definedServices" : [
         {
             "currentStatus" : "ACTIVE",

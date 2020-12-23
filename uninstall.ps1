@@ -8,6 +8,13 @@ cd C:\Users\skywall\skywall
 .\skywall-ui.exe uninstall
 .\skywall-filter.exe uninstall
 
+$json = Get-Content .\data\config.json | ConvertFrom-Json
+if ($json.formerAdminUsers) {
+    $formerAdminUsers = $json.formerAdminUsers -join "~,~"
+    .\scripts\toggleStrictMode.ps1 -mode off -usersToRestore $formerAdminUsers
+}
+
+
 cd ..
 rm -Recurse .\skywall
 

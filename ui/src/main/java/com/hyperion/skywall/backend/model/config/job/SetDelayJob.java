@@ -68,7 +68,7 @@ public class SetDelayJob extends Job {
             }
         });
 
-        if (needsRestart.get()) {
+        if (needsRestart.get() && configService.getConfig().isStrictModeEnabled()) {
             // this is technically a race condition with job termination & queue removal, but all that
             // should finish before the restart happens given the baked-in delay before the actual restart
             CompletableFuture.runAsync(() -> {
