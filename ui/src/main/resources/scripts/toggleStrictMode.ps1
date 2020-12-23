@@ -9,7 +9,7 @@
 if ($mode -eq "on") {
     $returnUsers = [System.Collections.ArrayList]@()
     Disable-LocalUser -Name "Administrator"
-    $users = Get-LocalUser | where {$_.Name -ne "skywall"}
+    $users = Get-LocalUser | where {$_.Name -ne "skywall" -and $_.Name -ne "backup-admin"}
     foreach ($user in $users) {
         if ($user.Enabled -eq $true) {
             Remove-LocalGroupMember -Group "Administrators" -Member $user.Name
