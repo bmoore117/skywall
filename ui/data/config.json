@@ -5,7 +5,7 @@
     "retryJobs" : [ ],
     "bedtimes" : null,
     "knownLocations" : [ ],
-    "formerAdminUsers": [ ],
+    "formerAdminUsers": [ "moore" ],
     "definedServices" : [
         {
             "currentStatus" : "ACTIVE",
@@ -1036,6 +1036,24 @@
             "lastActivationStatus" : "ACTIVE",
             "id" : "74b3796e-8ae2-4f27-b307-53a5406c8030",
             "phrase" : "priscilla isabella"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "833c2b39-3806-422c-914e-2d121567f9e6",
+            "phrase" : "lexxi tyler"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "67073d98-c8c1-48be-917b-37dca03393e9",
+            "phrase" : "sexy"
+        },
+        {
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "8e92b6d4-5749-4724-af3e-47bd31609145",
+            "phrase" : "bikini"
         }
     ],
     "blockedHosts" : [
