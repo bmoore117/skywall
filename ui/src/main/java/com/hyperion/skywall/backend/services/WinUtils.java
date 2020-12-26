@@ -1,14 +1,12 @@
 package com.hyperion.skywall.backend.services;
 
+import com.hyperion.skywall.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,27 +17,9 @@ public class WinUtils {
     private static final Logger log = LoggerFactory.getLogger(WinUtils.class);
 
     private static final boolean inDevMode = "dev".equalsIgnoreCase(System.getenv("RUN_MODE"));
+    public static final String GPS_ERROR = "Access Denied for Location Information";
 
-    private Process runProc(ProcessBuilder builder) throws IOException, InterruptedException {
-        Process p = builder.start();
-        p.waitFor();
-
-        try (InputStream stdOut = p.getInputStream(); InputStream stdErr = p.getErrorStream()) {
-            String line;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stdOut));
-            while ((line = reader.readLine()) != null) {
-                log.info(line);
-            }
-            reader = new BufferedReader(new InputStreamReader(stdErr));
-            while ((line = reader.readLine()) != null) {
-                log.error(line);
-            }
-        }
-
-        return p;
-    }
-
-    private String runProcForOutput(ProcessBuilder builder) throws IOException, InterruptedException {
+    private Pair<Process, String> runProc(ProcessBuilder builder) throws IOException, InterruptedException {
         Process p = builder.start();
         p.waitFor();
 
@@ -53,11 +33,12 @@ public class WinUtils {
             }
             reader = new BufferedReader(new InputStreamReader(stdErr));
             while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
                 log.error(line);
             }
         }
 
-        return stringBuilder.toString().trim();
+        return Pair.of(p, stringBuilder.toString().trim());
     }
 
     public void restartService(String serviceName) throws IOException, InterruptedException {
@@ -130,24 +111,29 @@ public class WinUtils {
         builder.command("powershell.exe", "-File", "changePassword.ps1", "-password", newPassword);
 
         try {
-            Process p = runProc(builder);
-            return p.exitValue();
+            Pair<Process, String> p = runProc(builder);
+            return p.first.exitValue();
         } catch (IOException | InterruptedException e) {
             log.error("Error running changePassword.ps1", e);
             return -1;
         }
     }
 
-    public Double[] getGpsCoordinates() throws IOException, InterruptedException {
+    public Optional<Double[]> getGpsCoordinates() throws IOException, InterruptedException, GPSAccessDeniedException {
         ProcessBuilder builder = new ProcessBuilder();
         builder.directory(new File("scripts"));
         builder.command("powershell.exe", "-File", "gpsLocation.ps1");
 
-        String returnVal = runProcForOutput(builder);
-        if (!returnVal.isBlank()) {
-            return Arrays.stream(returnVal.split(",")).map(Double::valueOf).toArray(Double[]::new);
+        Pair<Process, String> results = runProc(builder);
+
+        if (results.second.contains(GPS_ERROR)) {
+            throw new GPSAccessDeniedException();
         } else {
-            return new Double[0];
+            if (!results.second.isBlank()) {
+                return Optional.of(Arrays.stream(results.second.split(",")).map(Double::valueOf).toArray(Double[]::new));
+            } else {
+                return Optional.empty();
+            }
         }
     }
 
@@ -160,9 +146,9 @@ public class WinUtils {
         } else {
             builder.command("powershell.exe", "-File", "toggleStrictMode.ps1", "-mode", "off", String.join("~,~", usersToReEnable));
         }
-        String returnVal = runProcForOutput(builder);
-        if (!returnVal.isBlank()) {
-            return Arrays.stream(returnVal.split("~,~")).collect(Collectors.toList());
+        Pair<Process, String> returnVal = runProc(builder);
+        if (!returnVal.second.isBlank()) {
+            return Arrays.stream(returnVal.second.split("~,~")).collect(Collectors.toList());
         } else {
             return Collections.emptyList();
         }

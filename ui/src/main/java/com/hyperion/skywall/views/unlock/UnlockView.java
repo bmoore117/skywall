@@ -6,6 +6,7 @@ import com.hyperion.skywall.backend.model.config.Location;
 import com.hyperion.skywall.backend.model.config.job.AddTrustedLocationJob;
 import com.hyperion.skywall.backend.model.config.job.SetDelayJob;
 import com.hyperion.skywall.backend.services.ConfigService;
+import com.hyperion.skywall.backend.services.GPSAccessDeniedException;
 import com.hyperion.skywall.backend.services.JobRunner;
 import com.hyperion.skywall.backend.services.WinUtils;
 import com.hyperion.skywall.views.main.MainView;
@@ -160,8 +161,9 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         unlock = new Button("Unlock");
         unlock.addClickListener(buttonClickEvent -> {
             try {
-                Double[] latLon = winUtils.getGpsCoordinates();
-                if (latLon.length > 1) {
+                Optional<Double[]> latLonOpt = winUtils.getGpsCoordinates();
+                if (latLonOpt.isPresent()) {
+                    Double[] latLon = latLonOpt.get();
                     Location location = new Location(null, latLon[0], latLon[1]);
                     if (inTrustedLocation(location)) {
                         SetDelayJob job = new SetDelayJob(null, "Location-based unlock", Delay.ZERO);
@@ -169,26 +171,39 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
                         if (result) {
                             showNotification("Unlock successful. Password changed to stock value of " + ConfigService.STOCK_PASSWORD);
                         } else {
-                            showNotification("An error occurred");
+                            showErrorNotification("An error occurred");
                         }
                     } else {
                         showNotification("You do not appear to be in a trusted location");
                     }
+                } else {
+                    showErrorNotification("Error fetching location information: no data returned");
                 }
             } catch (IOException | InterruptedException e) {
                 log.error("Error fetching current location", e);
-                showNotification("Error fetching current location");
+                showErrorNotification("Error fetching current location");
+            } catch (GPSAccessDeniedException e) {
+                log.error("Error fetching current location", e);
+                showErrorNotification("Unable to fetch location: please enable location services");
             }
         });
         getCurrentLocation = new Button("Get Current Location");
         getCurrentLocation.addClickListener(buttonClickEvent -> {
             try {
-                Double[] latLon = winUtils.getGpsCoordinates();
-                latitude.setValue(latLon[0]);
-                longitude.setValue(latLon[1]);
+                Optional<Double[]> latLonOpt = winUtils.getGpsCoordinates();
+                if (latLonOpt.isPresent()) {
+                    Double[] latLon = latLonOpt.get();
+                    latitude.setValue(latLon[0]);
+                    longitude.setValue(latLon[1]);
+                } else {
+                    showErrorNotification("Error fetching location information: no data returned");
+                }
             } catch (IOException | InterruptedException e) {
                 showNotification("Error fetching location information");
                 log.error("Error fetching location information", e);
+            }  catch (GPSAccessDeniedException e) {
+                log.error("Error fetching current location", e);
+                showErrorNotification("Unable to fetch location: please enable location services");
             }
         });
 
@@ -363,6 +378,7 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
 
     private Div generateGPSPage() {
         Div page = new Div();
+        page.setWidthFull();
         H3 gpsUnlockTitle = new H3("GPS-Based Unlocking");
         page.add(gpsUnlockTitle);
         Label info = new Label("Click to get your current location. Then save to add a new trusted location from which you can instantly unlock your device. Simply click the unlock button when you are in the same general area as a trusted location; if you are close enough, delay will automatically be set to 0");
@@ -444,6 +460,15 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         }
         notification = new Notification(message, 5000, Notification.Position.BOTTOM_CENTER);
         notification.addThemeVariants(NotificationVariant.LUMO_CONTRAST);
+        notification.open();
+    }
+
+    private void showErrorNotification(String message) {
+        if (notification != null && notification.isOpened()) {
+            notification.close();
+        }
+        notification = new Notification(message, 5000, Notification.Position.MIDDLE);
+        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         notification.open();
     }
 }
