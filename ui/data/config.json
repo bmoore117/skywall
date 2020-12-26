@@ -1,11 +1,14 @@
 {
     "delay" : "ZERO",
     "hallPassUsed" : false,
+    "strictModeEnabled" : true,
+    "formerAdminUsers" : [
+        "moore"
+    ],
     "pendingJobs" : [ ],
     "retryJobs" : [ ],
     "bedtimes" : null,
     "knownLocations" : [ ],
-    "formerAdminUsers": [ "moore" ],
     "definedServices" : [
         {
             "currentStatus" : "ACTIVE",
