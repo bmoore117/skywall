@@ -364,8 +364,10 @@ public class JobRunner {
             // we're locking back up for the week after a hall pass activation
             log.info("Locking back up for the week after hall pass activation");
             configService.withTransaction(config -> config.setHallPassUsed(false));
-            SetDelayJob job = new SetDelayJob(null, null, Delay.TWO_HOURS);
-            runJob(job);
+            if (configService.getDelaySeconds() == 0) {
+                SetDelayJob job = new SetDelayJob(null, null, Delay.TWO_HOURS);
+                runJob(job);
+            }
         }
     }
 }
