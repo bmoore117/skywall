@@ -368,7 +368,7 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
 
         H3 hallPass = new H3("Weekend Hall Pass");
         page.add(hallPass);
-        Label hallPassLabel = new Label("On weekends, you can set delay to 0 once for free. Weekends are defined as any time past 5 pm on Friday, and before Monday. If activated, the hall pass will automatically reset on Mondays, when the delay will be raised to 2 hours, the skywall account password changed, and your PC restarted if strict mode is enabled.");
+        Label hallPassLabel = new Label("On weekends, you can set delay to 0 once for free. Weekends are defined as any time past 5 pm on Friday, and before Monday. If activated, the hall pass will automatically reset on Mondays, when the delay will be raised to 2 hours, the skywall account password changed, and your PC restarted if strict mode is enabled, unless you have already raised the delay above zero by then.");
         page.add(hallPassLabel);
         page.add(new Html("<br />"));
         activate.getElement().getStyle().set("width", "20%");
