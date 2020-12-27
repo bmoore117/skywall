@@ -270,6 +270,7 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
             if (result) {
                 showNotification("Password changed to stock value of " + ConfigService.STOCK_PASSWORD);
                 activate.setEnabled(false);
+                configService.withTransaction(config -> config.setHallPassUsed(true));
             } else {
                 showNotification("Check logs for error");
             }

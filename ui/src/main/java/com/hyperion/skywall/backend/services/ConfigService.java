@@ -107,11 +107,6 @@ public class ConfigService {
         return config.isHallPassUsed();
     }
 
-    public void setHallPassUsed(boolean used) {
-        config.setHallPassUsed(used);
-        writeFile();
-    }
-
     public boolean isEnabled() {
         return 0 == getDelaySeconds();
     }
