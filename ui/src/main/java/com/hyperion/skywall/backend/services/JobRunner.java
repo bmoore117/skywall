@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.time.DayOfWeek;
@@ -25,11 +24,9 @@ import java.util.stream.Collectors;
 public class JobRunner {
 
     private static final Logger log = LoggerFactory.getLogger(JobRunner.class);
-    public static final String TOGGLE_INTERNET_OFF = "Toggle internet off";
     private final ApplicationContext applicationContext;
 
     private final ConfigService configService;
-    private final WinUtils winUtils;
 
     private static List<CustomTimerTask> tasks = new LinkedList<>();
 
@@ -39,7 +36,6 @@ public class JobRunner {
     public JobRunner(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         this.configService = applicationContext.getBean(ConfigService.class);
-        this.winUtils = applicationContext.getBean(WinUtils.class);
     }
 
     class CustomTimerTask extends TimerTask {
@@ -152,7 +148,7 @@ public class JobRunner {
         turn to run it, due to the job-timer association
      */
     public synchronized void runReadyJobs() {
-        retryFailedJobsInternal(false);
+        retryFailedJobs();
 
         List<Job> jobs = configService.getConfig().getPendingJobs().stream()
                 .filter(job -> !job.getJobLaunchTime().isAfter(LocalDateTime.now()))
@@ -173,10 +169,6 @@ public class JobRunner {
             });
             configService.reloadConfig();
         }
-    }
-
-    public void retryFailedJobs() {
-        retryFailedJobsInternal(true);
     }
 
     public void deleteFailedJobs() {
@@ -218,22 +210,6 @@ public class JobRunner {
                 it.remove();
             }
         }
-    }
-
-    public void cancelPendingJobs() {
-        log.info("Canceling all jobs");
-        Iterator<CustomTimerTask> it = tasks.iterator();
-        List<UUID> jobIds = new LinkedList<>();
-        while (it.hasNext()) {
-            CustomTimerTask task = it.next();
-            if (!task.getJobDescription().equals(TOGGLE_INTERNET_OFF)) {
-                task.cancel();
-                jobIds.add(task.getJobId());
-                it.remove();
-            }
-        }
-        configService.withTransaction(config -> jobIds.forEach(id -> configService.getConfig().getPendingJobs()
-                .removeIf(job -> job.getId().equals(id))));
     }
 
     public boolean cancelSetDelayJobs() {
@@ -299,29 +275,27 @@ public class JobRunner {
                 .removeIf(job -> job.getId().equals(id))));
     }
 
-    private void retryFailedJobsInternal(boolean writeFile) {
-        Iterator<Job> it = configService.getConfig().getRetryJobs().iterator();
-        while (it.hasNext()) {
-            Job job = it.next();
-            log.info("Retrying previously errored job {}", job.getJobDescription());
-            RuntimeException e = null;
-            boolean result = true;
-            try {
-                result = runJob(job);
-            } catch (RuntimeException ex) {
-                e = ex;
-                log.error("Retry of job failed, leaving in retry queue", e);
-            }
+    private void retryFailedJobs() {
+        configService.withTransaction(config -> {
+            Iterator<Job> it = config.getRetryJobs().iterator();
+            while (it.hasNext()) {
+                Job job = it.next();
+                log.info("Retrying previously failed job {}", job.getJobDescription());
+                RuntimeException e = null;
+                boolean result = true;
+                try {
+                    result = runJob(job);
+                } catch (RuntimeException ex) {
+                    e = ex;
+                    log.error("Retry of job failed, leaving in retry queue", e);
+                }
 
-            if (e == null && result) {
-                log.info("Job succeeded, removing from queue");
-                it.remove();
+                if (e == null && result) {
+                    log.info("Job succeeded, removing from queue");
+                    it.remove();
+                }
             }
-        }
-
-        if (writeFile) {
-            configService.writeFile();
-        }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -389,9 +363,7 @@ public class JobRunner {
         if (!(isWeekend || afterFiveOnFriday) && configService.isHallPassUsed()) {
             // we're locking back up for the week after a hall pass activation
             log.info("Locking back up for the week after hall pass activation");
-            configService.withTransaction(config -> {
-                config.setHallPassUsed(false);
-            });
+            configService.withTransaction(config -> config.setHallPassUsed(false));
             SetDelayJob job = new SetDelayJob(null, null, Delay.TWO_HOURS);
             runJob(job);
         }
