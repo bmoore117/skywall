@@ -332,7 +332,7 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         Div page = new Div();
         H3 delayTitle = new H3("Delay");
         page.add(delayTitle);
-        Label label = new Label("This program is controlled by a delay: you can add a new website at any time but it will only take effect after the current delay. If you set the delay to zero in a moment of weakness but rally and decide not to, abort changes using the button below.");
+        Label label = new Label("This program is controlled by a delay: changes to settings that involve allowing more through the filter or reducing security can be made at anytime, but will only take effect after the current delay. You may choose a delay that works best for you, and if you reduce the delay in a moment of weakness but rally and decide not to, abort changes using the button below.");
         page.add(label);
         HorizontalLayout buttonRow = new HorizontalLayout();
         buttonRow.setPadding(false);
@@ -368,7 +368,7 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
 
         H3 hallPass = new H3("Weekend Hall Pass");
         page.add(hallPass);
-        Label hallPassLabel = new Label("On weekends, you can set delay to 0 once for free. Weekends are defined as any time past 5 pm on Friday, and before Monday");
+        Label hallPassLabel = new Label("On weekends, you can set delay to 0 once for free. Weekends are defined as any time past 5 pm on Friday, and before Monday. If activated, the hall pass will automatically reset on Mondays, when the delay will be raised to 2 hours, the skywall account password changed, and your PC restarted if strict mode is enabled.");
         page.add(hallPassLabel);
         page.add(new Html("<br />"));
         activate.getElement().getStyle().set("width", "20%");
