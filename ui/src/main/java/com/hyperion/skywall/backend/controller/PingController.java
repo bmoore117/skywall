@@ -25,7 +25,7 @@ public class PingController {
     public void checkStatus(@RequestBody Ping ping) {
         log.info("Received ping");
         jobRunner.onWake();
-        jobRunner.resetHallPassForTheWeekIfEligible(ping.getShouldResetPassword());
+        jobRunner.resetHallPassForTheWeekIfEligible();
     }
 
     @GetMapping(path = "/getStockPassword")

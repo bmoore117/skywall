@@ -18,8 +18,7 @@ public class SetDelayJob extends Job {
 
     private static final String DELAY = "delay";
 
-    public SetDelayJob() {
-    }
+    public SetDelayJob() {}
 
     public SetDelayJob(LocalDateTime jobLaunchTime, String jobDescription, Delay delay) {
         super(jobLaunchTime, jobDescription);

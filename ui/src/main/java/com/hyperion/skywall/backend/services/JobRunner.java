@@ -376,7 +376,7 @@ public class JobRunner {
         return tasks.size();
     }
 
-    public void resetHallPassForTheWeekIfEligible(boolean shouldResetPassword) {
+    public void resetHallPassForTheWeekIfEligible() {
         log.info("Entering resetHallPassForTheWeek");
 
         LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
@@ -391,32 +391,9 @@ public class JobRunner {
             log.info("Locking back up for the week after hall pass activation");
             configService.withTransaction(config -> {
                 config.setHallPassUsed(false);
-                if (configService.getDelaySeconds() < Delay.valueInSeconds(Delay.TWO_HOURS)) {
-                    configService.setDelay(Delay.TWO_HOURS);
-                }
             });
-
-            if (shouldResetPassword) {
-                resetPasswordAndRestart();
-            }
-        } else if (shouldResetPassword && configService.getDelaySeconds() > 0) {
-            // we increased delay up from zero, but forgot to change the password as well
-            log.info("Delay increased from zero but password not reset, now resetting");
-            resetPasswordAndRestart();
-        }
-    }
-
-    private void resetPasswordAndRestart() {
-        String password = winUtils.generatePassword();
-        if (winUtils.changeLocalAdminPassword(password) == 0) {
-            if (configService.getConfig().isStrictModeEnabled()) {
-                try {
-                    log.info("Attempting restart");
-                    winUtils.restartComputer();
-                } catch (IOException | InterruptedException e) {
-                    log.error("Error while attempting restart", e);
-                }
-            }
+            SetDelayJob job = new SetDelayJob(null, null, Delay.TWO_HOURS);
+            runJob(job);
         }
     }
 }
