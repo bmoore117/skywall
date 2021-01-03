@@ -24,6 +24,14 @@ if ($hasConnection -eq $false) {
     return
 }
 
+if ((Test-Path -Path "C:\WINDOWS\system32\config\systemprofile\.mitmproxy") -eq $false) {
+    Write-Host "Adding certificate to store on first run"
+    do {
+        Start-Sleep -Seconds 3
+    } while ((Test-Path -Path "C:\WINDOWS\system32\config\systemprofile\.mitmproxy") -eq $false)
+    certutil -addstore root C:\WINDOWS\system32\config\systemprofile\.mitmproxy\mitmproxy-ca-cert.cer
+}
+
 Set-Location $PSScriptRoot
 
 $json = Get-Content .\filter\monitor\hosts.json | ConvertFrom-Json

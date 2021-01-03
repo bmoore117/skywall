@@ -16,5 +16,5 @@ drivers/
 error-screenshots/
 webpack.generated.js
 
-filter/hosts.json
+filter/monitor/hosts.json
 ui/scripts/

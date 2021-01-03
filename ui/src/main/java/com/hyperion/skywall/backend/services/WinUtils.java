@@ -142,6 +142,7 @@ public class WinUtils {
         builder.directory(new File("scripts"));
 
         if (on) {
+            createSkywallAdminUser();
             builder.command("powershell.exe", "-File", "toggleStrictMode.ps1", "-mode", "on");
         } else {
             builder.command("powershell.exe", "-File", "toggleStrictMode.ps1", "-mode", "off", String.join("~,~", usersToReEnable));
@@ -152,5 +153,12 @@ public class WinUtils {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    private void createSkywallAdminUser() throws IOException, InterruptedException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.directory(new File("scripts"));
+        builder.command("powershell.exe", "-File", "createSkyWallUser.ps1");
+        runProc(builder);
     }
 }

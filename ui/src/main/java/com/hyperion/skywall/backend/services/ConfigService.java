@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hyperion.skywall.backend.model.config.Config;
-import com.hyperion.skywall.backend.model.config.Credentials;
 import com.hyperion.skywall.backend.model.config.Delay;
 import com.hyperion.skywall.backend.model.config.service.Host;
 import com.hyperion.skywall.backend.model.filter.FilterConfig;
@@ -21,7 +20,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ public class ConfigService {
     private static final Logger log = LoggerFactory.getLogger(ConfigService.class);
 
     public static final String FILTER_FILE_NAME = "hosts.json";
-    public static final String FILTER_CONFIG_LOCATION = "filter";
+    public static final String FILTER_CONFIG_LOCATION = "filter/monitor";
     public static final String FILE_LOCATION = "data";
     public static final String FILE_NAME = "config.json";
     public static final String STOCK_PASSWORD = "P@ssw0rd";
