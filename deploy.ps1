@@ -1,9 +1,12 @@
+$installDir = "C:\Program Files\SkyWall"
 cd .\ui
-cp .\setup\winsw.exe C:\Users\skywall\skywall\skywall-ui.exe
+cp .\setup\winsw.exe $installDir\skywall-ui.exe
+cp -Recurse .\data $installDir
 .\deploy.ps1
 
 cd ..\filter
-cp .\setup\winsw.exe C:\Users\skywall\skywall\skywall-filter.exe
+cp .\setup\winsw.exe $installDir\skywall-filter.exe
+cp -Recurse .\filter $installDir
 .\deploy.ps1
-Unblock-File -Path C:\Users\skywall\skywall\launchProxy.ps1
+Unblock-File -Path $installDir\launchProxy.ps1
 cd ..

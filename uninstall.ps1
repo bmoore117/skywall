@@ -4,7 +4,7 @@ Stop-Service -Name "SkyWall Filter"
 # the method used in pydivert - WinDivert is a hidden service that does not show up in services.msc
 sc.exe stop WinDivert1.3
 
-cd C:\Users\skywall\skywall
+cd "C:\Program Files\SkyWall"
 .\skywall-ui.exe uninstall
 .\skywall-filter.exe uninstall
 
@@ -13,7 +13,6 @@ if ($json.formerAdminUsers) {
     $formerAdminUsers = $json.formerAdminUsers -join "~,~"
     .\scripts\toggleStrictMode.ps1 -mode off -usersToRestore $formerAdminUsers
 }
-
 
 cd ..
 rm -Recurse .\skywall

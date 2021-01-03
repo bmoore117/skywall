@@ -1,8 +1,9 @@
-cp .\dist\SkyWall.jar C:\Users\skywall\skywall\
-cp .\setup\winsw.xml C:\Users\skywall\skywall\skywall-ui.xml
+$installDir = 'C:\Program Files\SkyWall'
+cp .\dist\SkyWall.jar $installDir
+cp .\setup\winsw.xml $installDir\skywall-ui.xml
 if (Get-Service "SkyWall UI" -ErrorAction SilentlyContinue) {
-    cp C:\Users\skywall\skywall\data\config.json .\data\config.json
-    cp C:\Users\skywall\skywall\filter\hosts.json ..\filter\filter\hosts.json
+    cp $installDir\data\config.json .\data\config.json
+    cp $installDir\filter\hosts.json ..\filter\filter\hosts.json
     Stop-Service -Name "SkyWall UI"
     Remove-Item -Recurse C:\Users\Public\Documents\skywall-logs\ui\*
     Start-Service -Name "SkyWall UI"

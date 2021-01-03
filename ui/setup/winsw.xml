@@ -2,7 +2,7 @@
 	<id>SkyWall UI</id>
 	<name>SkyWall UI</name>
 	<description>Control the SkyWall Filter</description>
-	<executable>C:\Users\skywall\skywall\dist\jdk-11.0.9\bin\java.exe</executable>
+	<executable>C:\Program Files\SkyWall\dist\jdk-11.0.9\bin\java.exe</executable>
 	<arguments>-jar SkyWall.jar</arguments>
 	<logpath>C:\Users\Public\Documents\skywall-logs\ui</logpath>
 	<log mode="roll-by-time">
