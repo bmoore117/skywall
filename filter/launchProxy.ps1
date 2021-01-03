@@ -26,7 +26,7 @@ if ($hasConnection -eq $false) {
 
 Set-Location $PSScriptRoot
 
-$json = Get-Content .\filter\hosts.json | ConvertFrom-Json
+$json = Get-Content .\filter\monitor\hosts.json | ConvertFrom-Json
 $ignoredHosts = $json.ignoredHosts -join "|"
 
 if ([string]::IsNullOrEmpty($ignoredHosts)) {

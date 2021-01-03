@@ -44,7 +44,7 @@ class JarvisFilter:
         self.binaryContentTypes = ['video', 'audio', 'image', 'octet', 'pdf', 'zip', 'ms', 'soap', 'mpeg']
 
         scriptFilePath = os.path.dirname(os.path.realpath(__file__))
-        hostsDir = os.path.join(scriptFilePath, "filter")
+        hostsDir = os.path.join(scriptFilePath, "filter/monitor")
         hostsFile = os.path.join(hostsDir, "hosts.json")
 
         self.loadFile(hostsFile)
