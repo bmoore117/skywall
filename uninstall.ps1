@@ -1,10 +1,13 @@
-﻿Stop-Service -Name "SkyWall UI"
+﻿$startLocation = Get-Location
+
+Stop-Service -Name "SkyWall UI"
 Stop-Service -Name "SkyWall Filter"
 
 # the method used in pydivert - WinDivert is a hidden service that does not show up in services.msc
 sc.exe stop WinDivert1.3
 
-cd "C:\Program Files\SkyWall"
+$installDir = "C:\Program Files\SkyWall"
+cd $installDir
 .\skywall-ui.exe uninstall
 .\skywall-filter.exe uninstall
 
@@ -15,7 +18,7 @@ if ($json.formerAdminUsers) {
 }
 
 cd ..
-rm -Recurse .\skywall
+rm -Recurse -Force .\SkyWall
 
 Remove-NetFirewallRule -Name "SkyWall - Allow Filter Inbound"
 Remove-NetFirewallRule -Name "SkyWall - Allow Filter Outbound"
@@ -25,10 +28,11 @@ Unregister-ScheduledTask -TaskName "Restart SkyWall on Network Change" -Confirm:
 Unregister-ScheduledTask -TaskName "Ping SkyWall" -Confirm:$false
 
 $path = [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::Machine)
-$path = $path.Replace(";C:\Users\skywall\skywall\dist\Python39\Scripts", "");
+$path = $path.Replace(";$installDir\dist\Python39\Scripts", "");
 [Environment]::SetEnvironmentVariable("Path", $path, [EnvironmentVariableTarget]::Machine)
 
-Get-ChildItem Cert:\LocalMachine\Root |Where-Object { $_.Subject -match 'mitmproxy' } | Remove-Item
+Get-ChildItem Cert:\LocalMachine\Root | Where-Object { $_.Subject -match 'mitmproxy' } | Remove-Item
 Remove-Item C:\Windows\System32\config\systemprofile\.mitmproxy\ -Recurse
 
 Write-Host "Uninstall completed successfully"
+cd $startLocation
