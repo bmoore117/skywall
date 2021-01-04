@@ -15,14 +15,14 @@ New-NetFirewallRule -Name "SkyWall - Block QUIC Protocol" -DisplayName "SkyWall 
 
 $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
 
-$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-File $installDir\scripts\ping.ps1'
+$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-File $installDir\scripts\ping.ps1"
 $stateChangeTrigger = Get-CimClass -Namespace ROOT\Microsoft\Windows\TaskScheduler -ClassName MSFT_TaskSessionStateChangeTrigger
 # TASK_SESSION_STATE_CHANGE_TYPE.TASK_SESSION_UNLOCK (taskschd.h)
 $onUnlockTrigger = New-CimInstance -CimClass $stateChangeTrigger -Property @{ StateChange = 8 } -ClientOnly
 $pingSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries
 Register-ScheduledTask -Action $action -Trigger $onUnlockTrigger -TaskName "Ping SkyWall" -Principal $principal -Settings $pingSettings
 
-$restartAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-File $installDir\scripts\restartService.ps1 -serviceName "SkyWall Filter"'
+$restartAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-File $installDir\scripts\restartService.ps1 -serviceName ""SkyWall Filter"""
 $networkChangeClass = Get-CimClass -Namespace ROOT\Microsoft\Windows\TaskScheduler -ClassName MSFT_TaskEventTrigger
 $subscription = @"
 <QueryList><Query Id="0" Path="Microsoft-Windows-NetworkProfile/Operational"><Select Path="Microsoft-Windows-NetworkProfile/Operational">*[System[Provider[@Name='Microsoft-Windows-NetworkProfile'] and EventID=10000]]</Select></Query></QueryList>
