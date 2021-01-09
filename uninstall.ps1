@@ -25,13 +25,13 @@ cd ..
 rm -Recurse -Force .\SkyWall
 
 Write-Host "Deleting firewall rules"
-Remove-NetFirewallRule -Name "SkyWall - Allow Filter Inbound"
-Remove-NetFirewallRule -Name "SkyWall - Allow Filter Outbound"
-Remove-NetFirewallRule -Name "SkyWall - Block QUIC Protocol"
+Remove-NetFirewallRule -Name "SkyWall - Allow Filter Inbound" -ErrorAction SilentlyContinue
+Remove-NetFirewallRule -Name "SkyWall - Allow Filter Outbound" -ErrorAction SilentlyContinue
+Remove-NetFirewallRule -Name "SkyWall - Block QUIC Protocol" -ErrorAction SilentlyContinue
 
 Write-Host "Deleting Scheduled Tasks"
-Unregister-ScheduledTask -TaskName "Restart SkyWall on Network Change" -Confirm:$false
-Unregister-ScheduledTask -TaskName "Ping SkyWall" -Confirm:$false
+Unregister-ScheduledTask -TaskName "Restart SkyWall on Network Change" -Confirm:$false -ErrorAction SilentlyContinue
+Unregister-ScheduledTask -TaskName "Ping SkyWall" -Confirm:$false -ErrorAction SilentlyContinue
 
 Write-Host "Cleaning path"
 $path = [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::Machine)

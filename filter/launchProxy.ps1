@@ -32,6 +32,39 @@ if ((Test-Path -Path "C:\WINDOWS\system32\config\systemprofile\.mitmproxy") -eq 
     certutil -addstore root C:\WINDOWS\system32\config\systemprofile\.mitmproxy\mitmproxy-ca-cert.cer
 }
 
+$principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+
+if ((Get-ScheduledTask -TaskName "Ping SkyWall" -ErrorAction SilentlyContinue) -eq $null) {
+    $actionStr = @'
+-Command "& {if ((Get-AppxPackage -Name SkyWall) -ne $null -or $env:SKYWALL_SCRIPT_INSTALL) { Invoke-RestMethod -Uri http://localhost:9090/ping -Method Post } else { Unregister-ScheduledTask -TaskName 'Ping SkyWall' -Confirm:$false; Remove-NetFirewallRule -DisplayName "SkyWall - Block QUIC Protocol" -ErrorAction SilentlyContinue }}"
+'@
+
+    $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $actionStr
+    $stateChangeTrigger = Get-CimClass -Namespace ROOT\Microsoft\Windows\TaskScheduler -ClassName MSFT_TaskSessionStateChangeTrigger
+    # TASK_SESSION_STATE_CHANGE_TYPE.TASK_SESSION_UNLOCK (taskschd.h)
+    $onUnlockTrigger = New-CimInstance -CimClass $stateChangeTrigger -Property @{ StateChange = 8 } -ClientOnly
+    $pingSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries
+    Register-ScheduledTask -Action $action -Trigger $onUnlockTrigger -TaskName "Ping SkyWall" -Principal $principal -Settings $pingSettings
+}
+
+if ((Get-ScheduledTask -TaskName "Restart SkyWall on Network Change" -ErrorAction SilentlyContinue) -eq $null) {
+    $actionStr = @'
+-Command "& {if ((Get-AppxPackage -Name SkyWall) -ne $null -or $env:SKYWALL_SCRIPT_INSTALL) { Restart-Service -Name "SkyWall Filter" } else { Unregister-ScheduledTask -TaskName 'Restart SkyWall on Network Change' -Confirm:$false; Remove-NetFirewallRule -DisplayName "SkyWall - Block QUIC Protocol" -ErrorAction SilentlyContinue }}"
+'@
+    $restartAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $actionStr
+    $networkChangeClass = Get-CimClass -Namespace ROOT\Microsoft\Windows\TaskScheduler -ClassName MSFT_TaskEventTrigger
+    $subscription = @"
+<QueryList><Query Id="0" Path="Microsoft-Windows-NetworkProfile/Operational"><Select Path="Microsoft-Windows-NetworkProfile/Operational">*[System[Provider[@Name='Microsoft-Windows-NetworkProfile'] and EventID=10000]]</Select></Query></QueryList>
+"@
+    $onNetworkChange = New-CimInstance -CimClass $networkChangeClass -Property @{ Subscription = $subscription } -ClientOnly
+    $restartSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries
+    Register-ScheduledTask -Action $restartAction -Trigger $onNetworkChange -TaskName "Restart SkyWall on Network Change" -Principal $principal -Settings $restartSettings
+}
+
+if ((Get-NetFirewallRule -DisplayName "SkyWall - Block QUIC Protocol" -ErrorAction SilentlyContinue) -eq $null) {
+    New-NetFirewallRule -Name "SkyWall - Block QUIC Protocol" -DisplayName "SkyWall - Block QUIC Protocol" -Action Block -Profile Any -Direction Outbound -Protocol UDP -RemotePort 80,443
+}
+
 Set-Location $PSScriptRoot
 
 $json = Get-Content .\filter\monitor\hosts.json | ConvertFrom-Json
