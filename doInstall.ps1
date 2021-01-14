@@ -3,6 +3,8 @@
     exit 1
 }
 
+$origLocation = Get-Location
+
 $installDir = "C:\Program Files\SkyWall"
 $null = New-Item -Type Directory -Force -Path $installDir
 
@@ -23,5 +25,6 @@ cd $installDir
 Start-Service "SkyWall UI"
 Start-Service "SkyWall Filter"
 
+cd $origLocation
 Write-Host "Install completed, exiting in 5 seconds"
 Start-Sleep -Seconds 5

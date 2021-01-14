@@ -24,14 +24,6 @@ if ($hasConnection -eq $false) {
     return
 }
 
-if ((Test-Path -Path "C:\WINDOWS\system32\config\systemprofile\.mitmproxy") -eq $false) {
-    Write-Host "Adding certificate to store on first run"
-    do {
-        Start-Sleep -Seconds 3
-    } while ((Test-Path -Path "C:\WINDOWS\system32\config\systemprofile\.mitmproxy") -eq $false)
-    certutil -addstore root C:\WINDOWS\system32\config\systemprofile\.mitmproxy\mitmproxy-ca-cert.cer
-}
-
 $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
 
 if ((Get-ScheduledTask -TaskName "Ping SkyWall" -ErrorAction SilentlyContinue) -eq $null) {
@@ -67,13 +59,13 @@ if ((Get-NetFirewallRule -DisplayName "SkyWall - Block QUIC Protocol" -ErrorActi
 
 Set-Location $PSScriptRoot
 
-$json = Get-Content .\filter\monitor\hosts.json | ConvertFrom-Json
+$json = Get-Content .\filter\hosts.json | ConvertFrom-Json
 $ignoredHosts = $json.ignoredHosts -join "|"
 
 if ([string]::IsNullOrEmpty($ignoredHosts)) {
     Write-Host "Launching with no ignored hosts"
-    mitmdump.exe --mode transparent --set block_global=false --ssl-insecure --no-http2 -s .\skywall-filter.py
+    .\dist\Python39\python.exe .\mitmdump.py --mode transparent --set block_global=false --ssl-insecure --no-http2 -s .\skywall-filter.py
 } else {
     Write-Host "Launching with ignored hosts" $ignoredHosts
-    mitmdump.exe --mode transparent --set block_global=false --ssl-insecure --no-http2 -s .\skywall-filter.py --ignore-hosts $ignoredHosts
+    .\dist\Python39\python.exe .\mitmdump.py --mode transparent --set block_global=false --ssl-insecure --no-http2 -s .\skywall-filter.py --ignore-hosts $ignoredHosts
 }

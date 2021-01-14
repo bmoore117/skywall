@@ -276,26 +276,28 @@ public class JobRunner {
     }
 
     private void retryFailedJobs() {
-        configService.withTransaction(config -> {
-            Iterator<Job> it = config.getRetryJobs().iterator();
-            while (it.hasNext()) {
-                Job job = it.next();
-                log.info("Retrying previously failed job {}", job.getJobDescription());
-                RuntimeException e = null;
-                boolean result = true;
-                try {
-                    result = runJob(job);
-                } catch (RuntimeException ex) {
-                    e = ex;
-                    log.error("Retry of job failed, leaving in retry queue", e);
-                }
+        if (configService.getConfig().getRetryJobs().size() > 0) {
+            configService.withTransaction(config -> {
+                Iterator<Job> it = config.getRetryJobs().iterator();
+                while (it.hasNext()) {
+                    Job job = it.next();
+                    log.info("Retrying previously failed job {}", job.getJobDescription());
+                    RuntimeException e = null;
+                    boolean result = true;
+                    try {
+                        result = runJob(job);
+                    } catch (RuntimeException ex) {
+                        e = ex;
+                        log.error("Retry of job failed, leaving in retry queue", e);
+                    }
 
-                if (e == null && result) {
-                    log.info("Job succeeded, removing from queue");
-                    it.remove();
+                    if (e == null && result) {
+                        log.info("Job succeeded, removing from queue");
+                        it.remove();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @SuppressWarnings("unchecked")

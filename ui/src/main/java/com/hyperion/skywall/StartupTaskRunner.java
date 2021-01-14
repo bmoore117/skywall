@@ -1,6 +1,7 @@
 package com.hyperion.skywall;
 
 import com.hyperion.skywall.backend.services.JobRunner;
+import com.hyperion.skywall.backend.services.WinUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,13 @@ public class StartupTaskRunner implements ApplicationRunner {
 
     private final ResourcePatternResolver resourcePatternResolver;
     private final JobRunner jobRunner;
+    private final WinUtils winUtils;
 
     @Autowired
-    public StartupTaskRunner(JobRunner jobRunner, ResourcePatternResolver resourcePatternResolver) {
+    public StartupTaskRunner(JobRunner jobRunner, WinUtils winUtils,
+                             ResourcePatternResolver resourcePatternResolver) {
         this.jobRunner = jobRunner;
+        this.winUtils = winUtils;
         this.resourcePatternResolver = resourcePatternResolver;
     }
 
@@ -39,6 +43,7 @@ public class StartupTaskRunner implements ApplicationRunner {
             if (!f.exists()) {
                 if (f.mkdirs()) {
                     unpackFiles(f);
+                    winUtils.trustCert();
                 } else {
                     log.error("For some reason the scripts directory could not be created");
                 }
@@ -47,6 +52,8 @@ public class StartupTaskRunner implements ApplicationRunner {
             }
         } catch (IOException e) {
             log.error("Error unpacking scripts", e);
+        } catch (InterruptedException e) {
+            log.error("Error running trustCert.ps1", e);
         }
 
         // todo is this needed if we have ping controller? It would seem safe enough to just wrap in a runAsync but is it really needed?

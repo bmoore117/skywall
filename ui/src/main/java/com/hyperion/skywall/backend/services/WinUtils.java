@@ -161,4 +161,11 @@ public class WinUtils {
         builder.command("powershell.exe", "-File", "createSkyWallUser.ps1");
         runProc(builder);
     }
+
+    public void trustCert() throws IOException, InterruptedException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.directory(new File("scripts"));
+        builder.command("powershell.exe", "-File", "trustCert.ps1");
+        runProc(builder);
+    }
 }

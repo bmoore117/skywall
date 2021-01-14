@@ -32,7 +32,7 @@ public class ConfigService {
     private static final Logger log = LoggerFactory.getLogger(ConfigService.class);
 
     public static final String FILTER_FILE_NAME = "hosts.json";
-    public static final String FILTER_CONFIG_LOCATION = "filter/monitor";
+    public static final String FILTER_CONFIG_LOCATION = "filter";
     public static final String FILE_LOCATION = "data";
     public static final String FILE_NAME = "config.json";
     public static final String STOCK_PASSWORD = "P@ssw0rd";
