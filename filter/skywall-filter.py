@@ -43,14 +43,15 @@ class JarvisFilter:
 
         self.binaryContentTypes = ['video', 'audio', 'image', 'octet', 'pdf', 'zip', 'ms', 'soap', 'mpeg']
 
-        scriptFilePath = os.path.dirname(os.path.realpath(__file__))
+        scriptFilePath = os.path.join(os.getenv('LOCALAPPDATA'), "SkyWall")
         hostsDir = os.path.join(scriptFilePath, "filter")
+        ctx.log.info("Monitoring directory: " + str(hostsDir))
         hostsFile = os.path.join(hostsDir, "hosts.json")
 
         self.loadFile(hostsFile)
 
-        patterns = "*.json"
-        ignore_patterns = ""
+        patterns = ["*.json"]
+        ignore_patterns = []
         ignore_directories = True
         case_sensitive = True
         handler = PatternMatchingEventHandler(patterns, ignore_patterns, ignore_directories, case_sensitive)
