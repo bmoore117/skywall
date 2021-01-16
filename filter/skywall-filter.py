@@ -45,7 +45,6 @@ class JarvisFilter:
 
         scriptFilePath = os.path.join(os.getenv('LOCALAPPDATA'), "SkyWall")
         hostsDir = os.path.join(scriptFilePath, "filter")
-        ctx.log.info("Monitoring directory: " + str(hostsDir))
         hostsFile = os.path.join(hostsDir, "hosts.json")
 
         self.loadFile(hostsFile)
