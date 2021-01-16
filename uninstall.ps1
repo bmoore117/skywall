@@ -9,20 +9,26 @@ sc.exe stop WinDivert1.3
 
 Write-Host "Unregistering Services"
 $installDir = "C:\Program Files\SkyWall"
-cd $installDir
-.\skywall-ui.exe uninstall
-.\skywall-filter.exe uninstall
+if (Test-Path $installDir) {
+    cd $installDir
+    .\skywall-ui.exe uninstall
+    .\skywall-filter.exe uninstall
 
-Write-Host "Restoring former admin users"
-$json = Get-Content .\data\config.json | ConvertFrom-Json
-if ($json.formerAdminUsers) {
-    $formerAdminUsers = $json.formerAdminUsers -join "~,~"
-    .\scripts\toggleStrictMode.ps1 -mode off -usersToRestore $formerAdminUsers
+    Write-Host "Restoring former admin users"
+    $json = Get-Content C:\Windows\System32\config\systemprofile\AppData\Local\SkyWall\data\config.json | ConvertFrom-Json
+    if ($json.formerAdminUsers) {
+        $formerAdminUsers = $json.formerAdminUsers -join "~,~"
+        C:\Windows\System32\config\systemprofile\AppData\Local\SkyWall\scripts\toggleStrictMode.ps1 -mode off -usersToRestore $formerAdminUsers
+    }
+
+    Write-Host "Deleting SkyWall install files"
+    cd ..
+    rm -Recurse -Force .\SkyWall
+
+    Write-Host "Deleting SkyWall config files"
+    cd ..
+    rm -Recurse -Force C:\Windows\System32\config\systemprofile\AppData\Local\SkyWall
 }
-
-Write-Host "Deleting SkyWall install files"
-cd ..
-rm -Recurse -Force .\SkyWall
 
 Write-Host "Deleting firewall rules"
 Remove-NetFirewallRule -Name "SkyWall - Allow Filter Inbound" -ErrorAction SilentlyContinue
