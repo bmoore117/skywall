@@ -13,12 +13,12 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static com.hyperion.skywall.backend.model.nlp.enumentity.FilterMode.PASSTHROUGH;
+import static com.hyperion.skywall.backend.model.nlp.enumentity.FilterMode.STANDARD;
 import static com.hyperion.skywall.backend.services.WinUtils.FILTER_SERVICE_NAME;
 
 public class DeactivateServiceJob extends Job implements ActivatableJob {
@@ -54,11 +54,30 @@ public class DeactivateServiceJob extends Job implements ActivatableJob {
 
         AtomicBoolean needsRestart = new AtomicBoolean(false);
         configService.withTransaction(config -> configService.withFilterTransaction(filterConfig -> {
+
+            // the general strategy here is zero out the filter config hosts of both types, and rebuild by what's active
+            // we have to be careful not to accidentally add any pending items in as active, so we work out what those
+            // are first.
+
+            List<String> pendingIgnoredHosts = config.getDefinedServices().stream().map(service -> {
+                HashSet<String> remainingHosts = service.getHosts().stream().filter(host -> PASSTHROUGH == host.getFilterMode())
+                        .map(Host::getHost).collect(Collectors.toCollection(HashSet::new));
+                remainingHosts.removeAll(filterConfig.getIgnoredHosts());
+                return Arrays.asList(remainingHosts.toArray(new String[0]));
+            }).filter(list -> !list.isEmpty()).flatMap(Collection::stream).collect(Collectors.toList());
+
+            List<String> pendingHosts = config.getDefinedServices().stream().map(service -> {
+                HashSet<String> remainingHosts = service.getHosts().stream().filter(host -> STANDARD == host.getFilterMode())
+                        .map(Host::getHost).collect(Collectors.toCollection(HashSet::new));
+                remainingHosts.removeAll(filterConfig.getHosts());
+                return Arrays.asList(remainingHosts.toArray(new String[0]));
+            }).filter(list -> !list.isEmpty()).flatMap(Collection::stream).collect(Collectors.toList());
+
             Set<String> oldIgnoredHosts = new HashSet<>(filterConfig.getIgnoredHosts());
             filterConfig.getIgnoredHosts().clear();
             filterConfig.getHosts().clear();
             for (Service service : configService.getConfig().getDefinedServices()) {
-                if (!serviceName.equals(service.getName())) {
+                if (!serviceName.equals(service.getName()) && service.getCurrentStatus() != ActivationStatus.DISABLED) {
                     for (Host host : service.getHosts()) {
                         if (host.getFilterMode() == PASSTHROUGH) {
                             filterConfig.getIgnoredHosts().add(host.getHost());
@@ -68,6 +87,9 @@ public class DeactivateServiceJob extends Job implements ActivatableJob {
                     }
                 }
             }
+
+            filterConfig.getIgnoredHosts().removeAll(pendingIgnoredHosts);
+            filterConfig.getHosts().removeAll(pendingHosts);
 
             if (!filterConfig.getIgnoredHosts().containsAll(oldIgnoredHosts) ||
                     filterConfig.getIgnoredHosts().size() != oldIgnoredHosts.size()) {
