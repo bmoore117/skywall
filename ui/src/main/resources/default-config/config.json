@@ -1,0 +1,1100 @@
+{
+    "delay" : "ZERO",
+    "hallPassUsed" : false,
+    "strictModeEnabled" : true,
+    "formerAdminUsers" : [
+        "moore"
+    ],
+    "pendingJobs" : [ ],
+    "retryJobs" : [ ],
+    "bedtimes" : null,
+    "knownLocations" : [ ],
+    "definedServices" : [
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : null,
+            "id" : "4d568fcf-7307-46dc-abbb-62ac0080e136",
+            "name" : "Amazon",
+            "hosts" : [
+                {
+                    "host" : "amazon.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : null,
+            "id" : "949a4b9d-67b1-4796-a16a-f3f1247f3e93",
+            "name" : "DLive",
+            "hosts" : [
+                {
+                    "host" : "dlive.tv",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "p5cdn.com/dlive",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : null,
+            "id" : "a2f0641f-e514-45a5-b49a-fa50f77129ba",
+            "name" : "Reddit",
+            "hosts" : [
+                {
+                    "host" : "reddit.com/r/facepalm",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gateway.reddit.com/desktopapi/v1/subreddits/facepalm",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : null,
+            "id" : "12ea36ad-cb9b-4909-892e-8f0d490137e6",
+            "name" : "Social Media",
+            "hosts" : [
+                {
+                    "host" : "linkedin.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "meetup.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : null,
+            "id" : "af47022e-5ff9-48d2-a3ef-1a37f354913a",
+            "name" : "nVidia",
+            "hosts" : [
+                {
+                    "host" : "nvidia.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "geforce.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "nvidiagrid.net",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "international-gfe.download.nvidia.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : null,
+            "id" : "ccd88783-074d-4e7e-a4e7-340cac544832",
+            "name" : "Informational",
+            "hosts" : [
+                {
+                    "host" : "coursera.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "udemy.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "everipedia.org",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : null,
+            "id" : "4f292fbd-4a04-40c8-9594-ca524dd54d00",
+            "name" : "Interview Cake",
+            "hosts" : [
+                {
+                    "host" : "embedwistia-a.akamaihd.net",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "interviewcake.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : null,
+            "id" : "210b7abf-2fa8-478b-8956-481de8c1460d",
+            "name" : "Travel",
+            "hosts" : [
+                {
+                    "host" : "tripadvisor.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "allegiantair.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "kiwi.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "aa.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "tripmatch.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "kayak.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "booker.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "expedia.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "airbnb.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "1d884053-f52c-4b09-a29f-94ef097cdd1f",
+            "name" : "General",
+            "hosts" : [
+                {
+                    "host" : "activebuilding.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "vanguard.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "crunchyroll.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "lethalperformance.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "sourceforge.net",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "sunbasket.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "toasttab.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "pooltool.io",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "patronpath.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "wearehygge.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "realpython.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "americanmuscle.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "getfpv.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cars.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cjponyparts.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "ebay.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gunnar.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "apartments.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "vaadin.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "usnwc.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "zoeskitchen.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "ewheels.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "knowyourmeme.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "indeed.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "oscarliang.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "yubico.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "synxis.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "highwiregames.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gopro.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "astrogaming.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "bestbuy.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "floatandcarve.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "yardhouse.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "wework.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "112c2bf3-9286-48d7-affe-5b4d4fbfad0a",
+            "name" : "Food Services",
+            "hosts" : [
+                {
+                    "host" : "grubhub.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "97d5b5d4-537c-4330-a1ea-90536ef05647",
+            "name" : "News",
+            "hosts" : [
+                {
+                    "host" : "americanidentitymovement.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cardano.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "coinmarketcap.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "nypost.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "forbes.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "wtfhappenedin1971.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "pcmag.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "iohk.io",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "arstechnica.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "coindesk.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "newsobserver.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "wsj.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "wsj.net",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "futurism.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cointelegraph.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cnbc.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "claremontreviewofbooks.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "drudgereport.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "apnews.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "americanmind.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "charlotteobserver.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "thrillist.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "miamiherald.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "medium.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "claremont.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "abc.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "reuters.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "23f471bc-2a13-4e63-8dc8-0aed1782ed2f",
+            "name" : "Work",
+            "hosts" : [
+                {
+                    "host" : "bankofamerica.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "171.158(.*)",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "171.162.(.*)",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "portal-us.bankofamerica.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "ed876e77-9b5d-4817-a11c-95b8ffb3ffa9",
+            "name" : "Proton Mail",
+            "hosts" : [
+                {
+                    "host" : "protonmail.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "4ed76d4b-e962-4c4e-b5c8-b092a85016ff",
+            "name" : "Programming",
+            "hosts" : [
+                {
+                    "host" : "github.io",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "conda.io",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "chocolatey.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "mitmproxy.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "rasa.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "pythonhosted.org",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "jetbrains.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "github.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "hackerrank.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "leetcode.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "0e1a15d2-03e6-447f-b2c0-8ac857ef2a6d",
+            "name" : "Origin",
+            "hosts" : [
+                {
+                    "host" : "dice.se",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "origin.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "ea.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "40eca3b7-d045-4fb7-b684-5635b0fd305c",
+            "name" : "Microsoft",
+            "hosts" : [
+                {
+                    "host" : "live.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "office.net",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "microsoft.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "windows.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "windows.net",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "fba3c03a-318b-4a80-8338-4679da680e7a",
+            "name" : "Ledger",
+            "hosts" : [
+                {
+                    "host" : "ledger.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "abc243ed-7e87-4cf8-8632-bee566356325",
+            "name" : "LastPass",
+            "hosts" : [
+                {
+                    "host" : "lastpass.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "5ee4f57c-fcd0-40e5-bf3a-7251adf78568",
+            "name" : "Halo MCC",
+            "hosts" : [
+                {
+                    "host" : "halowaypoint.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "c3c25d06-6a44-4e3b-943d-5a16d2fcf7d1",
+            "name" : "Google",
+            "hosts" : [
+                {
+                    "host" : "mail.google.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "google.com/maps",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "accounts.google.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gstatic.com/images/icons",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "youtube.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "maps.gstatic.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gmail.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "play.google.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "hcaptcha.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "maps.googleapis.com/maps",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "bf287183-7d3c-49b0-9a78-28a1aa2ddfe5",
+            "name" : "Gaming",
+            "hosts" : [
+                {
+                    "host" : "steampowered.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "robertsspaceindustries.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "epal.gg",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "steamcontent.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "04007d2e-71d8-445a-85c2-40b5d1365a1e",
+            "name" : "Discord",
+            "hosts" : [
+                {
+                    "host" : "discordapp.com/assets",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cdn.discordapp.com/icons",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cdn.discordapp.com/app-assets",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cdn.discordapp.com/emojis",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cdn.discordapp.com/avatars",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "discord.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "discord.gg",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "68e48847-0c13-47d0-b4c7-ad0bd66a0b69",
+            "name" : "Cardano",
+            "hosts" : [
+                {
+                    "host" : "daedaluswallet.io",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "adapools.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "daedalus.io",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "bittrex.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "21864256-29d0-4be4-9f2b-e87bc2ce8a15",
+            "name" : "NewRelic",
+            "hosts" : [
+                {
+                    "host" : "newrelic.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "86174a6f-63ad-4fcc-ab9d-bc920e01b1f7",
+            "name" : "Valorant",
+            "hosts" : [
+                {
+                    "host" : "riotgames.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "riotcdn.net",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "pvp.net",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "kaxsdc.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "d5ab6c3b-a0b9-4d2b-b0fb-a13819efeab5",
+            "name" : "Netflix",
+            "hosts" : [
+                {
+                    "host" : "netflix.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "nflxso.net",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "de61e748-6f25-4ece-aa49-88a44a525674",
+            "name" : "epal",
+            "hosts" : [
+                {
+                    "host" : "epal.gg",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "nim-nosdn.netease.im",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "5af65c95-ab7b-4fd9-b202-272d079319e0",
+            "name" : "World of Warships",
+            "hosts" : [
+                {
+                    "host" : "wows-wowsp-global.gcdn.co",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "worldofwarships.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "armory-wows-global.gcdn.co",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "wargaming.net",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "wows-static-production.gcdn.co",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "a3166e97-1ea3-403d-b3c3-373ff29d1968",
+            "name" : "4chan",
+            "hosts" : [
+                {
+                    "host" : "boards.4chan.org/pol",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "i.4cdn.org/pol",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "is2.4chan.org/biz",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "boards.4chan.org/biz",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "is2.4chan.org/pol",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "i.4cdn.org/biz",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "43d1a87c-c48f-427f-b2d2-bd3ac814cb74",
+            "name" : "Stripe",
+            "hosts" : [
+                {
+                    "host" : "stripe.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "3300e84e-2a04-4652-be97-76246551f3a6",
+            "name" : "Binance",
+            "hosts" : [
+                {
+                    "host" : "binance.us",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "dn-staticdown.qbox.me",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "static.geetest.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "7ffffc4f-a1c4-4ebd-a636-81e8b6864943",
+            "name" : "NC State Government",
+            "hosts" : [
+                {
+                    "host" : "ncdot.gov",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "2fe85cfa-68f9-45bd-824c-53c8bde9db94",
+            "name" : "AMD",
+            "hosts" : [
+                {
+                    "host" : "amd.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "8add613b-c658-43d4-90dc-9ad62de7c05b",
+            "name" : "League of Legends",
+            "hosts" : [
+                {
+                    "host" : "leagueoflegends.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        }
+    ],
+    "definedPhrases" : [
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "685700ba-01c4-4e62-8eeb-db17ba2587ff",
+            "phrase" : "age-restricted video"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "262e2fab-e6c3-4257-8be9-8809c5f96f9a",
+            "phrase" : "zooier than thou"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "519e86b0-05ec-4dc6-bb84-67716c02d90b",
+            "phrase" : "ladyboy"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "59ba7834-4511-4602-b1ee-c44ffe9cdd9d",
+            "phrase" : "barbara jimenez"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "65ec1d81-94c7-4ac3-b050-c0b21256c9f2",
+            "phrase" : "sheylla wandergirlt"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "a7995947-07ab-4b3b-abc6-46c504900824",
+            "phrase" : "miss trans"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "23061096-c6c0-4218-ab2e-9d2a11da291b",
+            "phrase" : "yeid(i|y) collins"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "4a946cfa-1859-44cc-ac34-f98983272ee5",
+            "phrase" : "transsexual"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "a5df934e-7008-42c3-982e-c3973a551c74",
+            "phrase" : "travesti"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "34dfdae1-0a88-41e1-97b9-5e8e84bef9a4",
+            "phrase" : "susi villa"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "6484e636-dde6-432a-a339-7963d724a0f0",
+            "phrase" : "bestiality"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "fe323ed7-b77c-4d43-a203-6fefbfcc9b8f",
+            "phrase" : "beastiality"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "d90f763c-c53d-4e1f-9624-95611cfdcb66",
+            "phrase" : "tgirlnights"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "43014177-6e1c-4c45-ad4d-e85a9177f7fa",
+            "phrase" : "goddess ling"
+        },
+        {
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "52730756-6277-48e4-a4a8-f7795cdf58c4",
+            "phrase" : "transgender(?!.safespace|bathroom)"
+        },
+        {
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "74b3796e-8ae2-4f27-b307-53a5406c8030",
+            "phrase" : "priscilla isabella"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "833c2b39-3806-422c-914e-2d121567f9e6",
+            "phrase" : "lexxi tyler"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "67073d98-c8c1-48be-917b-37dca03393e9",
+            "phrase" : "sexy"
+        },
+        {
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "8e92b6d4-5749-4724-af3e-47bd31609145",
+            "phrase" : "bikini"
+        }
+    ],
+    "blockedHosts" : [
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "cc8053d1-3c91-4ada-b3b1-8ef6c93eedaa",
+            "host" : "8muses.com"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "c3ad6595-1fa8-4cd6-abcc-60a031eaf927",
+            "host" : "artofzoo.com"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "0e9647f1-cfbc-48da-907a-46d0725b470d",
+            "host" : "disboard.org"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "938f9129-302c-49dd-a9b3-c89f55d2ade9",
+            "host" : "media.discordapp.net"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "2de6b39c-6c96-4d04-87ea-d4514e3aa494",
+            "host" : "zoo.wtf"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "6e9f9f93-e993-4a1d-b37d-ea4a141cdabb",
+            "host" : "zooville.org"
+        }
+    ]
+}

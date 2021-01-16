@@ -11,10 +11,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.concurrent.CompletableFuture;
@@ -39,20 +39,18 @@ public class StartupTaskRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         try {
-            File f = new File("scripts");
-            if (!f.exists()) {
-                if (f.mkdirs()) {
-                    unpackFiles(f);
-                    winUtils.trustCert();
-                } else {
-                    log.error("For some reason the scripts directory could not be created");
-                }
-            } else {
-                unpackFiles(f);
+            Path f = PathUtil.getWindowsPath(Paths.get("scripts"));
+            if (!Files.exists(f)) {
+                Files.createDirectories(f);
             }
+            unpackFiles(f);
         } catch (IOException e) {
             log.error("Error unpacking scripts", e);
-        } catch (InterruptedException e) {
+        }
+
+        try {
+            winUtils.trustCert();
+        } catch (IOException | InterruptedException e) {
             log.error("Error running trustCert.ps1", e);
         }
 
@@ -60,12 +58,12 @@ public class StartupTaskRunner implements ApplicationRunner {
         CompletableFuture.runAsync(jobRunner::requeuePendingJobs);
     }
 
-    private void unpackFiles(File f) throws IOException {
+    private void unpackFiles(Path f) throws IOException {
         Resource[] resources = resourcePatternResolver.getResources("classpath:scripts/*.ps1");
         for (Resource resource : resources) {
             log.info("Unpacking {} script", resource.getFilename());
             try (InputStream inputStream = resource.getInputStream()) {
-                Files.copy(inputStream, Paths.get(f.getName(), resource.getFilename()), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(inputStream, Paths.get(f.toAbsolutePath().toString(), resource.getFilename()), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 log.error("Error unpacking changePassword from classpath", e);
             }

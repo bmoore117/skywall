@@ -5,12 +5,16 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.hyperion.skywall.PathUtil;
 import com.hyperion.skywall.backend.model.config.Config;
 import com.hyperion.skywall.backend.model.config.Delay;
 import com.hyperion.skywall.backend.model.config.service.Host;
 import com.hyperion.skywall.backend.model.filter.FilterConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -42,6 +46,8 @@ public class ConfigService {
     public static final ObjectMapper mapper;
     private static final DefaultPrettyPrinter printer;
 
+    private final ResourceLoader resourceLoader;
+
     static {
         mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -52,7 +58,9 @@ public class ConfigService {
         printer.indentArraysWith(indenter);
     }
 
-    public ConfigService() throws IOException {
+    @Autowired
+    public ConfigService(ResourceLoader resourceLoader) throws IOException {
+        this.resourceLoader = resourceLoader;
         config = refreshFile();
         filterConfig = refreshFilterConfigFile();
     }
@@ -76,11 +84,13 @@ public class ConfigService {
 
     protected Config refreshFile() throws IOException {
         Config returnVal;
-        Path location = Paths.get(FILE_LOCATION);
-        Path file = Paths.get(FILE_LOCATION + File.separator + FILE_NAME);
+        Path file = PathUtil.getWindowsPath(Paths.get(FILE_LOCATION + File.separator + FILE_NAME));
         if (Files.notExists(file)) {
-            returnVal = new Config();
-            Files.createDirectories(location);
+            Resource defaultFile = resourceLoader.getResource("classpath:default-config/config.json");
+            try (InputStream content = defaultFile.getInputStream()) {
+                returnVal = mapper.readValue(content, Config.class);
+            }
+            Files.createDirectories(file.getParent());
             Files.write(file.toAbsolutePath(), mapper.writer(printer).writeValueAsString(returnVal).getBytes());
         } else {
             returnVal = mapper.readValue(Files.newInputStream(file), Config.class);
@@ -91,11 +101,13 @@ public class ConfigService {
 
     private FilterConfig refreshFilterConfigFile() throws IOException {
         FilterConfig returnVal;
-        Path location = Paths.get(FILTER_CONFIG_LOCATION);
-        Path file = Paths.get(FILTER_CONFIG_LOCATION + File.separator + FILTER_FILE_NAME);
+        Path file = PathUtil.getWindowsPath(Paths.get(FILTER_CONFIG_LOCATION + File.separator + FILTER_FILE_NAME));
         if (Files.notExists(file)) {
-            returnVal = new FilterConfig();
-            Files.createDirectories(location);
+            Resource defaultFile = resourceLoader.getResource("classpath:default-config/hosts.json");
+            try (InputStream content = defaultFile.getInputStream()) {
+                returnVal = mapper.readValue(content, FilterConfig.class);
+            }
+            Files.createDirectories(file.getParent());
             Files.write(file.toAbsolutePath(), mapper.writer(printer).writeValueAsString(returnVal).getBytes());
         } else {
             returnVal = mapper.readValue(Files.newInputStream(file), FilterConfig.class);
@@ -126,8 +138,8 @@ public class ConfigService {
 
     public void writeFile() {
         try {
-            Files.write(Paths.get(FILE_LOCATION + File.separator + FILE_NAME), mapper.writer(printer)
-                    .writeValueAsString(config).getBytes());
+            Path path = PathUtil.getWindowsPath(Paths.get(FILE_LOCATION + File.separator + FILE_NAME));
+            Files.write(path, mapper.writer(printer).writeValueAsString(config).getBytes());
         } catch (IOException e) {
             log.error("Error writing config", e);
         }
@@ -177,8 +189,8 @@ public class ConfigService {
 
     public void writeFilterConfig(FilterConfig filterConfig) {
         try {
-            Files.write(Paths.get(FILTER_CONFIG_LOCATION + File.separator + FILTER_FILE_NAME), mapper.writer(printer)
-                    .writeValueAsString(filterConfig).getBytes());
+            Path path = PathUtil.getWindowsPath(Paths.get(FILTER_CONFIG_LOCATION + File.separator + FILTER_FILE_NAME));
+            Files.write(path, mapper.writer(printer).writeValueAsString(filterConfig).getBytes());
         } catch (IOException e) {
             log.error("Error writing config", e);
         }

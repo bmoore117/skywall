@@ -1,6 +1,7 @@
 package com.hyperion.skywall.backend.services;
 
 import com.hyperion.skywall.Pair;
+import com.hyperion.skywall.PathUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ public class WinUtils {
 
     private static final Logger log = LoggerFactory.getLogger(WinUtils.class);
 
-    private static final boolean inDevMode = "dev".equalsIgnoreCase(System.getenv("RUN_MODE"));
+    private static final boolean inDevMode = "dev".equalsIgnoreCase(System.getenv("SKYWALL_RUN_MODE"));
     public static final String GPS_ERROR = "Access Denied for Location Information";
 
     private Pair<Process, String> runProc(ProcessBuilder builder) throws IOException, InterruptedException {
@@ -47,7 +48,7 @@ public class WinUtils {
         }
 
         ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File("scripts"));
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
         builder.command("powershell.exe", "-File", "restartService.ps1", "-serviceName", serviceName);
 
         runProc(builder);
@@ -59,7 +60,7 @@ public class WinUtils {
         }
 
         ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File("scripts"));
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
         builder.command("powershell.exe", "-File", "stopService.ps1", "-serviceName", serviceName);
 
         runProc(builder);
@@ -71,7 +72,7 @@ public class WinUtils {
         }
 
         ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File("scripts"));
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
         builder.command("powershell.exe", "-File", "startService.ps1", "-serviceName", serviceName);
 
         runProc(builder);
@@ -83,7 +84,7 @@ public class WinUtils {
         }
 
         ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File("scripts"));
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
         builder.command("powershell.exe", "-File", "restartComputer.ps1");
 
         runProc(builder);
@@ -107,7 +108,7 @@ public class WinUtils {
         }
 
         ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File("scripts"));
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
         builder.command("powershell.exe", "-File", "changePassword.ps1", "-password", newPassword);
 
         try {
@@ -121,7 +122,7 @@ public class WinUtils {
 
     public Optional<Double[]> getGpsCoordinates() throws IOException, InterruptedException, GPSAccessDeniedException {
         ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File("scripts"));
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
         builder.command("powershell.exe", "-File", "gpsLocation.ps1");
 
         Pair<Process, String> results = runProc(builder);
@@ -139,7 +140,7 @@ public class WinUtils {
 
     public List<String> toggleStrictMode(boolean on, List<String> usersToReEnable) throws IOException, InterruptedException {
         ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File("scripts"));
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
 
         if (on) {
             createSkywallAdminUser();
@@ -157,14 +158,14 @@ public class WinUtils {
 
     private void createSkywallAdminUser() throws IOException, InterruptedException {
         ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File("scripts"));
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
         builder.command("powershell.exe", "-File", "createSkyWallUser.ps1");
         runProc(builder);
     }
 
     public void trustCert() throws IOException, InterruptedException {
         ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File("scripts"));
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
         builder.command("powershell.exe", "-File", "trustCert.ps1");
         runProc(builder);
     }
