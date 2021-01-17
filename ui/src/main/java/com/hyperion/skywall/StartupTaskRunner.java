@@ -48,11 +48,15 @@ public class StartupTaskRunner implements ApplicationRunner {
             log.error("Error unpacking scripts", e);
         }
 
-        try {
-            winUtils.trustCert();
-        } catch (IOException | InterruptedException e) {
-            log.error("Error running trustCert.ps1", e);
-        }
+        // don't block startup waiting - allow the user to hit the main page if they left the launch when ready option
+        // checked during install
+        CompletableFuture.runAsync(() -> {
+            try {
+                winUtils.trustCert();
+            } catch (IOException | InterruptedException e) {
+                log.error("Error running trustCert.ps1", e);
+            }
+        });
 
         // todo is this needed if we have ping controller? It would seem safe enough to just wrap in a runAsync but is it really needed?
         CompletableFuture.runAsync(jobRunner::requeuePendingJobs);
