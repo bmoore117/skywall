@@ -1,0 +1,9 @@
+{
+    "applications": [
+        {
+            "id": "SkyWall",
+            "executable": "VFS\\ProgramFilesX64\\SkyWall\\dist\\jdk-11.0.9\\bin\\javaw.exe",
+            "arguments": "-jar VFS\\ProgramFilesX64\\SkyWall\\launcher.jar"
+        }
+    ]
+}

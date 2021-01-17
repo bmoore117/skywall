@@ -53,6 +53,9 @@
           <desktop6:Service Name="SkyWall UI" StartupType="auto" StartAccount="localSystem" /></desktop6:Extension>
       </Extensions>
    </Application>
+   <Application Id="SkyWall" Executable="PsfLauncher64.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements BackgroundColor="transparent" DisplayName="SkyWall UI" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Control the SkyWall Filter" />
+   </Application>
   </Applications>
   <Capabilities>
     <rescap:Capability Name="localSystemServices" />

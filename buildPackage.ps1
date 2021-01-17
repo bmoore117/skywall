@@ -14,6 +14,8 @@ cp -Recurse .\ui\data .\package\VFS\ProgramFilesX64\SkyWall
 cp .\ui\setup\winsw.exe .\package\VFS\ProgramFilesX64\SkyWall\skywall-ui.exe
 cp .\ui\setup\winsw.xml .\package\VFS\ProgramFilesX64\SkyWall\skywall-ui.xml
 
+cp .\launcher\dist\launcher.jar .\package\VFS\ProgramFilesX64\SkyWall
+
 cp -Recurse .\dist .\package\VFS\ProgramFilesX64\SkyWall
 
 rm .\SkyWall.msix
