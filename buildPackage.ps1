@@ -7,7 +7,6 @@ cp .\filter\setup\winsw.xml .\package\VFS\ProgramFilesX64\SkyWall\skywall-filter
 cp .\filter\launchProxy.ps1 .\package\VFS\ProgramFilesX64\SkyWall
 cp .\filter\mitmdump.py .\package\VFS\ProgramFilesX64\SkyWall
 cp .\filter\skywall-filter.py .\package\VFS\ProgramFilesX64\SkyWall
-cp -Recurse .\filter\filter .\package\VFS\ProgramFilesX64\SkyWall\
 
 cp .\ui\dist\SkyWall.jar .\package\VFS\ProgramFilesX64\SkyWall
 cp .\ui\setup\winsw.exe .\package\VFS\ProgramFilesX64\SkyWall\skywall-ui.exe
