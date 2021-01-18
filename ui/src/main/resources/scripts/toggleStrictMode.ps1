@@ -21,7 +21,7 @@ if ($mode -eq "on") {
     if ($usersToRestore) {
         $users = $usersToRestore -split "~,~"
         foreach ($user in $users) {
-            Add-LocalGroupMember -Group "Administrators" -Member $user
+            Add-LocalGroupMember -Group "Administrators" -Member $user -ErrorAction SilentlyContinue
         }
     }
 }

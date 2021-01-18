@@ -28,7 +28,7 @@ $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType
 
 if ((Get-ScheduledTask -TaskName "Ping SkyWall" -ErrorAction SilentlyContinue) -eq $null) {
     $actionStr = @'
--Command "& {if ((Get-AppxPackage -Name SkyWall) -ne $null -or $env:SKYWALL_SCRIPT_INSTALL) { Invoke-RestMethod -Uri http://localhost:9090/ping -Method Post } else { Unregister-ScheduledTask -TaskName 'Ping SkyWall' -Confirm:$false; Unregister-ScheduledTask -TaskName 'Restart SkyWall on Network Change' -Confirm:$false; Remove-NetFirewallRule -DisplayName "SkyWall - Block QUIC Protocol" -ErrorAction SilentlyContinue; Get-ChildItem Cert:\LocalMachine\Root | Where-Object { $_.Subject -match 'mitmproxy' } | Remove-Item; Remove-Item ~\.mitmproxy\ -Recurse; rm -Recurse -Force ~\AppData\Local\SkyWall }}"
+-Command "& {if ((Get-AppxPackage -Name SkyWall) -ne $null -or $env:SKYWALL_SCRIPT_INSTALL) { Invoke-RestMethod -Uri http://localhost:9090/ping -Method Post } else { ~\AppData\Local\SkyWall\scripts\finishUninstall.ps1 }}"
 '@
 
     $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $actionStr
@@ -41,7 +41,7 @@ if ((Get-ScheduledTask -TaskName "Ping SkyWall" -ErrorAction SilentlyContinue) -
 
 if ((Get-ScheduledTask -TaskName "Restart SkyWall on Network Change" -ErrorAction SilentlyContinue) -eq $null) {
     $actionStr = @'
--Command "& {if ((Get-AppxPackage -Name SkyWall) -ne $null -or $env:SKYWALL_SCRIPT_INSTALL) { Restart-Service -Name "SkyWall Filter" } else { Unregister-ScheduledTask -TaskName 'Restart SkyWall on Network Change' -Confirm:$false }}"
+-Command "& {if ((Get-AppxPackage -Name SkyWall) -ne $null -or $env:SKYWALL_SCRIPT_INSTALL) { Restart-Service -Name "SkyWall Filter" } else { ~\AppData\Local\SkyWall\scripts\finishUninstall.ps1 }}"
 '@
     $restartAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $actionStr
     $networkChangeClass = Get-CimClass -Namespace ROOT\Microsoft\Windows\TaskScheduler -ClassName MSFT_TaskEventTrigger

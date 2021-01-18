@@ -1,10 +1,8 @@
 {
     "delay" : "ZERO",
     "hallPassUsed" : false,
-    "strictModeEnabled" : true,
-    "formerAdminUsers" : [
-        "moore"
-    ],
+    "strictModeEnabled" : false,
+    "formerAdminUsers" : [ ],
     "pendingJobs" : [ ],
     "retryJobs" : [ ],
     "bedtimes" : null,

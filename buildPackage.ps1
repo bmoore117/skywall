@@ -10,7 +10,6 @@ cp .\filter\skywall-filter.py .\package\VFS\ProgramFilesX64\SkyWall
 cp -Recurse .\filter\filter .\package\VFS\ProgramFilesX64\SkyWall\
 
 cp .\ui\dist\SkyWall.jar .\package\VFS\ProgramFilesX64\SkyWall
-cp -Recurse .\ui\data .\package\VFS\ProgramFilesX64\SkyWall
 cp .\ui\setup\winsw.exe .\package\VFS\ProgramFilesX64\SkyWall\skywall-ui.exe
 cp .\ui\setup\winsw.xml .\package\VFS\ProgramFilesX64\SkyWall\skywall-ui.xml
 
@@ -30,5 +29,5 @@ if ($certs -eq $null) {
     Import-PfxCertificate -CertStoreLocation 'Cert:\LocalMachine\Root' -FilePath .\signing-cert.pfx -Password $password
 }
 
-MakeAppx.exe pack /h SHA256 /d .\package /p SkyWall.msix
+makeappx.exe pack /h SHA256 /d .\package /p SkyWall.msix
 signtool.exe sign /fd SHA256 /f .\signing-cert.pfx /p asdf .\SkyWall.msix
