@@ -32,4 +32,9 @@ public class PingController {
     public String getStockPassword() {
         return ConfigService.STOCK_PASSWORD;
     }
+
+    @GetMapping(path = "/startupCheck")
+    public String startupCheck() {
+        return "started";
+    }
 }
