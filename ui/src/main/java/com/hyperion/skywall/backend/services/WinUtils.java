@@ -83,6 +83,8 @@ public class WinUtils {
             return;
         }
 
+        log.info("Restarting computer");
+
         ProcessBuilder builder = new ProcessBuilder();
         builder.directory(PathUtil.getWindowsFile(new File("scripts")));
         builder.command("powershell.exe", "-File", "restartComputer.ps1");
