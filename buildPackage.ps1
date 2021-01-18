@@ -20,5 +20,15 @@ cp -Recurse .\dist .\package\VFS\ProgramFilesX64\SkyWall
 
 rm .\SkyWall.msix
 
-MakeAppx pack /v /h SHA256 /d .\package /p SkyWall.msix
-signtool.exe sign /fd SHA256 /f C:\Users\User\Desktop\signing-cert.pfx /p asdf .\SkyWall.msix
+$certs = Get-ChildItem Cert:\LocalMachine\Root | Where-Object { $_.FriendlyName -eq 'SkyWall Signing Cert' }
+if ($certs -eq $null) {
+    Write-Host "Generating new signing cert"
+    $result = New-SelfSignedCertificate -Type Custom -Subject "CN=SkyWall, O=Me Inc, C=US" -KeyUsage DigitalSignature -FriendlyName "SkyWall Signing Cert" -CertStoreLocation "Cert:\CurrentUser\My"
+    $thumbprint = $result.Thumbprint
+    $password = ConvertTo-SecureString -String "asdf" -Force -AsPlainText
+    Export-PfxCertificate -Cert "Cert:\CurrentUser\My\$thumbprint" -FilePath .\signing-cert.pfx -Password $password
+    Import-PfxCertificate -CertStoreLocation 'Cert:\LocalMachine\Root' -FilePath .\signing-cert.pfx -Password $password
+}
+
+MakeAppx.exe pack /h SHA256 /d .\package /p SkyWall.msix
+signtool.exe sign /fd SHA256 /f .\signing-cert.pfx /p asdf .\SkyWall.msix

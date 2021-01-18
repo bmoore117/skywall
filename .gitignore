@@ -1,2 +1,3 @@
 package/VFS/
 *.msix
+signing-cert.pfx
