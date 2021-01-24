@@ -39,11 +39,6 @@ Write-Host "Deleting Scheduled Tasks"
 Unregister-ScheduledTask -TaskName "Restart SkyWall on Network Change" -Confirm:$false -ErrorAction SilentlyContinue
 Unregister-ScheduledTask -TaskName "Ping SkyWall" -Confirm:$false -ErrorAction SilentlyContinue
 
-Write-Host "Cleaning path"
-$path = [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::Machine)
-$path = $path.Replace(";$installDir\dist\Python39\Scripts", "");
-[Environment]::SetEnvironmentVariable("Path", $path, [EnvironmentVariableTarget]::Machine)
-
 $user = Get-LocalUser -Name "skywall" -ErrorAction SilentlyContinue
 if ($user -ne $null) {
     Write-Host "Deleting SkyWall User"
@@ -53,7 +48,13 @@ if ($user -ne $null) {
 
 Write-Host "Removing installed certificates"
 Get-ChildItem Cert:\LocalMachine\Root | Where-Object { $_.Subject -match 'mitmproxy' } | Remove-Item
-Remove-Item C:\Windows\System32\config\systemprofile\.mitmproxy\ -Recurse
+if (Test-Path C:\Windows\System32\config\systemprofile\.mitmproxy) {
+    Remove-Item C:\Windows\System32\config\systemprofile\.mitmproxy -Recurse
+}
+
+Write-Host "Clearing logs"
+Remove-Item -Recurse C:\Users\Public\Documents\skywall-logs\filter\*
+Remove-Item -Recurse C:\Users\Public\Documents\skywall-logs\ui\*
 
 Write-Host "Uninstall completed"
 cd $startLocation

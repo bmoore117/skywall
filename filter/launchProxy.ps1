@@ -1,4 +1,5 @@
-﻿$json = Get-Content .\filter\hosts.json | ConvertFrom-Json
+﻿$jsonLocation = "~\AppData\Local\SkyWall\filter\hosts.json"
+$json = Get-Content $jsonLocation | ConvertFrom-Json
 if ($json.filterActive -eq $false) {
     Write-Host "Aborting startup as filter set to OFF, re-enable from UI"
     return
@@ -24,42 +25,9 @@ if ($hasConnection -eq $false) {
     return
 }
 
-$principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
-
-if ((Get-ScheduledTask -TaskName "Ping SkyWall" -ErrorAction SilentlyContinue) -eq $null) {
-    $actionStr = @'
--Command "& {if ((Get-AppxPackage -Name SkyWall) -ne $null -or $env:SKYWALL_SCRIPT_INSTALL) { Invoke-RestMethod -Uri http://localhost:9090/ping -Method Post } else { ~\AppData\Local\SkyWall\scripts\finishUninstall.ps1 }}"
-'@
-
-    $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $actionStr
-    $stateChangeTrigger = Get-CimClass -Namespace ROOT\Microsoft\Windows\TaskScheduler -ClassName MSFT_TaskSessionStateChangeTrigger
-    # TASK_SESSION_STATE_CHANGE_TYPE.TASK_SESSION_UNLOCK (taskschd.h)
-    $onUnlockTrigger = New-CimInstance -CimClass $stateChangeTrigger -Property @{ StateChange = 8 } -ClientOnly
-    $pingSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries
-    Register-ScheduledTask -Action $action -Trigger $onUnlockTrigger -TaskName "Ping SkyWall" -Principal $principal -Settings $pingSettings
-}
-
-if ((Get-ScheduledTask -TaskName "Restart SkyWall on Network Change" -ErrorAction SilentlyContinue) -eq $null) {
-    $actionStr = @'
--Command "& {if ((Get-AppxPackage -Name SkyWall) -ne $null -or $env:SKYWALL_SCRIPT_INSTALL) { Restart-Service -Name "SkyWall Filter" } else { ~\AppData\Local\SkyWall\scripts\finishUninstall.ps1 }}"
-'@
-    $restartAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $actionStr
-    $networkChangeClass = Get-CimClass -Namespace ROOT\Microsoft\Windows\TaskScheduler -ClassName MSFT_TaskEventTrigger
-    $subscription = @"
-<QueryList><Query Id="0" Path="Microsoft-Windows-NetworkProfile/Operational"><Select Path="Microsoft-Windows-NetworkProfile/Operational">*[System[Provider[@Name='Microsoft-Windows-NetworkProfile'] and EventID=10000]]</Select></Query></QueryList>
-"@
-    $onNetworkChange = New-CimInstance -CimClass $networkChangeClass -Property @{ Subscription = $subscription } -ClientOnly
-    $restartSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries
-    Register-ScheduledTask -Action $restartAction -Trigger $onNetworkChange -TaskName "Restart SkyWall on Network Change" -Principal $principal -Settings $restartSettings
-}
-
-if ((Get-NetFirewallRule -DisplayName "SkyWall - Block QUIC Protocol" -ErrorAction SilentlyContinue) -eq $null) {
-    New-NetFirewallRule -Name "SkyWall - Block QUIC Protocol" -DisplayName "SkyWall - Block QUIC Protocol" -Action Block -Profile Any -Direction Outbound -Protocol UDP -RemotePort 80,443
-}
-
 Set-Location $PSScriptRoot
 
-$json = Get-Content ~\AppData\Local\SkyWall\filter\hosts.json | ConvertFrom-Json
+$json = Get-Content $jsonLocation | ConvertFrom-Json
 $ignoredHosts = $json.ignoredHosts -join "|"
 
 if ([string]::IsNullOrEmpty($ignoredHosts)) {
