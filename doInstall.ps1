@@ -24,16 +24,17 @@ $onUnlockTrigger = New-CimInstance -CimClass $stateChangeTrigger -Property @{ St
 $pingSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries
 Register-ScheduledTask -Action $action -Trigger $onUnlockTrigger -TaskName "Ping SkyWall" -Principal $principal -Settings $pingSettings
 
-
-$actionStr = '-Command "& {Restart-Service -Name "SkyWall Filter" }"'
+$actionStr = "-Command ""& {Restart-Service -Name 'SkyWall Filter' }"""
 $restartAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $actionStr
 $networkChangeClass = Get-CimClass -Namespace ROOT\Microsoft\Windows\TaskScheduler -ClassName MSFT_TaskEventTrigger
-$subscription = @"
+# if you put spaces in the xml below, task scheduler will think it's a custom filter. Without spaces it will actually recognize the specific event and show it. Event 10000 is for new connection, event 10001 is for disconnection.
+# turns out we only need 10000 for disconnecting and reconnecting from home wifi / ethernet
+$newConnectionSub = @"
 <QueryList><Query Id="0" Path="Microsoft-Windows-NetworkProfile/Operational"><Select Path="Microsoft-Windows-NetworkProfile/Operational">*[System[Provider[@Name='Microsoft-Windows-NetworkProfile'] and EventID=10000]]</Select></Query></QueryList>
 "@
-$onNetworkChange = New-CimInstance -CimClass $networkChangeClass -Property @{ Subscription = $subscription } -ClientOnly
+$onNewConnection = New-CimInstance -CimClass $networkChangeClass -Property @{ Subscription = $newConnectionSub } -ClientOnly
 $restartSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries
-Register-ScheduledTask -Action $restartAction -Trigger $onNetworkChange -TaskName "Restart SkyWall on Network Change" -Principal $principal -Settings $restartSettings
+Register-ScheduledTask -Action $restartAction -Trigger $onNewConnection -TaskName "Restart SkyWall on Network Change" -Principal $principal -Settings $restartSettings
 
 
 .\deploy.ps1
