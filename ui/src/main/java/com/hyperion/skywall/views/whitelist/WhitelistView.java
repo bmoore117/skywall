@@ -413,15 +413,12 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
                     // in the pending change from the add. We'd need a granularity change to have hosts in a service
                     // have individual activation times to instantly handle that case, rather than a group based
                     // service activation time. So we can only instantly process a host deletion if the service was
-                    // active with no other pending additions. Otherwise, if it wasn't already pending reactivation
-                    // mark it as such
+                    // active with no other pending additions. Otherwise, if it was already pending reactivation
+                    // the change will be picked up on activation, and if it is disabled leave it that way
                     Service current = definedServices.asSingleSelect().getValue();
                     if (current.getCurrentStatus() == ActivationStatus.ACTIVE) {
                         UpdateServiceJob job = new UpdateServiceJob(LocalDateTime.now(), "Activate Service: " + current.getName(), current, ActivationStatus.ACTIVE);
                         jobRunner.runJob(job);
-                    } else if (current.getCurrentStatus() != ActivationStatus.PENDING_ACTIVATION) {
-                        current.updateCurrentActivationStatus(ActivationStatus.NEEDS_REACTIVATION);
-                        definedServices.getDataProvider().refreshItem(current);
                     }
                 });
                 editButtons.add(edit);
