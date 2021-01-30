@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class DeactivatePhraseJob extends Job implements ActivatableJob {
-    private static final Logger log = LoggerFactory.getLogger(DeactivateServiceJob.class);
+    private static final Logger log = LoggerFactory.getLogger(DeactivatePhraseJob.class);
 
     public DeactivatePhraseJob() {}
 

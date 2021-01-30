@@ -22,4 +22,12 @@ public class Host {
     public void setFilterMode(FilterMode filterMode) {
         this.filterMode = filterMode;
     }
+
+    @Override
+    public String toString() {
+        return "Host{" +
+                "host='" + host + '\'' +
+                ", filterMode=" + filterMode +
+                '}';
+    }
 }

@@ -1,10 +1,11 @@
 package com.hyperion.skywall.backend.services;
 
+import com.hyperion.skywall.backend.model.config.ActivationStatus;
 import com.hyperion.skywall.backend.model.config.Delay;
 import com.hyperion.skywall.backend.model.config.JobConstants;
-import com.hyperion.skywall.backend.model.config.job.ActivateServiceJob;
 import com.hyperion.skywall.backend.model.config.job.Job;
 import com.hyperion.skywall.backend.model.config.job.SetDelayJob;
+import com.hyperion.skywall.backend.model.config.job.UpdateServiceJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class JobRunner {
 
     private static List<CustomTimerTask> tasks = new LinkedList<>();
 
-    private ActivateServiceJob lastActivateServiceJob;
+    private UpdateServiceJob lastActivateServiceJob;
 
     @Autowired
     public JobRunner(ApplicationContext applicationContext) {
@@ -113,9 +114,12 @@ public class JobRunner {
         log.info("Scheduling job: {}", job.getJobDescription());
         // if re-queueing job, it is already in pending jobs, do not re-add
         if (!configService.getConfig().getPendingJobs().contains(job)) {
-            if (ActivateServiceJob.class.getName().equals(job.getConcreteClass())) {
-                // used in whitelist view
-                lastActivateServiceJob = (ActivateServiceJob) job;
+            if (UpdateServiceJob.class.getName().equals(job.getConcreteClass())) {
+                UpdateServiceJob updateServiceJob = (UpdateServiceJob) convertIfNecessary(job);
+                if (updateServiceJob.getNewStatus() == ActivationStatus.ACTIVE) {
+                    // used in whitelist view
+                    lastActivateServiceJob = updateServiceJob;
+                }
             }
             configService.getConfig().getPendingJobs().add(job.dehydrateJob());
             if (writeFile) {
@@ -242,7 +246,8 @@ public class JobRunner {
         List<UUID> jobIds = new LinkedList<>();
         while (it.hasNext()) {
             CustomTimerTask task = it.next();
-            if (task.getJobClass().equals(ActivateServiceJob.class)) {
+            // this should be OK because we never queue disable service runs, we run them immediately
+            if (task.getJobClass().equals(UpdateServiceJob.class)) {
                 task.cancel();
                 jobIds.add(task.getJobId());
                 it.remove();

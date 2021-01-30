@@ -313,6 +313,26 @@
                 {
                     "host" : "wework.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "asus.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "anandtech.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "theverge.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "dover.io",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "ameliesfrenchbakery.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -440,6 +460,10 @@
                 },
                 {
                     "host" : "reuters.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "bloombergquint.com",
                     "filterMode" : "STANDARD"
                 }
             ]
@@ -657,6 +681,10 @@
                 {
                     "host" : "maps.googleapis.com/maps",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "pay.google.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -680,6 +708,14 @@
                 },
                 {
                     "host" : "steamcontent.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "steamcdn-a.akamaihd.net",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "xboxlive.com",
                     "filterMode" : "PASSTHROUGH"
                 }
             ]
@@ -886,7 +922,7 @@
         },
         {
             "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "DISABLED",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
             "id" : "3300e84e-2a04-4652-be97-76246551f3a6",
             "name" : "Binance",
             "hosts" : [
@@ -900,6 +936,18 @@
                 },
                 {
                     "host" : "static.geetest.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "binance.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "binance.cloud",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cdn.plaid.com",
                     "filterMode" : "STANDARD"
                 }
             ]
@@ -944,7 +992,7 @@
     "definedPhrases" : [
         {
             "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "685700ba-01c4-4e62-8eeb-db17ba2587ff",
             "phrase" : "age-restricted video"
         },
@@ -1033,7 +1081,7 @@
             "phrase" : "transgender(?!.safespace|bathroom)"
         },
         {
-            "currentStatus" : "DISABLED",
+            "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "ACTIVE",
             "id" : "74b3796e-8ae2-4f27-b307-53a5406c8030",
             "phrase" : "priscilla isabella"
@@ -1045,7 +1093,7 @@
             "phrase" : "lexxi tyler"
         },
         {
-            "currentStatus" : "ACTIVE",
+            "currentStatus" : "DISABLED",
             "lastActivationStatus" : "ACTIVE",
             "id" : "67073d98-c8c1-48be-917b-37dca03393e9",
             "phrase" : "sexy"
@@ -1055,6 +1103,12 @@
             "lastActivationStatus" : "ACTIVE",
             "id" : "8e92b6d4-5749-4724-af3e-47bd31609145",
             "phrase" : "bikini"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "28a3721d-3464-43df-a850-b0829bf3a66c",
+            "phrase" : "pattaya"
         }
     ],
     "blockedHosts" : [

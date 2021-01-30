@@ -2,9 +2,8 @@ package com.hyperion.skywall.views.whitelist;
 
 
 import com.hyperion.skywall.backend.model.config.ActivationStatus;
-import com.hyperion.skywall.backend.model.config.job.ActivateServiceJob;
-import com.hyperion.skywall.backend.model.config.job.DeactivateServiceJob;
 import com.hyperion.skywall.backend.model.config.job.DeleteServiceJob;
+import com.hyperion.skywall.backend.model.config.job.UpdateServiceJob;
 import com.hyperion.skywall.backend.model.config.service.Host;
 import com.hyperion.skywall.backend.model.config.service.Service;
 import com.hyperion.skywall.backend.model.nlp.enumentity.FilterMode;
@@ -201,7 +200,7 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
                 if (service.getCurrentStatus() == ActivationStatus.ACTIVE)  {
                     button = new Button("Deactivate");
                     button.addClickListener(e -> {
-                        DeactivateServiceJob job = new DeactivateServiceJob(LocalDateTime.now(), "Deactivate Service: " + service.getName(), service);
+                        UpdateServiceJob job = new UpdateServiceJob(LocalDateTime.now(), "Deactivate Service: " + service.getName(), service, ActivationStatus.DISABLED);
                         jobRunner.runJob(job);
                         definedServices.getDataProvider().refreshItem(service);
                     });
@@ -209,7 +208,7 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
                         || service.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
                     button = new Button("Activate");
                     button.addClickListener(e -> {
-                        ActivateServiceJob job = new ActivateServiceJob(LocalDateTime.now().plusSeconds(configService.getDelaySeconds()), "Activate Service: " + service.getName(), service);
+                        UpdateServiceJob job = new UpdateServiceJob(LocalDateTime.now().plusSeconds(configService.getDelaySeconds()), "Activate Service: " + service.getName(), service, ActivationStatus.ACTIVE);
                         if (!jobRunner.queueJob(job)) {
                             // expecting configService to modify same instance used by UI
                             configService.withTransaction(config ->
@@ -402,10 +401,28 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
                     List<Host> items = hosts.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
                     items.remove(host);
                     hosts.setItems(items);
+                    // need the service change to hit at the file level before running the below
                     configService.withTransaction(config -> {
                         Service current = definedServices.asSingleSelect().getValue();
                         current.getHosts().remove(host);
                     });
+
+                    // the add 1, remove 1 case.
+                    // adding 1 means we would be restarting the timer
+                    // if we then come along and delete 1, we can't just run the activate service job or it puts
+                    // in the pending change from the add. We'd need a granularity change to have hosts in a service
+                    // have individual activation times to instantly handle that case, rather than a group based
+                    // service activation time. So we can only instantly process a host deletion if the service was
+                    // active with no other pending additions. Otherwise, if it wasn't already pending reactivation
+                    // mark it as such
+                    Service current = definedServices.asSingleSelect().getValue();
+                    if (current.getCurrentStatus() == ActivationStatus.ACTIVE) {
+                        UpdateServiceJob job = new UpdateServiceJob(LocalDateTime.now(), "Activate Service: " + current.getName(), current, ActivationStatus.ACTIVE);
+                        jobRunner.runJob(job);
+                    } else if (current.getCurrentStatus() != ActivationStatus.PENDING_ACTIVATION) {
+                        current.updateCurrentActivationStatus(ActivationStatus.NEEDS_REACTIVATION);
+                        definedServices.getDataProvider().refreshItem(current);
+                    }
                 });
                 editButtons.add(edit);
                 editButtons.add(delete);
