@@ -16,7 +16,7 @@ New-NetFirewallRule -Name "SkyWall - Allow Filter Outbound" -DisplayName "SkyWal
 New-NetFirewallRule -Name "SkyWall - Block QUIC Protocol" -DisplayName "SkyWall - Block QUIC Protocol" -Action Block -Profile Any -Direction Outbound -Protocol UDP -RemotePort 80,443
 
 $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
-$actionStr = '-Command "& {Invoke-RestMethod -Uri http://localhost:9090/ping -Method Post}"'
+$actionStr = "-Command ""& {Invoke-RestMethod -Uri http://localhost:9090/rest/ping -Method Post -Body '{}' -ContentType 'application/json'}"""
 $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $actionStr
 $stateChangeTrigger = Get-CimClass -Namespace ROOT\Microsoft\Windows\TaskScheduler -ClassName MSFT_TaskSessionStateChangeTrigger
 # TASK_SESSION_STATE_CHANGE_TYPE.TASK_SESSION_UNLOCK (taskschd.h)
