@@ -94,6 +94,7 @@ class JarvisFilter:
                 self.lockdownActive = data.get('lockdownActive', False)
             print("Allowed url paths: " + str(self.siteKnownHosts.keys()))
             print("Blocked url paths: " + str(self.blockedUrls))
+            print("Blocked phrases: " + str(self.blockedPhrases))
 
     def isUrlPathBlocked(self, url):
         for urlPath in self.blockedUrls:
@@ -246,7 +247,6 @@ class JarvisFilter:
         if hashVal in self.processedPages:
             ctx.log.info("Document hash previously seen, skipping url extraction")
             return
-        self.processedPages.add(hashVal)
 
         if originKnownForReferer:
             siteRootUrl = refererUrl
@@ -302,6 +302,7 @@ class JarvisFilter:
 
         self.discoveredSafeMediaUrls.clear()
         self.discoveredSafeMediaUrls.update(self.mediaUrlsQueue)
+        self.processedPages.add(hashVal)
 
     def contentTypeNonBinary(self, contentType):
         for binaryType in self.binaryContentTypes:
@@ -352,7 +353,7 @@ class JarvisFilter:
             elif originKnownForReferer:
                 ctx.log.info("Referer in discovered referrers for origin")
             else:
-                ctx.log.info("Request is whitelisted")
+                ctx.log.info("Request part of whitelisted subtree")
             # don't want to slow down loading of these by invoking flow.response.text
             if self.contentTypeNonBinary(contentType):
                 try:
@@ -373,7 +374,7 @@ class JarvisFilter:
             if originKnownForReferer:
                 ctx.log.info("Referer not in discovered referrers for origin")
             if 'video' in contentType or 'image' in contentType and 'svg' not in contentType:
-                ctx.log.info("Media detected, returning 404")
+                ctx.log.info("Blocking detected media, returning 404")
                 flow.response = http.HTTPResponse.make(404)
             else:
                 if self.contentTypeNonBinary(contentType) and 'woff' not in originUrl.geturl():
@@ -399,9 +400,9 @@ class JarvisFilter:
             messages, corresponding to the BINARY and TEXT frame types.
         """
         ctx.log.info(time.ctime(time.time()))
-        if flow.server_conn.address[0] not in self.siteKnownHosts:
-            if flow.messages[-1].type == Opcode.BINARY:
-                ctx.log.info("Blocking binary frame type")
+        if flow.messages[-1].type == Opcode.BINARY:
+            if flow.server_conn.sni not in self.siteKnownHosts and flow.server_conn.address[0] not in self.siteKnownHosts:
+                ctx.log.info("Blocking binary frame type, setting empty body")
                 flow.messages[-1].content = ""
         ctx.log.info('')  # leave blank line
 
