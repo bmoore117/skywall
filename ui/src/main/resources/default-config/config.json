@@ -38,7 +38,7 @@
         },
         {
             "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : null,
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
             "id" : "a2f0641f-e514-45a5-b49a-fa50f77129ba",
             "name" : "Reddit",
             "hosts" : [
@@ -48,6 +48,22 @@
                 },
                 {
                     "host" : "gateway.reddit.com/desktopapi/v1/subreddits/facepalm",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "styles.redditmedia.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "redditstatic.com/gold",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "preview.redd.it/award_images",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "redditstatic.com/avatars",
                     "filterMode" : "STANDARD"
                 }
             ]
@@ -333,6 +349,74 @@
                 {
                     "host" : "ameliesfrenchbakery.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "circauptown.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "mydepotmiami.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "mydepot16.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "mydepot15.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "mydepot28.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "mydepotmichigan.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "mydepotlenox.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "ricohtours.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "rentcafe.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "uhaul.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "arcgis.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "barrys.co",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "beachpal.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "mintrxpharmacy.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "fandango.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "brokenshaker.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "opentable.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -464,6 +548,14 @@
                 },
                 {
                     "host" : "bloombergquint.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "economist.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "pcworld.com",
                     "filterMode" : "STANDARD"
                 }
             ]
@@ -685,6 +777,22 @@
                 {
                     "host" : "pay.google.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gstatic.com/images/branding",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "google.com/images/cleardot.gif",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "googleusercontent.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "fonts.gstatic.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -752,6 +860,10 @@
                 },
                 {
                     "host" : "discord.gg",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "latency.discord.media",
                     "filterMode" : "PASSTHROUGH"
                 }
             ]
@@ -850,16 +962,12 @@
         },
         {
             "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "DISABLED",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
             "id" : "5af65c95-ab7b-4fd9-b202-272d079319e0",
             "name" : "World of Warships",
             "hosts" : [
                 {
                     "host" : "wows-wowsp-global.gcdn.co",
-                    "filterMode" : "STANDARD"
-                },
-                {
-                    "host" : "worldofwarships.com",
                     "filterMode" : "STANDARD"
                 },
                 {
@@ -873,12 +981,24 @@
                 {
                     "host" : "wows-static-production.gcdn.co",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "wds.gcdn.co",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "cdn-us-platform.gcdn.co",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "worldofwarships.com",
+                    "filterMode" : "PASSTHROUGH"
                 }
             ]
         },
         {
             "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "lastActivationStatus" : "DISABLED",
             "id" : "a3166e97-1ea3-403d-b3c3-373ff29d1968",
             "name" : "4chan",
             "hosts" : [
@@ -899,11 +1019,11 @@
                     "filterMode" : "STANDARD"
                 },
                 {
-                    "host" : "is2.4chan.org/pol",
+                    "host" : "i.4cdn.org/biz",
                     "filterMode" : "STANDARD"
                 },
                 {
-                    "host" : "i.4cdn.org/biz",
+                    "host" : "is2.4chan.org/pol",
                     "filterMode" : "STANDARD"
                 }
             ]
@@ -984,6 +1104,30 @@
             "hosts" : [
                 {
                     "host" : "leagueoflegends.com",
+                    "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "1658adbc-8ba6-4bdb-a226-bb9926d8206b",
+            "name" : "FL Govt & Utilities",
+            "hosts" : [
+                {
+                    "host" : "fpl.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "4fbe816f-7620-46e8-b150-7e9c2c946d96",
+            "name" : "Hunt: Showdown",
+            "hosts" : [
+                {
+                    "host" : "huntshowdown.com",
                     "filterMode" : "PASSTHROUGH"
                 }
             ]
@@ -1075,7 +1219,7 @@
             "phrase" : "goddess ling"
         },
         {
-            "currentStatus" : "DISABLED",
+            "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "ACTIVE",
             "id" : "52730756-6277-48e4-a4a8-f7795cdf58c4",
             "phrase" : "transgender(?!.safespace|bathroom)"
@@ -1093,7 +1237,7 @@
             "phrase" : "lexxi tyler"
         },
         {
-            "currentStatus" : "DISABLED",
+            "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "ACTIVE",
             "id" : "67073d98-c8c1-48be-917b-37dca03393e9",
             "phrase" : "sexy"
@@ -1109,6 +1253,30 @@
             "lastActivationStatus" : "ACTIVE",
             "id" : "28a3721d-3464-43df-a850-b0829bf3a66c",
             "phrase" : "pattaya"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "2b20960f-5c5a-4185-9154-8b15c749e771",
+            "phrase" : "burlesque"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "6ea26182-95ae-4904-8522-f9ceadf1e8e2",
+            "phrase" : "melinda demi"
+        },
+        {
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "7dce13a3-10f7-4ebd-8a99-8f1211fdaacc",
+            "phrase" : "mare"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "b8cd38ad-f3ba-4feb-ad87-ecc4360538e6",
+            "phrase" : "lo ivy"
         }
     ],
     "blockedHosts" : [
@@ -1125,7 +1293,7 @@
             "host" : "artofzoo.com"
         },
         {
-            "currentStatus" : "ACTIVE",
+            "currentStatus" : "DISABLED",
             "lastActivationStatus" : "ACTIVE",
             "id" : "0e9647f1-cfbc-48da-907a-46d0725b470d",
             "host" : "disboard.org"
