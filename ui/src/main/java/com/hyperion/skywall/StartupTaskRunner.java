@@ -56,6 +56,12 @@ public class StartupTaskRunner implements ApplicationRunner {
             } catch (IOException | InterruptedException e) {
                 log.error("Error running trustCert.ps1", e);
             }
+
+            try {
+                winUtils.disableSafeBoot();
+            } catch (IOException | InterruptedException e) {
+                log.error("Error running disableSafeBoot.ps1", e);
+            }
         });
 
         // todo is this needed if we have ping controller? It would seem safe enough to just wrap in a runAsync but is it really needed?

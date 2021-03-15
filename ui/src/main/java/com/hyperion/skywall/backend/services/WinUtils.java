@@ -171,4 +171,11 @@ public class WinUtils {
         builder.command("powershell.exe", "-File", "trustCert.ps1");
         runProc(builder);
     }
+
+    public void disableSafeBoot() throws IOException, InterruptedException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
+        builder.command("powershell.exe", "-File", "disableSafeBoot.ps1");
+        runProc(builder);
+    }
 }
