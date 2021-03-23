@@ -39,7 +39,7 @@ public class StartupTaskRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         try {
-            Path f = PathUtil.getWindowsPath(Paths.get("scripts"));
+            Path f = PathUtil.getWindowsPath("scripts");
             if (!Files.exists(f)) {
                 Files.createDirectories(f);
             }

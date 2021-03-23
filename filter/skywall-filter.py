@@ -43,8 +43,8 @@ class JarvisFilter:
 
         self.binaryContentTypes = ['video', 'audio', 'image', 'octet', 'pdf', 'zip', 'ms', 'soap', 'mpeg']
 
-        scriptFilePath = os.path.join(os.getenv('LOCALAPPDATA'), "SkyWall")
-        hostsDir = os.path.join(scriptFilePath, "filter")
+        scriptFilePath = os.path.join(os.getenv('LOCALAPPDATA'), "SkyWall", "filter")
+        hostsDir = os.path.join(scriptFilePath, "hosts")
         hostsFile = os.path.join(hostsDir, "hosts.json")
 
         self.loadFile(hostsFile)

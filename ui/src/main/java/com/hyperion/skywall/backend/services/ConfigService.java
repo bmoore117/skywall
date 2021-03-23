@@ -10,6 +10,7 @@ import com.hyperion.skywall.backend.model.config.Config;
 import com.hyperion.skywall.backend.model.config.Delay;
 import com.hyperion.skywall.backend.model.config.service.Host;
 import com.hyperion.skywall.backend.model.filter.FilterConfig;
+import com.hyperion.skywall.backend.model.filter.ProcessConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,10 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,14 +34,18 @@ public class ConfigService {
 
     private static final Logger log = LoggerFactory.getLogger(ConfigService.class);
 
-    public static final String FILTER_FILE_NAME = "hosts.json";
     public static final String FILTER_CONFIG_LOCATION = "filter";
+    public static final String FILTER_FILE_NAME = "hosts.json";
+    public static final String FILTER_HOSTS_LOCATION = "hosts";
+    public static final String FILTER_PROCESSES_LOCATION = "processes";
+    public static final String FILTER_PROCESSES_FILE = "processes.json";
     public static final String FILE_LOCATION = "data";
     public static final String FILE_NAME = "config.json";
     public static final String STOCK_PASSWORD = "P@ssw0rd";
 
     private Config config;
     private FilterConfig filterConfig;
+    private ProcessConfig processConfig;
     public static final ObjectMapper mapper;
     private static final DefaultPrettyPrinter printer;
 
@@ -63,6 +66,7 @@ public class ConfigService {
         this.resourceLoader = resourceLoader;
         config = refreshFile();
         filterConfig = refreshFilterConfigFile();
+        processConfig = refreshProcessConfigFile();
     }
 
     public void reloadConfig() {
@@ -82,9 +86,17 @@ public class ConfigService {
         }
     }
 
+    public void reloadProcessConfig() {
+        try {
+            processConfig = refreshProcessConfigFile();
+        } catch (IOException e) {
+            log.error("Error reloading config", e);
+        }
+    }
+
     protected Config refreshFile() throws IOException {
         Config returnVal;
-        Path file = PathUtil.getWindowsPath(Paths.get(FILE_LOCATION + File.separator + FILE_NAME));
+        Path file = PathUtil.getWindowsPath(FILE_LOCATION, FILE_NAME);
         if (Files.notExists(file)) {
             Resource defaultFile = resourceLoader.getResource("classpath:default-config/config.json");
             try (InputStream content = defaultFile.getInputStream()) {
@@ -101,7 +113,7 @@ public class ConfigService {
 
     private FilterConfig refreshFilterConfigFile() throws IOException {
         FilterConfig returnVal;
-        Path file = PathUtil.getWindowsPath(Paths.get(FILTER_CONFIG_LOCATION + File.separator + FILTER_FILE_NAME));
+        Path file = PathUtil.getWindowsPath(FILTER_CONFIG_LOCATION, FILTER_HOSTS_LOCATION, FILTER_FILE_NAME);
         if (Files.notExists(file)) {
             Resource defaultFile = resourceLoader.getResource("classpath:default-config/hosts.json");
             try (InputStream content = defaultFile.getInputStream()) {
@@ -111,6 +123,23 @@ public class ConfigService {
             Files.write(file.toAbsolutePath(), mapper.writer(printer).writeValueAsString(returnVal).getBytes());
         } else {
             returnVal = mapper.readValue(Files.newInputStream(file), FilterConfig.class);
+        }
+
+        return returnVal;
+    }
+
+    private ProcessConfig refreshProcessConfigFile() throws IOException {
+        ProcessConfig returnVal;
+        Path file = PathUtil.getWindowsPath(FILTER_CONFIG_LOCATION, FILTER_PROCESSES_LOCATION, FILTER_PROCESSES_FILE);
+        if (Files.notExists(file)) {
+            Resource defaultFile = resourceLoader.getResource("classpath:default-config/processes.json");
+            try (InputStream content = defaultFile.getInputStream()) {
+                returnVal = mapper.readValue(content, ProcessConfig.class);
+            }
+            Files.createDirectories(file.getParent());
+            Files.write(file.toAbsolutePath(), mapper.writer(printer).writeValueAsString(returnVal).getBytes());
+        } else {
+            returnVal = mapper.readValue(Files.newInputStream(file), ProcessConfig.class);
         }
 
         return returnVal;
@@ -138,7 +167,7 @@ public class ConfigService {
 
     public void writeFile() {
         try {
-            Path path = PathUtil.getWindowsPath(Paths.get(FILE_LOCATION + File.separator + FILE_NAME));
+            Path path = PathUtil.getWindowsPath(FILE_LOCATION, FILE_NAME);
             Files.write(path, mapper.writer(printer).writeValueAsString(config).getBytes());
         } catch (IOException e) {
             log.error("Error writing config", e);
@@ -189,8 +218,17 @@ public class ConfigService {
 
     public void writeFilterConfig(FilterConfig filterConfig) {
         try {
-            Path path = PathUtil.getWindowsPath(Paths.get(FILTER_CONFIG_LOCATION + File.separator + FILTER_FILE_NAME));
+            Path path = PathUtil.getWindowsPath(FILTER_CONFIG_LOCATION, FILTER_HOSTS_LOCATION, FILTER_FILE_NAME);
             Files.write(path, mapper.writer(printer).writeValueAsString(filterConfig).getBytes());
+        } catch (IOException e) {
+            log.error("Error writing config", e);
+        }
+    }
+
+    public void writeProcessConfig(ProcessConfig processConfig) {
+        try {
+            Path path = PathUtil.getWindowsPath(FILTER_CONFIG_LOCATION, FILTER_PROCESSES_LOCATION, FILTER_PROCESSES_FILE);
+            Files.write(path, mapper.writer(printer).writeValueAsString(processConfig).getBytes());
         } catch (IOException e) {
             log.error("Error writing config", e);
         }
@@ -212,5 +250,10 @@ public class ConfigService {
     public void withFilterTransaction(FilterTransaction filterTransaction) {
         filterTransaction.updateConfig(filterConfig);
         writeFilterConfig(filterConfig);
+    }
+
+    public void withProcessTransaction(ProcessTransaction configTransaction) {
+        configTransaction.updateConfig(processConfig);
+        writeProcessConfig(processConfig);
     }
 }

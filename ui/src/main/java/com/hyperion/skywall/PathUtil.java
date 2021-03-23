@@ -8,11 +8,16 @@ public class PathUtil {
 
     private static final boolean inDevMode = "dev".equalsIgnoreCase(System.getenv("SKYWALL_RUN_MODE"));
 
-    public static Path getWindowsPath(Path input) {
+    public static Path getWindowsPath(String... input) {
         if (inDevMode) {
-            return input;
+            String[] leftovers = new String[input.length - 1];
+            System.arraycopy(input, 1, leftovers, 0, leftovers.length);
+            return Paths.get(input[0], leftovers);
         } else {
-            return Paths.get(System.getenv("LOCALAPPDATA"), "SkyWall", input.toString());
+            String[] contents = new String[input.length + 1];
+            contents[0] = "SkyWall";
+            System.arraycopy(input, 0, contents, 1, input.length);
+            return Paths.get(System.getenv("LOCALAPPDATA"), contents);
         }
     }
 

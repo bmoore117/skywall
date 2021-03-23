@@ -1,4 +1,4 @@
-﻿$jsonLocation = "~\AppData\Local\SkyWall\filter\hosts.json"
+﻿$jsonLocation = "~\AppData\Local\SkyWall\filter\hosts\hosts.json"
 $json = Get-Content $jsonLocation | ConvertFrom-Json
 if ($json.filterActive -eq $false) {
     Write-Host "Aborting startup as filter set to OFF, re-enable from UI"
