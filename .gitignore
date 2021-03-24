@@ -1,3 +1,5 @@
 package/VFS/
 *.msix
 signing-cert.pfx
+*.iml
+.idea/
