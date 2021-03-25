@@ -213,14 +213,14 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
         Div root = new Div();
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.add(new H3("Whitelisted Processes"));
-        verticalLayout.add(new Label("Most non-browser processes (e.g. Microsoft Word, video games, etc) can be safely trusted, as they only communicate with a fixed set of domains. Rather than write and keep up with many individual rules for the domains a process talks to, simply whitelist a process here."));
+        verticalLayout.add(new Label("Most non-browser processes (e.g. Microsoft Word, video games, etc) can be safely trusted, as they only communicate with a fixed set of domains. Rather than write and keep up with many individual rules for the domains a process talks to, simply whitelist a process here. You don't have to specify the full path to the process, you can simply provide a path to a folder and all programs under that folder will be allowed through the filter."));
         verticalLayout.add(trustedProcesses);
         root.add(verticalLayout);
         return root;
     }
 
     private void initProcessesGrid() {
-        Grid.Column<Process> nameColumn = trustedProcesses.addColumn(Process::getProcess).setHeader("Process");
+        Grid.Column<Process> nameColumn = trustedProcesses.addColumn(Process::getProcess).setHeader("Path");
         trustedProcesses.addComponentColumn(process -> {
             Span active = new Span();
             if (process.getCurrentStatus() != null) {
