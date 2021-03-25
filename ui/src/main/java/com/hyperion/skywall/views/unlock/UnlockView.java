@@ -92,6 +92,7 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
 
     public UnlockView() {
         setSizeFull();
+        setPadding(false);
         delay = new Select<>();
         delay.setItems(Delay.values());
         delay.setLabel("Current Delay");
@@ -305,7 +306,6 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         tabsToPages.put(gpsTab, generateGPSPage());
 
         VerticalLayout tabActivePage = new VerticalLayout();
-        tabActivePage.setPadding(false);
         tabActivePage.add(delayPage);
 
         sections.add(delayTab, gpsTab);
