@@ -22,6 +22,7 @@ public class Config {
     private List<Service> definedServices;
     private List<Phrase> definedPhrases;
     private List<BlockedHost> blockedHosts;
+    private List<Process> trustedProcesses;
 
     public Config() {
         delay = Delay.ZERO;
@@ -34,6 +35,7 @@ public class Config {
         definedPhrases = new ArrayList<>();
         blockedHosts = new ArrayList<>();
         formerAdminUsers = new ArrayList<>();
+        trustedProcesses = new ArrayList<>();
     }
 
     public Boolean isHallPassUsed() {
@@ -154,5 +156,16 @@ public class Config {
 
     public void setFormerAdminUsers(List<String> formerAdminUsers) {
         this.formerAdminUsers = formerAdminUsers;
+    }
+
+    public List<Process> getTrustedProcesses() {
+        if (this.trustedProcesses == null) {
+            this.trustedProcesses = new ArrayList<>();
+        }
+        return trustedProcesses;
+    }
+
+    public void setTrustedProcesses(List<Process> trustedProcesses) {
+        this.trustedProcesses = trustedProcesses;
     }
 }

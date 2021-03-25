@@ -3,6 +3,7 @@ package com.hyperion.skywall.backend.services;
 import com.hyperion.skywall.backend.model.config.BlockedHost;
 import com.hyperion.skywall.backend.model.config.Config;
 import com.hyperion.skywall.backend.model.config.Phrase;
+import com.hyperion.skywall.backend.model.config.Process;
 import com.hyperion.skywall.backend.model.config.service.Service;
 
 import java.util.Optional;
@@ -31,6 +32,10 @@ public class ConfigUtils {
         return config.getBlockedHosts().stream().filter(host -> uuid.equals(host.getId())).findFirst();
     }
 
-    public static void resetActivatableStatus(Config config, UUID uuid, Class<?> activatableClass) {
+    public static Optional<Process> findProcessById(Config config, UUID uuid) {
+        if (uuid == null) {
+            return Optional.empty();
+        }
+        return config.getTrustedProcesses().stream().filter(process -> uuid.equals(process.getId())).findFirst();
     }
 }

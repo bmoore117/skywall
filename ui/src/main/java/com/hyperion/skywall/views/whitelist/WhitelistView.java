@@ -1,9 +1,9 @@
 package com.hyperion.skywall.views.whitelist;
 
 
-import com.hyperion.skywall.backend.model.config.ActivationStatus;
-import com.hyperion.skywall.backend.model.config.job.DeleteServiceJob;
-import com.hyperion.skywall.backend.model.config.job.UpdateServiceJob;
+import com.hyperion.skywall.backend.model.config.*;
+import com.hyperion.skywall.backend.model.config.Process;
+import com.hyperion.skywall.backend.model.config.job.*;
 import com.hyperion.skywall.backend.model.config.service.Host;
 import com.hyperion.skywall.backend.model.config.service.Service;
 import com.hyperion.skywall.backend.model.nlp.enumentity.FilterMode;
@@ -25,6 +25,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
@@ -65,6 +67,10 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
     private final Grid<Host> hosts;
     private final Binder<Host> hostBinder;
 
+    private final Grid<Process> trustedProcesses;
+    private final Binder<Process> processBinder;
+    private final Process addNewProcess;
+
     private final Host addNewHost;
     private final Service addNewService;
 
@@ -93,6 +99,42 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
         addNewHost.setHost("Add new");
         initHostsGrid();
 
+        trustedProcesses = new Grid<>();
+        processBinder = new Binder<>(Process.class);
+        addNewProcess = new Process();
+        addNewProcess.setProcess("Add new");
+        initProcessesGrid();
+
+        Tabs sections = new Tabs();
+        sections.setWidthFull();
+        Map<Tab, Component> tabsToPages = new HashMap<>();
+
+        Tab websitesTab = new Tab("Websites");
+        Div websitesPage = generateWebsitesPage();
+        tabsToPages.put(websitesTab, websitesPage);
+
+        Tab appsTab = new Tab("Apps");
+        tabsToPages.put(appsTab, generateAppsPage());
+
+        VerticalLayout tabActivePage = new VerticalLayout();
+        tabActivePage.setPadding(false);
+        tabActivePage.add(websitesPage);
+
+        sections.add(websitesTab, appsTab);
+        sections.setFlexGrowForEnclosedTabs(1);
+        sections.addSelectedChangeListener(event -> {
+            Component selectedPage = tabsToPages.get(sections.getSelectedTab());
+            selectedPage.setVisible(true);
+            tabActivePage.removeAll();
+            tabActivePage.add(selectedPage);
+        });
+
+        add(sections);
+        add(tabActivePage);
+    }
+
+    private Div generateWebsitesPage() {
+        Div root = new Div();
         Div primary = new Div();
         primary.setSizeFull();
         primary.add(createPrimaryFormLayout());
@@ -117,7 +159,7 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
                         .collect(Collectors.toList());
                 definedServices.setItems(matchingServices);
             } else {
-                doAfterNavigation();
+                doAfterNavigationServices();
             }
         });
         filter.setValueChangeMode(ValueChangeMode.EAGER);
@@ -139,11 +181,11 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
         upload.setDropAllowed(false);
         upload.setUploadButton(new Button("Import Configuration"));
         upload.addSucceededListener(e -> {
-           if (configService.importDefinedServices(buffer.getInputStream())) {
-               doAfterNavigation();
-           } else {
-               showNotification("Invalid input file format");
-           }
+            if (configService.importDefinedServices(buffer.getInputStream())) {
+                doAfterNavigationServices();
+            } else {
+                showNotification("Invalid input file format");
+            }
         });
         fieldRow.add(cancelLastChange, cancelAllChanges, export, upload);
         fieldRow.setVerticalComponentAlignment(Alignment.END, cancelLastChange);
@@ -155,7 +197,7 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
         Label description = new Label("Here you can whitelist websites and collections of hosts, grouping them together under custom categories called services. Activation is controlled by the current delay, and if you made a mistake and don't want to activate a service as-is, simply use the buttons to cancel the pending change. There are two types of whitelisting, standard and passthrough. In standard, traffic passes through the filter and is inspected. If you wrote a rule to allow A.com, standard mode allows the filter to inspect the HTML and javascript of A.com and allow images and material from B.com without you having to write a rule for B.com. Passthrough mode typically should not be used for websites, but instead for desktop programs that may have issues with the certificates the filter presents to applications on your computer. You should only try passthrough mode if standard mode doesn't work with an application. Passthrough mode allows limited wildcard syntax such as (.*).example.com");
 
         searchBar.add(title, description, fieldRow, new Hr());
-        add(searchBar);
+        root.add(searchBar);
 
         HorizontalLayout splitLayout = new HorizontalLayout();
         splitLayout.setSizeFull();
@@ -163,7 +205,183 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
         secondary.getStyle().set("width", "50%");
         splitLayout.add(primary, secondary);
 
-        add(splitLayout);
+        root.add(splitLayout);
+        return root;
+    }
+
+    private Div generateAppsPage() {
+        Div root = new Div();
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.add(new H3("Whitelisted Processes"));
+        verticalLayout.add(new Label("Most non-browser processes (e.g. Microsoft Word, video games, etc) can be safely trusted, as they only communicate with a fixed set of domains. Rather than write and keep up with many individual rules for the domains a process talks to, simply whitelist a process here."));
+        verticalLayout.add(trustedProcesses);
+        root.add(verticalLayout);
+        return root;
+    }
+
+    private void initProcessesGrid() {
+        Grid.Column<Process> nameColumn = trustedProcesses.addColumn(Process::getProcess).setHeader("Process");
+        trustedProcesses.addComponentColumn(process -> {
+            Span active = new Span();
+            if (process.getCurrentStatus() != null) {
+                if (process.getCurrentStatus() == ActivationStatus.ACTIVE) {
+                    active.setText("Active");
+                    active.getElement().setAttribute("theme", "badge success");
+                } else if (process.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
+                    active.setText("Reactivate");
+                    active.getElement().setAttribute("theme", "badge contrast");
+                } else if (process.getCurrentStatus() == ActivationStatus.PENDING_DELETE) {
+                    active.setText("Pending Delete");
+                    active.getElement().setAttribute("theme", "badge contrast");
+                } else if (process.getCurrentStatus() == ActivationStatus.PENDING_DEACTIVATION) {
+                    active.setText("Pending Deactivation");
+                    active.getElement().setAttribute("theme", "badge contrast");
+                } else if (process.getCurrentStatus() == ActivationStatus.PENDING_ACTIVATION) {
+                    active.setText("Pending Activation");
+                    active.getElement().setAttribute("theme", "badge contrast");
+                } else {
+                    active.setText("Disabled");
+                    active.getElement().setAttribute("theme", "badge contrast");
+                }
+            }
+            return active;
+        }).setHeader("Status");
+
+        trustedProcesses.addComponentColumn(process -> {
+            if (!addNewService.getName().equals(process.getProcess())) {
+                Button button;
+                if (process.getCurrentStatus() == ActivationStatus.ACTIVE)  {
+                    button = new Button("Deactivate");
+                    button.addClickListener(e -> {
+                        UpdateProcessJob job = new UpdateProcessJob(LocalDateTime.now(), "Deactivate Process: " + process.getProcess(), process, ActivationStatus.DISABLED);
+                        jobRunner.runJob(job);
+                        trustedProcesses.getDataProvider().refreshItem(process);
+                    });
+                } else if (process.getCurrentStatus() == ActivationStatus.DISABLED
+                        || process.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
+                    button = new Button("Activate");
+                    button.addClickListener(e -> {
+                        UpdateProcessJob job = new UpdateProcessJob(LocalDateTime.now().plusSeconds(configService.getDelaySeconds()), "Activate Process: " + process.getProcess(), process, ActivationStatus.ACTIVE);
+                        if (!jobRunner.queueJob(job)) {
+                            // expecting configService to modify same instance used by UI
+                            configService.withTransaction(config ->
+                                    ConfigUtils.findProcessById(config, process.getId())
+                                            .ifPresent(p -> p.updateCurrentActivationStatus(ActivationStatus.PENDING_ACTIVATION)));
+                            showNotification("Job queued. The change will take effect after the current delay expires");
+                        }
+                        trustedProcesses.getDataProvider().refreshItem(process);
+                    });
+                } else {
+                    button = new Button("Cancel");
+                    button.addClickListener(e -> {
+                        configService.withTransaction(config ->
+                                ConfigUtils.findProcessById(config, process.getId())
+                                        .ifPresent(p -> p.updateCurrentActivationStatus(p.getLastActivationStatus())));
+                        jobRunner.cancelPendingJobsForActivatable(process.getId());
+                        trustedProcesses.getDataProvider().refreshItem(process);
+                    });
+                }
+                return button;
+            } else {
+                return new Span();
+            }
+        }).setHeader("Action");
+
+        Editor<Process> editor = trustedProcesses.getEditor();
+        editor.setBinder(processBinder);
+        editor.setBuffered(true);
+
+        TextField processName = new TextField();
+        processBinder.forField(processName).asRequired("Mandatory field")
+                .withValidator(Objects::nonNull, "Mandatory field")
+                .bind(Process::getProcess, Process::setProcess);
+        nameColumn.setEditorComponent(processName);
+
+        Collection<Button> editButtons = Collections
+                .newSetFromMap(new WeakHashMap<>());
+
+        Grid.Column<Process> editorColumn = trustedProcesses.addComponentColumn(process -> {
+            if (addNewProcess.getProcess().equals(process.getProcess())) {
+                Button add = new Button(new Icon(VaadinIcon.PLUS));
+                add.addClassName("edit");
+                add.addClickListener(e -> {
+                    List<Process> items = trustedProcesses.getDataProvider().fetch(new Query<>())
+                            .filter(item -> !item.getProcess().equals(addNewProcess.getProcess())).collect(Collectors.toList());
+                    Process newProcess = new Process();
+                    newProcess.updateCurrentActivationStatus(ActivationStatus.DISABLED);
+                    items.add(newProcess);
+                    items.add(addNewProcess);
+                    trustedProcesses.setItems(items);
+                    editor.editItem(newProcess);
+                    processName.focus();
+                });
+                add.setEnabled(!editor.isOpen());
+                editButtons.add(add);
+                return add;
+            } else {
+                Div buttons = new Div();
+                Button edit = new Button(new Icon(VaadinIcon.EDIT));
+                edit.addClickListener(e -> {
+                    editor.editItem(process);
+                    processName.focus();
+                });
+                edit.setEnabled(!editor.isOpen());
+                buttons.add(edit);
+                Button delete = new Button(new Icon(VaadinIcon.CLOSE));
+                delete.addClickListener(e -> {
+                    List<Process> items = trustedProcesses.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
+                    items.remove(process);
+                    trustedProcesses.setItems(items);
+
+                    DeleteProcessJob job = new DeleteProcessJob(LocalDateTime.now(), "Delete Process: " + process.getProcess(), process);
+                    jobRunner.runJob(job);
+                });
+                editButtons.add(edit);
+                editButtons.add(delete);
+                buttons.add(delete);
+                return buttons;
+            }
+        }).setHeader("Edit");
+
+        editor.addOpenListener(e -> editButtons.forEach(button -> button.setEnabled(!editor.isOpen())));
+        editor.addCloseListener(e -> editButtons.forEach(button -> button.setEnabled(!editor.isOpen())));
+
+        Button saveGrid = new Button(new Icon(VaadinIcon.CHECK), e -> {
+            BinderValidationStatus<Process> validate = processBinder.validate();
+            if (validate.isOk()) {
+                Process item = editor.getItem();
+                String itemOldName = item.getProcess();
+                editor.save();
+                configService.withTransaction(config -> {
+                    // remove old, by filtering where name != old name
+                    List<Process> updated = config.getTrustedProcesses().stream()
+                            .filter(service -> !service.getProcess().equals(itemOldName)).collect(Collectors.toList());
+                    // item is now the new one from editor.save
+                    if (!updated.contains(item)) {
+                        updated.add(item);
+                    }
+                    config.setTrustedProcesses(updated);
+                });
+            }
+        });
+
+        Button cancel = new Button(new Icon(VaadinIcon.CLOSE), e -> {
+            Process edited = editor.getItem();
+            editor.cancel();
+            if (edited.getProcess() == null || edited.getProcess().isBlank()) {
+                List<Process> items = trustedProcesses.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
+                items.remove(edited);
+                trustedProcesses.setItems(items);
+            }
+        });
+
+        // Add a keypress listener that listens for an escape key up event.
+        // Note! some browsers return key as Escape and some as Esc
+        trustedProcesses.getElement().addEventListener("keyup", event -> editor.cancel())
+                .setFilter("event.key === 'Escape' || event.key === 'Esc'");
+
+        Div buttons = new Div(saveGrid, cancel);
+        editorColumn.setEditorComponent(buttons);
     }
 
     private void initServicesGrid() {
@@ -509,15 +727,24 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
 
     @Override
     public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {
-        doAfterNavigation();
+        doAfterNavigationServices();
+        doAfterNavigationProcesses();
     }
 
-    private void doAfterNavigation() {
+    private void doAfterNavigationServices() {
         List<Service> items = configService.getConfig().getDefinedServices();
         List<Service> uiSafeItems = items.stream().filter(i -> !addNewService.getName().equals(i.getName()))
                 .sorted(comparing(Service::getName, nullsLast(String.CASE_INSENSITIVE_ORDER))).collect(Collectors.toList());
         uiSafeItems.add(addNewService);
         definedServices.setItems(uiSafeItems);
+    }
+
+    private void doAfterNavigationProcesses() {
+        List<Process> processItems = configService.getConfig().getTrustedProcesses();
+        List<Process> uiSafeProcesses = processItems.stream().filter(i -> !addNewProcess.getProcess().equals(i.getProcess()))
+                .sorted(comparing(Process::getProcess, nullsLast(String.CASE_INSENSITIVE_ORDER))).collect(Collectors.toList());
+        uiSafeProcesses.add(addNewProcess);
+        trustedProcesses.setItems(uiSafeProcesses);
     }
 
     private void showNotification(String message) {
