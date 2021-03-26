@@ -979,8 +979,8 @@
             ]
         },
         {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
             "id" : "86174a6f-63ad-4fcc-ab9d-bc920e01b1f7",
             "name" : "Valorant",
             "hosts" : [
@@ -1035,8 +1035,8 @@
             ]
         },
         {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
             "id" : "5af65c95-ab7b-4fd9-b202-272d079319e0",
             "name" : "World of Warships",
             "hosts" : [
@@ -1171,8 +1171,8 @@
             ]
         },
         {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
             "id" : "8add613b-c658-43d4-90dc-9ad62de7c05b",
             "name" : "League of Legends",
             "hosts" : [
@@ -1215,6 +1215,18 @@
                 {
                     "host" : "bankofamerica.com",
                     "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "ef42da8e-e694-4802-82b9-2beecf3e8ab0",
+            "name" : "Zoom",
+            "hosts" : [
+                {
+                    "host" : "zoom.us",
+                    "filterMode" : "PASSTHROUGH"
                 }
             ]
         }
@@ -1405,14 +1417,8 @@
     ],
     "trustedProcesses" : [
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "DISABLED",
-            "id" : "917a7a78-9c54-4d94-99d4-64847493b59c",
-            "process" : "C:\\Games\\World_of_Warships_NA"
-        },
-        {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "DISABLED",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "355e12ac-f73d-4f10-9cb3-19507299fe35",
             "process" : "C:\\ProgramData\\Wargaming.net\\GameCenter"
         },
@@ -1435,8 +1441,8 @@
             "process" : "C:\\Program Files (x86)\\Steam"
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "DISABLED",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "04392678-692d-4327-9689-ecaf8bdda691",
             "process" : "C:\\Riot Games"
         },
@@ -1453,10 +1459,16 @@
             "process" : "C:\\Program Files\\AMD"
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "DISABLED",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "d7577118-8744-4a38-a3d1-1d04a0f8c6d3",
             "process" : "C:\\Users\\moore\\AppData\\Roaming\\Zoom"
+        },
+        {
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "0f07405d-e009-47f9-9e43-0ccc769fafe0",
+            "process" : "C:\\Program Files\\World_of_Warships"
         }
     ]
 }
