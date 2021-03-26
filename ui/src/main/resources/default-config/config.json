@@ -1,8 +1,10 @@
 {
     "delay" : "ZERO",
     "hallPassUsed" : false,
-    "strictModeEnabled" : false,
-    "formerAdminUsers" : [ ],
+    "strictModeEnabled" : true,
+    "formerAdminUsers" : [
+        "moore"
+    ],
     "pendingJobs" : [ ],
     "retryJobs" : [ ],
     "bedtimes" : null,
@@ -64,6 +66,26 @@
                 },
                 {
                     "host" : "redditstatic.com/avatars",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gateway.reddit.com/desktopapi/v1/subreddits/cardano",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gateway.reddit.com/desktopapi/v1/subreddits/satoshistreetbets",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gateway.reddit.com/desktopapi/v1/subreddits/wallstreetbets",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gateway.reddit.com/desktopapi/v1/subreddits/greentext",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gateway.reddit.com/desktopapi/v1/subreddits/whitepeopletwitter",
                     "filterMode" : "STANDARD"
                 }
             ]
@@ -417,6 +439,42 @@
                 {
                     "host" : "opentable.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "crunch.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "btcmiami.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "eventbrite.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "e-surfer.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "radinn.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "biscaynebayfoundation.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "miamiwaterkeeper.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "tropicalaudubon.org",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "vkoc.net",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -561,15 +619,11 @@
             ]
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "23f471bc-2a13-4e63-8dc8-0aed1782ed2f",
             "name" : "Work",
             "hosts" : [
-                {
-                    "host" : "bankofamerica.com",
-                    "filterMode" : "PASSTHROUGH"
-                },
                 {
                     "host" : "171.158(.*)",
                     "filterMode" : "PASSTHROUGH"
@@ -581,6 +635,10 @@
                 {
                     "host" : "portal-us.bankofamerica.com",
                     "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "bankofamerica.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -645,8 +703,8 @@
             ]
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "0e1a15d2-03e6-447f-b2c0-8ac857ef2a6d",
             "name" : "Origin",
             "hosts" : [
@@ -671,14 +729,6 @@
             "name" : "Microsoft",
             "hosts" : [
                 {
-                    "host" : "live.com",
-                    "filterMode" : "STANDARD"
-                },
-                {
-                    "host" : "office.net",
-                    "filterMode" : "STANDARD"
-                },
-                {
                     "host" : "microsoft.com",
                     "filterMode" : "PASSTHROUGH"
                 },
@@ -688,6 +738,22 @@
                 },
                 {
                     "host" : "windows.net",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "office365.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "office.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "live.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "office.net",
                     "filterMode" : "PASSTHROUGH"
                 }
             ]
@@ -717,8 +783,8 @@
             ]
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "5ee4f57c-fcd0-40e5-bf3a-7251adf78568",
             "name" : "Halo MCC",
             "hosts" : [
@@ -825,6 +891,10 @@
                 {
                     "host" : "xboxlive.com",
                     "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "ea.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -889,6 +959,10 @@
                 {
                     "host" : "bittrex.com",
                     "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "yoroiwallet.com",
+                    "filterMode" : "PASSTHROUGH"
                 }
             ]
         },
@@ -905,8 +979,8 @@
             ]
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "86174a6f-63ad-4fcc-ab9d-bc920e01b1f7",
             "name" : "Valorant",
             "hosts" : [
@@ -961,8 +1035,8 @@
             ]
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "5af65c95-ab7b-4fd9-b202-272d079319e0",
             "name" : "World of Warships",
             "hosts" : [
@@ -979,10 +1053,6 @@
                     "filterMode" : "PASSTHROUGH"
                 },
                 {
-                    "host" : "wows-static-production.gcdn.co",
-                    "filterMode" : "STANDARD"
-                },
-                {
                     "host" : "wds.gcdn.co",
                     "filterMode" : "PASSTHROUGH"
                 },
@@ -992,6 +1062,10 @@
                 },
                 {
                     "host" : "worldofwarships.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "wows-static-production.gcdn.co",
                     "filterMode" : "PASSTHROUGH"
                 }
             ]
@@ -1097,8 +1171,8 @@
             ]
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "DISABLED",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "8add613b-c658-43d4-90dc-9ad62de7c05b",
             "name" : "League of Legends",
             "hosts" : [
@@ -1121,14 +1195,26 @@
             ]
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "DISABLED",
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "4fbe816f-7620-46e8-b150-7e9c2c946d96",
             "name" : "Hunt: Showdown",
             "hosts" : [
                 {
                     "host" : "huntshowdown.com",
                     "filterMode" : "PASSTHROUGH"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "53f8113c-0ea2-4a9a-8c3b-447e32414c23",
+            "name" : "Bank of America",
+            "hosts" : [
+                {
+                    "host" : "bankofamerica.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         }
@@ -1219,7 +1305,7 @@
             "phrase" : "goddess ling"
         },
         {
-            "currentStatus" : "ACTIVE",
+            "currentStatus" : "DISABLED",
             "lastActivationStatus" : "ACTIVE",
             "id" : "52730756-6277-48e4-a4a8-f7795cdf58c4",
             "phrase" : "transgender(?!.safespace|bathroom)"
@@ -1237,7 +1323,7 @@
             "phrase" : "lexxi tyler"
         },
         {
-            "currentStatus" : "ACTIVE",
+            "currentStatus" : "DISABLED",
             "lastActivationStatus" : "ACTIVE",
             "id" : "67073d98-c8c1-48be-917b-37dca03393e9",
             "phrase" : "sexy"
@@ -1315,6 +1401,62 @@
             "lastActivationStatus" : "ACTIVE",
             "id" : "6e9f9f93-e993-4a1d-b37d-ea4a141cdabb",
             "host" : "zooville.org"
+        }
+    ],
+    "trustedProcesses" : [
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "917a7a78-9c54-4d94-99d4-64847493b59c",
+            "process" : "C:\\Games\\World_of_Warships_NA"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "355e12ac-f73d-4f10-9cb3-19507299fe35",
+            "process" : "C:\\ProgramData\\Wargaming.net\\GameCenter"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "61a70ed5-b7a2-450c-a32e-3151b06b166f",
+            "process" : "C:\\Program Files (x86)\\Origin"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "83ef6ffa-2271-48ed-8473-49ca4773302e",
+            "process" : "C:\\Program Files (x86)\\Origin Games"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "384f7348-d9a6-47dc-87a7-021034ae052a",
+            "process" : "C:\\Program Files (x86)\\Steam"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "04392678-692d-4327-9689-ecaf8bdda691",
+            "process" : "C:\\Riot Games"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "93277e99-3667-48d5-800c-7f0cd21853fb",
+            "process" : "C:\\Program Files (x86)\\VMware"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "6fd54694-a816-4434-8ed1-b43211aa395b",
+            "process" : "C:\\Program Files\\AMD"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "d7577118-8744-4a38-a3d1-1d04a0f8c6d3",
+            "process" : "C:\\Users\\moore\\AppData\\Roaming\\Zoom"
         }
     ]
 }
