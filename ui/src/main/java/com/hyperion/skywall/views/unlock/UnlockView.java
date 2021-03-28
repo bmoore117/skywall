@@ -49,8 +49,12 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -373,6 +377,28 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         page.add(new Html("<br />"));
         activate.getElement().getStyle().set("width", "20%");
         page.add(activate);
+
+        H3 timeTil = new H3("Time Til 5pm on Friday");
+        page.add(timeTil);
+        VerticalLayout timeLayout = new VerticalLayout();
+        timeLayout.setPadding(false);
+        timeLayout.setSpacing(true);
+        Label timeTilLabel = new Label("Time displays here");
+        timeLayout.add(timeTilLabel);
+        Button getTime = new Button("Get Time");
+        getTime.addClickListener(e -> {
+            LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
+            LocalDateTime fivePMOnFriday = now.with(TemporalAdjusters.next(DayOfWeek.FRIDAY))
+                    .with(ChronoField.HOUR_OF_DAY, 17)
+                    .with(ChronoField.MINUTE_OF_HOUR, 0)
+                    .with(ChronoField.SECOND_OF_MINUTE, 0)
+                    .with(ChronoField.MILLI_OF_SECOND, 0)
+                    .with(ChronoField.MICRO_OF_SECOND, 0);
+            Duration d = Duration.between(now, fivePMOnFriday);
+            timeTilLabel.setText(String.format("%d days, %d hours, %d minutes", d.toDaysPart(), d.toHoursPart(), d.toMinutesPart()));
+        });
+        timeLayout.add(getTime);
+        page.add(timeLayout);
 
         return page;
     }
