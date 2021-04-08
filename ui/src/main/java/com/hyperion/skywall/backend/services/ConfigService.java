@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -101,6 +102,10 @@ public class ConfigService {
             Resource defaultFile = resourceLoader.getResource("classpath:default-config/config.json");
             try (InputStream content = defaultFile.getInputStream()) {
                 returnVal = mapper.readValue(content, Config.class);
+                // in the case where we're unpacking a fresh install, make sure things are not enabled as leftovers
+                returnVal.setStrictModeEnabled(false);
+                returnVal.setFormerAdminUsers(Collections.emptyList());
+                returnVal.setDelay(Delay.ZERO);
             }
             Files.createDirectories(file.getParent());
             Files.write(file.toAbsolutePath(), mapper.writer(printer).writeValueAsString(returnVal).getBytes());

@@ -699,6 +699,18 @@
                 {
                     "host" : "leetcode.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "repo.maven.apache.org",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "maven.vaadin.com",
+                    "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "registry.npmjs.org",
+                    "filterMode" : "PASSTHROUGH"
                 }
             ]
         },
@@ -1469,6 +1481,12 @@
             "lastActivationStatus" : "ACTIVE",
             "id" : "0f07405d-e009-47f9-9e43-0ccc769fafe0",
             "process" : "C:\\Program Files\\World_of_Warships"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "aa9a6dfe-c21c-4233-af2a-e9a74c8c72c1",
+            "process" : "C:\\Program Files\\Ledger Live"
         }
     ]
 }
