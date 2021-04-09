@@ -719,6 +719,14 @@
                 {
                     "host" : "registry.npmjs.org",
                     "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "githubassets.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "githubusercontent.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },

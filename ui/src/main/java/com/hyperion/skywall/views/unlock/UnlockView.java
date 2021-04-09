@@ -136,8 +136,8 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
                     configService.withFilterTransaction(filterConfig -> filterConfig.setFilterActive(false));
                     toggleFilter.setText("Turn Filter On");
                 } else {
-                    winUtils.startService(WinUtils.FILTER_SERVICE_NAME);
                     configService.withFilterTransaction(filterConfig -> filterConfig.setFilterActive(true));
+                    winUtils.startService(WinUtils.FILTER_SERVICE_NAME);
                     toggleFilter.setText("Turn Filter Off");
                 }
             } catch (InterruptedException | IOException ex) {
