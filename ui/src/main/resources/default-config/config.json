@@ -1431,72 +1431,73 @@
             "host" : "zooville.org"
         }
     ],
-    "trustedProcesses" : [
+    "whitelistedPaths" : [
         {
             "currentStatus" : "DISABLED",
             "lastActivationStatus" : "ACTIVE",
             "id" : "355e12ac-f73d-4f10-9cb3-19507299fe35",
-            "process" : "C:\\ProgramData\\Wargaming.net\\GameCenter"
+            "path" : "C:\\ProgramData\\Wargaming.net\\GameCenter"
         },
         {
             "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "DISABLED",
             "id" : "61a70ed5-b7a2-450c-a32e-3151b06b166f",
-            "process" : "C:\\Program Files (x86)\\Origin"
+            "path" : "C:\\Program Files (x86)\\Origin"
         },
         {
             "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "DISABLED",
             "id" : "83ef6ffa-2271-48ed-8473-49ca4773302e",
-            "process" : "C:\\Program Files (x86)\\Origin Games"
+            "path" : "C:\\Program Files (x86)\\Origin Games"
         },
         {
             "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "DISABLED",
             "id" : "384f7348-d9a6-47dc-87a7-021034ae052a",
-            "process" : "C:\\Program Files (x86)\\Steam"
+            "path" : "C:\\Program Files (x86)\\Steam"
         },
         {
             "currentStatus" : "DISABLED",
             "lastActivationStatus" : "ACTIVE",
             "id" : "04392678-692d-4327-9689-ecaf8bdda691",
-            "process" : "C:\\Riot Games"
+            "path" : "C:\\Riot Games"
         },
         {
             "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "DISABLED",
             "id" : "93277e99-3667-48d5-800c-7f0cd21853fb",
-            "process" : "C:\\Program Files (x86)\\VMware"
+            "path" : "C:\\Program Files (x86)\\VMware"
         },
         {
             "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "DISABLED",
             "id" : "6fd54694-a816-4434-8ed1-b43211aa395b",
-            "process" : "C:\\Program Files\\AMD"
+            "path" : "C:\\Program Files\\AMD"
         },
         {
             "currentStatus" : "DISABLED",
             "lastActivationStatus" : "ACTIVE",
             "id" : "d7577118-8744-4a38-a3d1-1d04a0f8c6d3",
-            "process" : "C:\\Users\\moore\\AppData\\Roaming\\Zoom"
+            "path" : "C:\\Users\\moore\\AppData\\Roaming\\Zoom"
         },
         {
             "currentStatus" : "DISABLED",
             "lastActivationStatus" : "ACTIVE",
             "id" : "0f07405d-e009-47f9-9e43-0ccc769fafe0",
-            "process" : "C:\\Program Files\\World_of_Warships"
+            "path" : "C:\\Program Files\\World_of_Warships"
         },
         {
             "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "DISABLED",
             "id" : "aa9a6dfe-c21c-4233-af2a-e9a74c8c72c1",
-            "process" : "C:\\Program Files\\Ledger Live"
+            "path" : "C:\\Program Files\\Ledger Live"
         },
         {
             "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "DISABLED",
             "id" : "df6a623c-13d1-45c4-aef1-4e742fe40365",
-            "process" : "C:\\Program Files\\ASUS"
+            "path" : "C:\\Program Files\\ASUS"
         }
-    ]
+    ],
+    "blacklistedPaths" : [ ]
 }

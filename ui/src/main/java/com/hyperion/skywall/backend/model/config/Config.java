@@ -5,9 +5,7 @@ import com.hyperion.skywall.backend.model.config.job.Job;
 import com.hyperion.skywall.backend.model.config.service.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Config {
 
@@ -22,7 +20,8 @@ public class Config {
     private List<Service> definedServices;
     private List<Phrase> definedPhrases;
     private List<BlockedHost> blockedHosts;
-    private List<Process> trustedProcesses;
+    private List<Path> whitelistedPaths;
+    private List<Path> blacklistedPaths;
 
     public Config() {
         delay = Delay.ZERO;
@@ -35,7 +34,8 @@ public class Config {
         definedPhrases = new ArrayList<>();
         blockedHosts = new ArrayList<>();
         formerAdminUsers = new ArrayList<>();
-        trustedProcesses = new ArrayList<>();
+        whitelistedPaths = new ArrayList<>();
+        blacklistedPaths = new ArrayList<>();
     }
 
     public Boolean isHallPassUsed() {
@@ -158,14 +158,25 @@ public class Config {
         this.formerAdminUsers = formerAdminUsers;
     }
 
-    public List<Process> getTrustedProcesses() {
-        if (this.trustedProcesses == null) {
-            this.trustedProcesses = new ArrayList<>();
+    public List<Path> getWhitelistedPaths() {
+        if (this.whitelistedPaths == null) {
+            this.whitelistedPaths = new ArrayList<>();
         }
-        return trustedProcesses;
+        return whitelistedPaths;
     }
 
-    public void setTrustedProcesses(List<Process> trustedProcesses) {
-        this.trustedProcesses = trustedProcesses;
+    public void setWhitelistedPaths(List<Path> trustedPaths) {
+        this.whitelistedPaths = trustedPaths;
+    }
+
+    public List<Path> getBlacklistedPaths() {
+        if (this.blacklistedPaths == null) {
+            this.blacklistedPaths = new ArrayList<>();
+        }
+        return blacklistedPaths;
+    }
+
+    public void setBlacklistedPaths(List<Path> blacklistedPaths) {
+        this.blacklistedPaths = blacklistedPaths;
     }
 }

@@ -1,5 +1,5 @@
 {
-    "processes" : [
+    "whitelistedPaths" : [
         "C:\\Program Files (x86)\\Origin",
         "C:\\Program Files\\AMD",
         "C:\\Program Files\\ASUS",
@@ -7,5 +7,6 @@
         "C:\\Program Files\\Ledger Live",
         "C:\\Program Files (x86)\\Steam",
         "C:\\Program Files (x86)\\VMware"
-    ]
+    ],
+    "blacklistedPaths" : [ ]
 }

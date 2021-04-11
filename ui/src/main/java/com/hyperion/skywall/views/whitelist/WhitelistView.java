@@ -1,8 +1,9 @@
 package com.hyperion.skywall.views.whitelist;
 
 
-import com.hyperion.skywall.backend.model.config.*;
-import com.hyperion.skywall.backend.model.config.Process;
+import com.hyperion.skywall.backend.model.config.ActivationStatus;
+import com.hyperion.skywall.backend.model.config.Delay;
+import com.hyperion.skywall.backend.model.config.Path;
 import com.hyperion.skywall.backend.model.config.job.*;
 import com.hyperion.skywall.backend.model.config.service.Host;
 import com.hyperion.skywall.backend.model.config.service.Service;
@@ -67,9 +68,13 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
     private final Grid<Host> hosts;
     private final Binder<Host> hostBinder;
 
-    private final Grid<Process> trustedProcesses;
-    private final Binder<Process> processBinder;
-    private final Process addNewProcess;
+    private final Grid<Path> whitelistedPaths;
+    private final Binder<Path> whitelistedPathBinder;
+    private final Path addNewPathWhitelist;
+
+    private final Grid<Path> blacklistedPaths;
+    private final Binder<Path> blacklistedPathBinder;
+    private final Path addNewPathBlacklist;
 
     private final Host addNewHost;
     private final Service addNewService;
@@ -99,11 +104,16 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
         addNewHost.setHost("Add new");
         initHostsGrid();
 
-        trustedProcesses = new Grid<>();
-        processBinder = new Binder<>(Process.class);
-        addNewProcess = new Process();
-        addNewProcess.setProcess("Add new");
-        initProcessesGrid();
+        whitelistedPaths = new Grid<>();
+        whitelistedPathBinder = new Binder<>(Path.class);
+        blacklistedPaths = new Grid<>();
+        blacklistedPathBinder = new Binder<>(Path.class);
+        addNewPathWhitelist = new Path();
+        addNewPathWhitelist.setPath("Add new");
+        addNewPathBlacklist = new Path();
+        addNewPathBlacklist.setPath("Add new");
+        initWhitelistedPathsGrid();
+        initBlacklistedPathsGrid();
 
         Tabs sections = new Tabs();
         sections.setWidthFull();
@@ -214,29 +224,214 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.add(new H3("Whitelisted Processes"));
         verticalLayout.add(new Label("Most non-browser processes (e.g. Microsoft Word, video games, etc) can be safely trusted, as they only communicate with a fixed set of domains. Rather than write and keep up with many individual rules for the domains a process talks to, simply whitelist a process here. You don't have to specify the full path to the process, you can simply provide a path to a folder and all programs under that folder will be allowed through the filter."));
-        verticalLayout.add(trustedProcesses);
+        verticalLayout.add(whitelistedPaths);
+        verticalLayout.add(new H3("Blacklisted Processes"));
+        verticalLayout.add(new Label("Any processes that you want to block completely can be defined here"));
+        verticalLayout.add(blacklistedPaths);
         root.add(verticalLayout);
         return root;
     }
 
-    private void initProcessesGrid() {
-        Grid.Column<Process> nameColumn = trustedProcesses.addColumn(Process::getProcess).setHeader("Path");
-        trustedProcesses.addComponentColumn(process -> {
+    private void initBlacklistedPathsGrid() {
+        Grid.Column<Path> nameColumn = blacklistedPaths.addColumn(Path::getPath).setHeader("Path");
+        blacklistedPaths.addComponentColumn(phrase -> {
             Span active = new Span();
-            if (process.getCurrentStatus() != null) {
-                if (process.getCurrentStatus() == ActivationStatus.ACTIVE) {
+            if (phrase.getCurrentStatus() != null) {
+                if (phrase.getCurrentStatus() == ActivationStatus.ACTIVE) {
                     active.setText("Active");
                     active.getElement().setAttribute("theme", "badge success");
-                } else if (process.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
+                } else if (phrase.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
                     active.setText("Reactivate");
                     active.getElement().setAttribute("theme", "badge contrast");
-                } else if (process.getCurrentStatus() == ActivationStatus.PENDING_DELETE) {
+                } else if (phrase.getCurrentStatus() == ActivationStatus.PENDING_DELETE) {
                     active.setText("Pending Delete");
                     active.getElement().setAttribute("theme", "badge contrast");
-                } else if (process.getCurrentStatus() == ActivationStatus.PENDING_DEACTIVATION) {
+                } else if (phrase.getCurrentStatus() == ActivationStatus.PENDING_DEACTIVATION) {
                     active.setText("Pending Deactivation");
                     active.getElement().setAttribute("theme", "badge contrast");
-                } else if (process.getCurrentStatus() == ActivationStatus.PENDING_ACTIVATION) {
+                } else {
+                    active.setText("Disabled");
+                    active.getElement().setAttribute("theme", "badge contrast");
+                }
+            }
+            return active;
+        }).setHeader("Status");
+
+        blacklistedPaths.addComponentColumn(path -> {
+            if (!addNewPathBlacklist.getPath().equals(path.getPath())) {
+                Button button;
+                if (path.getCurrentStatus() == ActivationStatus.ACTIVE) {
+                    button = new Button("Deactivate");
+                    button.addClickListener(e -> {
+                        DeactivateBlacklistedPathJob job = new DeactivateBlacklistedPathJob(
+                                LocalDateTime.now().plusSeconds(configService.getDelaySeconds()),
+                                "Deactivate Path: " + path.getPath(), path);
+                        if (!jobRunner.queueJob(job)) {
+                            // expecting configService to modify same instance used by UI
+                            configService.withTransaction(config ->
+                                    ConfigUtils.findBlacklistedPathById(config, path.getId())
+                                            .ifPresent(p -> p.updateCurrentActivationStatus(ActivationStatus.PENDING_DEACTIVATION)));
+                            showNotification("The change will take effect after the current delay");
+                        }
+                        blacklistedPaths.getDataProvider().refreshItem(path);
+                    });
+                } else if (path.getCurrentStatus() == ActivationStatus.DISABLED
+                        || path.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
+                    button = new Button("Activate");
+                    button.addClickListener(e -> {
+                        // expecting configService to modify same instance used by UI
+                        configService.withTransaction(config ->
+                                ConfigUtils.findBlacklistedPathById(config, path.getId())
+                                        .ifPresent(p -> p.updateCurrentActivationStatus(ActivationStatus.ACTIVE)));
+                        configService.withProcessTransaction(config -> config.getBlacklistedPaths().add(path.getPath()));
+                        path.updateCurrentActivationStatus(ActivationStatus.ACTIVE);
+                        blacklistedPaths.getDataProvider().refreshItem(path);
+                    });
+                } else {
+                    button = new Button("Cancel");
+                    button.addClickListener(e -> {
+                        configService.withTransaction(config ->
+                                ConfigUtils.findBlacklistedPathById(config, path.getId())
+                                        .ifPresent(p -> p.updateCurrentActivationStatus(p.getLastActivationStatus())));
+                        jobRunner.cancelPendingJobsForActivatable(path.getId());
+                        blacklistedPaths.getDataProvider().refreshItem(path);
+                    });
+                }
+                return button;
+            } else {
+                return new Span();
+            }
+        }).setHeader("Action");
+
+        Editor<Path> editor = blacklistedPaths.getEditor();
+        editor.setBinder(blacklistedPathBinder);
+        editor.setBuffered(true);
+
+        TextField pathName = new TextField();
+        blacklistedPathBinder.forField(pathName).asRequired("*")
+                .withValidator(Objects::nonNull, "*")
+                .bind(Path::getPath, Path::setPath);
+        nameColumn.setEditorComponent(pathName);
+
+        Collection<Button> editButtons = Collections
+                .newSetFromMap(new WeakHashMap<>());
+
+        Grid.Column<Path> editorColumn = blacklistedPaths.addComponentColumn(path -> {
+            if (addNewPathBlacklist.getPath().equals(path.getPath())) {
+                Button add = new Button(new Icon(VaadinIcon.PLUS));
+                add.addClassName("edit");
+                add.addClickListener(e -> {
+                    List<Path> items = blacklistedPaths.getDataProvider().fetch(new Query<>())
+                            .filter(item -> !item.getPath().equals(addNewPathBlacklist.getPath())).collect(Collectors.toList());
+                    Path newPhrase = new Path();
+                    newPhrase.updateCurrentActivationStatus(ActivationStatus.DISABLED);
+                    items.add(newPhrase);
+                    items.add(addNewPathBlacklist);
+                    blacklistedPaths.setItems(items);
+                    editor.editItem(newPhrase);
+                    pathName.focus();
+                });
+                add.setEnabled(!editor.isOpen());
+                editButtons.add(add);
+                return add;
+            } else {
+                Div buttons = new Div();
+                Button edit = new Button(new Icon(VaadinIcon.EDIT));
+                edit.addClickListener(e -> {
+                    if (configService.getCurrentDelay() == Delay.ZERO) {
+                        editor.editItem(path);
+                        pathName.focus();
+                    } else {
+                        showNotification("Deactivate first to edit");
+                    }
+                });
+                edit.setEnabled(!editor.isOpen());
+                buttons.add(edit);
+                Button delete = new Button(new Icon(VaadinIcon.CLOSE));
+                delete.addClickListener(e -> {
+                    DeleteBlacklistedPathJob job = new DeleteBlacklistedPathJob(LocalDateTime.now().plusSeconds(configService.getDelaySeconds()), "Delete Path: " + path.getPath(), path);
+                    if (path.getCurrentStatus().equals(ActivationStatus.DISABLED)) {
+                        jobRunner.runJob(job);
+                        doAfterNavigationBlacklistedPaths();
+                    } else {
+                        if (jobRunner.queueJob(job)) {
+                            doAfterNavigationBlacklistedPaths();
+                        } else {
+                            // expecting configService to modify same instance used by UI
+                            configService.withTransaction(config ->
+                                    ConfigUtils.findBlacklistedPathById(config, path.getId())
+                                            .ifPresent(p -> p.updateCurrentActivationStatus(ActivationStatus.PENDING_DELETE)));
+                            blacklistedPaths.getDataProvider().refreshItem(path);
+                            showNotification("The change will take effect after the current delay");
+                        }
+                    }
+                });
+                editButtons.add(edit);
+                editButtons.add(delete);
+                buttons.add(delete);
+                return buttons;
+            }
+        }).setHeader("Edit");
+
+        editor.addOpenListener(e -> editButtons.forEach(button -> button.setEnabled(!editor.isOpen())));
+        editor.addCloseListener(e -> editButtons.forEach(button -> button.setEnabled(!editor.isOpen())));
+
+        Button saveGrid = new Button(new Icon(VaadinIcon.CHECK), e -> {
+            BinderValidationStatus<Path> validate = blacklistedPathBinder.validate();
+            if (validate.isOk()) {
+                Path item = editor.getItem();
+                String itemOldName = item.getPath();
+                editor.save();
+                configService.withTransaction(config -> {
+                    // remove old, by filtering where name != old name
+                    List<Path> updated = config.getBlacklistedPaths().stream()
+                            .filter(phrase -> !phrase.getPath().equals(itemOldName)).collect(Collectors.toList());
+                    // item is now the new one from editor.save
+                    if (!updated.contains(item)) {
+                        updated.add(item);
+                    }
+                    config.setBlacklistedPaths(updated);
+                });
+            }
+        });
+
+        Button cancel = new Button(new Icon(VaadinIcon.CLOSE), e -> {
+            Path edited = editor.getItem();
+            editor.cancel();
+            if (edited.getPath() == null || edited.getPath().isBlank()) {
+                List<Path> items = blacklistedPaths.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
+                items.remove(edited);
+                blacklistedPaths.setItems(items);
+            }
+        });
+
+        // Add a keypress listener that listens for an escape key up event.
+        // Note! some browsers return key as Escape and some as Esc
+        blacklistedPaths.getElement().addEventListener("keyup", event -> editor.cancel())
+                .setFilter("event.key === 'Escape' || event.key === 'Esc'");
+
+        Div buttons = new Div(saveGrid, cancel);
+        editorColumn.setEditorComponent(buttons);
+    }
+
+    private void initWhitelistedPathsGrid() {
+        Grid.Column<Path> nameColumn = whitelistedPaths.addColumn(Path::getPath).setHeader("Path");
+        whitelistedPaths.addComponentColumn(path -> {
+            Span active = new Span();
+            if (path.getCurrentStatus() != null) {
+                if (path.getCurrentStatus() == ActivationStatus.ACTIVE) {
+                    active.setText("Active");
+                    active.getElement().setAttribute("theme", "badge success");
+                } else if (path.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
+                    active.setText("Reactivate");
+                    active.getElement().setAttribute("theme", "badge contrast");
+                } else if (path.getCurrentStatus() == ActivationStatus.PENDING_DELETE) {
+                    active.setText("Pending Delete");
+                    active.getElement().setAttribute("theme", "badge contrast");
+                } else if (path.getCurrentStatus() == ActivationStatus.PENDING_DEACTIVATION) {
+                    active.setText("Pending Deactivation");
+                    active.getElement().setAttribute("theme", "badge contrast");
+                } else if (path.getCurrentStatus() == ActivationStatus.PENDING_ACTIVATION) {
                     active.setText("Pending Activation");
                     active.getElement().setAttribute("theme", "badge contrast");
                 } else {
@@ -247,38 +442,38 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
             return active;
         }).setHeader("Status");
 
-        trustedProcesses.addComponentColumn(process -> {
-            if (!addNewService.getName().equals(process.getProcess())) {
+        whitelistedPaths.addComponentColumn(path -> {
+            if (!addNewPathWhitelist.getPath().equals(path.getPath())) {
                 Button button;
-                if (process.getCurrentStatus() == ActivationStatus.ACTIVE)  {
+                if (path.getCurrentStatus() == ActivationStatus.ACTIVE)  {
                     button = new Button("Deactivate");
                     button.addClickListener(e -> {
-                        UpdateProcessJob job = new UpdateProcessJob(LocalDateTime.now(), "Deactivate Process: " + process.getProcess(), process, ActivationStatus.DISABLED);
+                        UpdateWhitelistedPathJob job = new UpdateWhitelistedPathJob(LocalDateTime.now(), "Deactivate Path: " + path.getPath(), path, ActivationStatus.DISABLED);
                         jobRunner.runJob(job);
-                        trustedProcesses.getDataProvider().refreshItem(process);
+                        whitelistedPaths.getDataProvider().refreshItem(path);
                     });
-                } else if (process.getCurrentStatus() == ActivationStatus.DISABLED
-                        || process.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
+                } else if (path.getCurrentStatus() == ActivationStatus.DISABLED
+                        || path.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
                     button = new Button("Activate");
                     button.addClickListener(e -> {
-                        UpdateProcessJob job = new UpdateProcessJob(LocalDateTime.now().plusSeconds(configService.getDelaySeconds()), "Activate Process: " + process.getProcess(), process, ActivationStatus.ACTIVE);
+                        UpdateWhitelistedPathJob job = new UpdateWhitelistedPathJob(LocalDateTime.now().plusSeconds(configService.getDelaySeconds()), "Activate Path: " + path.getPath(), path, ActivationStatus.ACTIVE);
                         if (!jobRunner.queueJob(job)) {
                             // expecting configService to modify same instance used by UI
                             configService.withTransaction(config ->
-                                    ConfigUtils.findProcessById(config, process.getId())
+                                    ConfigUtils.findWhitelistedPathById(config, path.getId())
                                             .ifPresent(p -> p.updateCurrentActivationStatus(ActivationStatus.PENDING_ACTIVATION)));
                             showNotification("Job queued. The change will take effect after the current delay expires");
                         }
-                        trustedProcesses.getDataProvider().refreshItem(process);
+                        whitelistedPaths.getDataProvider().refreshItem(path);
                     });
                 } else {
                     button = new Button("Cancel");
                     button.addClickListener(e -> {
                         configService.withTransaction(config ->
-                                ConfigUtils.findProcessById(config, process.getId())
+                                ConfigUtils.findWhitelistedPathById(config, path.getId())
                                         .ifPresent(p -> p.updateCurrentActivationStatus(p.getLastActivationStatus())));
-                        jobRunner.cancelPendingJobsForActivatable(process.getId());
-                        trustedProcesses.getDataProvider().refreshItem(process);
+                        jobRunner.cancelPendingJobsForActivatable(path.getId());
+                        whitelistedPaths.getDataProvider().refreshItem(path);
                     });
                 }
                 return button;
@@ -287,32 +482,32 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
             }
         }).setHeader("Action");
 
-        Editor<Process> editor = trustedProcesses.getEditor();
-        editor.setBinder(processBinder);
+        Editor<Path> editor = whitelistedPaths.getEditor();
+        editor.setBinder(whitelistedPathBinder);
         editor.setBuffered(true);
 
         TextField processName = new TextField();
-        processBinder.forField(processName).asRequired("Mandatory field")
+        whitelistedPathBinder.forField(processName).asRequired("Mandatory field")
                 .withValidator(Objects::nonNull, "Mandatory field")
-                .bind(Process::getProcess, Process::setProcess);
+                .bind(Path::getPath, Path::setPath);
         nameColumn.setEditorComponent(processName);
 
         Collection<Button> editButtons = Collections
                 .newSetFromMap(new WeakHashMap<>());
 
-        Grid.Column<Process> editorColumn = trustedProcesses.addComponentColumn(process -> {
-            if (addNewProcess.getProcess().equals(process.getProcess())) {
+        Grid.Column<Path> editorColumn = whitelistedPaths.addComponentColumn(path -> {
+            if (addNewPathWhitelist.getPath().equals(path.getPath())) {
                 Button add = new Button(new Icon(VaadinIcon.PLUS));
                 add.addClassName("edit");
                 add.addClickListener(e -> {
-                    List<Process> items = trustedProcesses.getDataProvider().fetch(new Query<>())
-                            .filter(item -> !item.getProcess().equals(addNewProcess.getProcess())).collect(Collectors.toList());
-                    Process newProcess = new Process();
-                    newProcess.updateCurrentActivationStatus(ActivationStatus.DISABLED);
-                    items.add(newProcess);
-                    items.add(addNewProcess);
-                    trustedProcesses.setItems(items);
-                    editor.editItem(newProcess);
+                    List<Path> items = whitelistedPaths.getDataProvider().fetch(new Query<>())
+                            .filter(item -> !item.getPath().equals(addNewPathWhitelist.getPath())).collect(Collectors.toList());
+                    Path newPath = new Path();
+                    newPath.updateCurrentActivationStatus(ActivationStatus.DISABLED);
+                    items.add(newPath);
+                    items.add(addNewPathWhitelist);
+                    whitelistedPaths.setItems(items);
+                    editor.editItem(newPath);
                     processName.focus();
                 });
                 add.setEnabled(!editor.isOpen());
@@ -322,18 +517,18 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
                 Div buttons = new Div();
                 Button edit = new Button(new Icon(VaadinIcon.EDIT));
                 edit.addClickListener(e -> {
-                    editor.editItem(process);
+                    editor.editItem(path);
                     processName.focus();
                 });
                 edit.setEnabled(!editor.isOpen());
                 buttons.add(edit);
                 Button delete = new Button(new Icon(VaadinIcon.CLOSE));
                 delete.addClickListener(e -> {
-                    List<Process> items = trustedProcesses.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
-                    items.remove(process);
-                    trustedProcesses.setItems(items);
+                    List<Path> items = whitelistedPaths.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
+                    items.remove(path);
+                    whitelistedPaths.setItems(items);
 
-                    DeleteProcessJob job = new DeleteProcessJob(LocalDateTime.now(), "Delete Process: " + process.getProcess(), process);
+                    DeleteWhitelistedPathJob job = new DeleteWhitelistedPathJob(LocalDateTime.now(), "Delete Path: " + path.getPath(), path);
                     jobRunner.runJob(job);
                 });
                 editButtons.add(edit);
@@ -347,37 +542,37 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
         editor.addCloseListener(e -> editButtons.forEach(button -> button.setEnabled(!editor.isOpen())));
 
         Button saveGrid = new Button(new Icon(VaadinIcon.CHECK), e -> {
-            BinderValidationStatus<Process> validate = processBinder.validate();
+            BinderValidationStatus<Path> validate = whitelistedPathBinder.validate();
             if (validate.isOk()) {
-                Process item = editor.getItem();
-                String itemOldName = item.getProcess();
+                Path item = editor.getItem();
+                String itemOldName = item.getPath();
                 editor.save();
                 configService.withTransaction(config -> {
                     // remove old, by filtering where name != old name
-                    List<Process> updated = config.getTrustedProcesses().stream()
-                            .filter(service -> !service.getProcess().equals(itemOldName)).collect(Collectors.toList());
+                    List<Path> updated = config.getWhitelistedPaths().stream()
+                            .filter(path -> !path.getPath().equals(itemOldName)).collect(Collectors.toList());
                     // item is now the new one from editor.save
                     if (!updated.contains(item)) {
                         updated.add(item);
                     }
-                    config.setTrustedProcesses(updated);
+                    config.setWhitelistedPaths(updated);
                 });
             }
         });
 
         Button cancel = new Button(new Icon(VaadinIcon.CLOSE), e -> {
-            Process edited = editor.getItem();
+            Path edited = editor.getItem();
             editor.cancel();
-            if (edited.getProcess() == null || edited.getProcess().isBlank()) {
-                List<Process> items = trustedProcesses.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
+            if (edited.getPath() == null || edited.getPath().isBlank()) {
+                List<Path> items = whitelistedPaths.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
                 items.remove(edited);
-                trustedProcesses.setItems(items);
+                whitelistedPaths.setItems(items);
             }
         });
 
         // Add a keypress listener that listens for an escape key up event.
         // Note! some browsers return key as Escape and some as Esc
-        trustedProcesses.getElement().addEventListener("keyup", event -> editor.cancel())
+        whitelistedPaths.getElement().addEventListener("keyup", event -> editor.cancel())
                 .setFilter("event.key === 'Escape' || event.key === 'Esc'");
 
         Div buttons = new Div(saveGrid, cancel);
@@ -728,7 +923,8 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
     @Override
     public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {
         doAfterNavigationServices();
-        doAfterNavigationProcesses();
+        doAfterNavigationWhitelistedPaths();
+        doAfterNavigationBlacklistedPaths();
     }
 
     private void doAfterNavigationServices() {
@@ -739,12 +935,20 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
         definedServices.setItems(uiSafeItems);
     }
 
-    private void doAfterNavigationProcesses() {
-        List<Process> processItems = configService.getConfig().getTrustedProcesses();
-        List<Process> uiSafeProcesses = processItems.stream().filter(i -> !addNewProcess.getProcess().equals(i.getProcess()))
-                .sorted(comparing(Process::getProcess, nullsLast(String.CASE_INSENSITIVE_ORDER))).collect(Collectors.toList());
-        uiSafeProcesses.add(addNewProcess);
-        trustedProcesses.setItems(uiSafeProcesses);
+    private void doAfterNavigationWhitelistedPaths() {
+        List<Path> pathItems = configService.getConfig().getWhitelistedPaths();
+        List<Path> uiSafePaths = pathItems.stream().filter(i -> !addNewPathWhitelist.getPath().equals(i.getPath()))
+                .sorted(comparing(Path::getPath, nullsLast(String.CASE_INSENSITIVE_ORDER))).collect(Collectors.toList());
+        uiSafePaths.add(addNewPathWhitelist);
+        whitelistedPaths.setItems(uiSafePaths);
+    }
+
+    private void doAfterNavigationBlacklistedPaths() {
+        List<Path> pathItems = configService.getConfig().getBlacklistedPaths();
+        List<Path> uiSafePaths = pathItems.stream().filter(i -> !addNewPathBlacklist.getPath().equals(i.getPath()))
+                .sorted(comparing(Path::getPath, nullsLast(String.CASE_INSENSITIVE_ORDER))).collect(Collectors.toList());
+        uiSafePaths.add(addNewPathBlacklist);
+        blacklistedPaths.setItems(uiSafePaths);
     }
 
     private void showNotification(String message) {

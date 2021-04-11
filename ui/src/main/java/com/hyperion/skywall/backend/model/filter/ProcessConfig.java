@@ -5,16 +5,28 @@ import java.util.Set;
 
 public class ProcessConfig {
 
-    private Set<String> processes;
+    private Set<String> whitelistedPaths;
+    private Set<String> blacklistedPaths;
 
-    public Set<String> getProcesses() {
-        if (processes == null) {
-            processes = new HashSet<>();
+    public Set<String> getWhitelistedPaths() {
+        if (whitelistedPaths == null) {
+            whitelistedPaths = new HashSet<>();
         }
-        return processes;
+        return whitelistedPaths;
     }
 
-    public void setProcesses(Set<String> processes) {
-        this.processes = processes;
+    public void setWhitelistedPaths(Set<String> whitelistedPaths) {
+        this.whitelistedPaths = whitelistedPaths;
+    }
+
+    public Set<String> getBlacklistedPaths() {
+        if (blacklistedPaths == null) {
+            blacklistedPaths = new HashSet<>();
+        }
+        return blacklistedPaths;
+    }
+
+    public void setBlacklistedPaths(Set<String> blacklistedPaths) {
+        this.blacklistedPaths = blacklistedPaths;
     }
 }
