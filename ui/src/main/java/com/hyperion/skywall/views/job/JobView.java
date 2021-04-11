@@ -89,8 +89,14 @@ public class JobView extends VerticalLayout implements AfterNavigationObserver {
                                 ConfigUtils.findPhraseById(config, converted.getActivatableId())
                                         .ifPresent(obj -> obj.updateCurrentActivationStatus(obj.getLastActivationStatus()));
                             } else if (Path.class.equals(activatableClass)) {
-                                ConfigUtils.findPhraseById(config, converted.getActivatableId())
+                                // since a path could be a whitelisted path or a blacklisted path, we need to go
+                                // fishing in each list, the target activatable ID should only be present in one or the
+                                // other so it should be safe to look in both
+                                ConfigUtils.findWhitelistedPathById(config, converted.getActivatableId())
                                         .ifPresent(obj -> obj.updateCurrentActivationStatus(obj.getLastActivationStatus()));
+                                ConfigUtils.findBlacklistedPathById(config, converted.getActivatableId())
+                                        .ifPresent(obj -> obj.updateCurrentActivationStatus(obj.getLastActivationStatus()));
+
                             }
                         });
                     }
