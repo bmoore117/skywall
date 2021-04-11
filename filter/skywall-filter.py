@@ -37,17 +37,17 @@ class JarvisFilter:
         # remove data:image/ urls if present - Google includes in the initial response
         # original: 'data:image/.*?base64,[A-Za-z0-9+/]+'
         self.dataUrlRegex = re.compile(r'data:image[A-Za-z0-9+/,\\;=]+')
-        self.urlRegex = re.compile(r"((https?|ftp|file):)?(\\)?/(\\)?/[-a-zA-Z0-9+&@#/%?=~_|!:,.;\\]*[-a-zA-Z0-9+&@#/%=~_|\\]")
+        self.urlRegex = re.compile(r'((https?|ftp|file):)?(\\)?/(\\)?/[-a-zA-Z0-9+&@#/%?=~_|!:,.;\\]*[-a-zA-Z0-9+&@#/%=~_|\\]')
 
         self.blockedPhrases = set()
 
         self.binaryContentTypes = ['video', 'audio', 'image', 'octet', 'pdf', 'zip', 'ms', 'soap', 'mpeg']
 
-        scriptFilePath = os.path.join(os.getenv('LOCALAPPDATA'), "SkyWall", "filter")
-        hostsDir = os.path.join(scriptFilePath, "hosts")
-        hostsFile = os.path.join(hostsDir, "hosts.json")
+        script_file_path = os.path.join(os.getenv('LOCALAPPDATA'), "SkyWall", "filter")
+        hosts_dir = os.path.join(script_file_path, "hosts")
+        hosts_file = os.path.join(hosts_dir, "hosts.json")
 
-        self.loadFile(hostsFile)
+        self.load_file(hosts_file)
 
         patterns = ["*.json"]
         ignore_patterns = []
@@ -57,24 +57,24 @@ class JarvisFilter:
         handler.on_modified = self.on_modified
 
         observer = Observer()
-        observer.schedule(handler, hostsDir, recursive=False)
+        observer.schedule(handler, hosts_dir, recursive=False)
         observer.start()
 
     def on_modified(self, event):
-        self.loadFile(event.src_path)
+        self.load_file(event.src_path)
 
-    def loadFile(self, srcPath):
+    def load_file(self, src_path):
         with self.lock:
-            with open(srcPath) as f:
+            with open(src_path) as f:
                 data = json.load(f)
                 hosts = data.get('hosts')
 
                 # first we remove all sites no longer whitelisted in the file
-                sitesToRemove = []
+                sites_to_remove = []
                 for site in self.siteKnownHosts:
                     if site not in hosts:
-                        sitesToRemove.append(site)
-                for site in sitesToRemove:
+                        sites_to_remove.append(site)
+                for site in sites_to_remove:
                     self.siteKnownHosts.pop(site)
 
                 # then we add all newly whitelisted sites
@@ -87,22 +87,25 @@ class JarvisFilter:
                 self.blockedUrls.update(data.get('blockedHosts', set()))
 
                 self.blockedPhrases.clear()
-                phrasesStr = data.get('blockedPhrases', set())
-                for phrase in phrasesStr:
-                    self.blockedPhrases.add(re.compile(phrase))
+                phrases_str = data.get('blockedPhrases', set())
+                for phrase in phrases_str:
+                    try:
+                        self.blockedPhrases.add(re.compile(phrase))
+                    except:
+                        ctx.log.error("Error compiling phrase: " + phrase + ". " + traceback.format_exc())
 
                 self.lockdownActive = data.get('lockdownActive', False)
             print("Allowed url paths: " + str(self.siteKnownHosts.keys()))
             print("Blocked url paths: " + str(self.blockedUrls))
             print("Blocked phrases: " + str(self.blockedPhrases))
 
-    def isUrlPathBlocked(self, url):
+    def is_url_path_blocked(self, url):
         for urlPath in self.blockedUrls:
             if urlPath in url:
                 return True  # blocked
         return False
 
-    def isUrlPathWhitelisted(self, url):
+    def is_url_path_whitelisted(self, url):
         if self.lockdownActive:
             ctx.log.info("Lockdown active, blocking all media")
             return True  # blocked
@@ -114,8 +117,8 @@ class JarvisFilter:
                 return True
         return False
 
-    def isOriginKnownForReferer(self, refererUrl, originUrl):
-        if refererUrl is None:
+    def is_origin_known_for_referer(self, referer_url, origin_url):
+        if referer_url is None:
             return False
 
         if self.lockdownActive:
@@ -123,31 +126,31 @@ class JarvisFilter:
             return False  # blocked
 
         # is referer a root or subtree of a root, save that root
-        siteRoot = None
+        site_root = None
         for urlPath in self.siteKnownHosts.keys():
-            if urlPath in refererUrl.geturl():
-                siteRoot = urlPath
+            if urlPath in referer_url.geturl():
+                site_root = urlPath
 
-        if siteRoot is not None:
-            ctx.log.info("Referer matches whitelisted root: " + siteRoot)
-            if originUrl.hostname in self.siteKnownHosts[siteRoot]:
+        if site_root is not None:
+            ctx.log.info("Referer matches whitelisted root: " + site_root)
+            if origin_url.hostname in self.siteKnownHosts[site_root]:
                 return True
         return False
 
     @staticmethod
-    def getUrlDirPath(originUrl):
-        ctx.log.info("Path is: " + originUrl.path)
-        lastIndexOfSlash = originUrl.path.rfind("/") + 1
-        lastIndexOfDot = originUrl.path.rfind(".") + 1
-        if lastIndexOfSlash > lastIndexOfDot:  # there is no file extension ending, take whole path
-            return originUrl.hostname + originUrl.path
+    def get_url_dir_path(origin_url):
+        ctx.log.info("Path is: " + origin_url.path)
+        last_index_of_slash = origin_url.path.rfind("/") + 1
+        last_index_of_dot = origin_url.path.rfind(".") + 1
+        if last_index_of_slash > last_index_of_dot:  # there is no file extension ending, take whole path
+            return origin_url.hostname + origin_url.path
         else:
-            return originUrl.hostname + originUrl.path[:lastIndexOfSlash]
+            return origin_url.hostname + origin_url.path[:last_index_of_slash]
 
-    def filterPhrase(self, flow):
-        lowerText = flow.response.text.lower()
+    def filter_phrase(self, flow):
+        lower_text = flow.response.text.lower()
         for phrase in self.blockedPhrases:
-            match = re.search(phrase, lowerText)
+            match = re.search(phrase, lower_text)
             if match is not None:
                 ctx.log.info("Filtering custom phrase: " + phrase.pattern)
                 flow.response = http.HTTPResponse.make(200,
@@ -157,156 +160,156 @@ class JarvisFilter:
         return False
 
     @staticmethod
-    def processSrc(src, originUrl):
+    def process_src(src, origin_url):
         if "://" not in src:
             if src.startswith("//"):
-                fullUrl = originUrl.scheme + ":" + src
+                full_url = origin_url.scheme + ":" + src
             elif src.startswith("/"):
-                fullUrl = originUrl.scheme + "://" + originUrl.hostname + src
+                full_url = origin_url.scheme + "://" + origin_url.hostname + src
             else:
-                fullUrl = src
-            return urlparse(fullUrl)
+                full_url = src
+            return urlparse(full_url)
         else:
             return urlparse(src)
 
-    def processTagSrc(self, tag, originUrl, siteRootKey):
-        parsedUrls = []
-        if siteRootKey is not None:
+    def process_tag_src(self, tag, origin_url, site_root_key):
+        parsed_urls = []
+        if site_root_key is not None:
             if tag.has_attr('src'):
-                parsedUrl = self.processSrc(tag['src'], originUrl)
-                parsedUrls.append(parsedUrl)
-                self.siteKnownHosts[siteRootKey].add(parsedUrl.hostname)
+                parsed_url = self.process_src(tag['src'], origin_url)
+                parsed_urls.append(parsed_url)
+                self.siteKnownHosts[site_root_key].add(parsed_url.hostname)
             if tag.has_attr('data-src'):
-                parsedUrl = self.processSrc(tag['data-src'], originUrl)
-                parsedUrls.append(parsedUrl)
-                self.siteKnownHosts[siteRootKey].add(parsedUrl.hostname)
+                parsed_url = self.process_src(tag['data-src'], origin_url)
+                parsed_urls.append(parsed_url)
+                self.siteKnownHosts[site_root_key].add(parsed_url.hostname)
             if tag.has_attr('href'):
-                parsedUrl = self.processSrc(tag['href'], originUrl)
-                parsedUrls.append(parsedUrl)
-                self.siteKnownHosts[siteRootKey].add(parsedUrl.hostname)
-        return parsedUrls
+                parsed_url = self.process_src(tag['href'], origin_url)
+                parsed_urls.append(parsed_url)
+                self.siteKnownHosts[site_root_key].add(parsed_url.hostname)
+        return parsed_urls
 
     @staticmethod
-    def acceptMatch(match: str, contentType: str) -> bool:
-        if 'script' in contentType:
-            jsFactors = 0
+    def accept_match(match: str, content_type: str) -> bool:
+        if 'script' in content_type:
+            js_factors = 0
             if ";" in match:
-                jsFactors = jsFactors + 1
+                js_factors = js_factors + 1
             if ":" in match:
-                jsFactors = jsFactors + 1
+                js_factors = js_factors + 1
             if ")" in match:
-                jsFactors = jsFactors + 1
+                js_factors = js_factors + 1
             if "(" in match:
-                jsFactors = jsFactors + 1
+                js_factors = js_factors + 1
             if "&&" in match:
-                jsFactors = jsFactors + 1
+                js_factors = js_factors + 1
             if "||" in match:
-                jsFactors = jsFactors + 1
-            if jsFactors >= 2:
+                js_factors = js_factors + 1
+            if js_factors >= 2:
                 return False
         return True
 
     @staticmethod
-    def sanitizeMatch(match: str, contentType: str) -> str:
-        sanitizedMatch = match
-        if "\\u0" in sanitizedMatch:
-            if sanitizedMatch.endswith("\\"):
+    def sanitize_match(match: str, content_type: str) -> str:
+        sanitized_match = match
+        if "\\u0" in sanitized_match:
+            if sanitized_match.endswith("\\"):
                 # the regex probably picked up a url in a string with escaped quotes, and got the slash but not
                 # the quote: ...\"
-                sanitizedMatch = sanitizedMatch[:-1]
-            sanitizedMatch = sanitizedMatch.encode().decode('unicode-escape')
-        if "\\" in sanitizedMatch:
-            sanitizedMatch = sanitizedMatch.replace("\\", "")
-        if 'css' in contentType:
-            if sanitizedMatch.endswith(")"):
+                sanitized_match = sanitized_match[:-1]
+            sanitized_match = sanitized_match.encode().decode('unicode-escape')
+        if "\\" in sanitized_match:
+            sanitized_match = sanitized_match.replace("\\", "")
+        if 'css' in content_type:
+            if sanitized_match.endswith(")"):
                 # very likely the regex picked up a url from css url() function, and grabbed the close paren
-                sanitizedMatch = sanitizedMatch[:-1]
-            elif ");" in sanitizedMatch:
-                idx = sanitizedMatch.index(");")
-                sanitizedMatch = sanitizedMatch[:idx]
-        return sanitizedMatch
+                sanitized_match = sanitized_match[:-1]
+            elif ");" in sanitized_match:
+                idx = sanitized_match.index(");")
+                sanitized_match = sanitized_match[:idx]
+        return sanitized_match
 
-    def processFile(self, script, originUrl, siteRootKey, contentType):
+    def process_file(self, script, origin_url, site_root_key, content_type):
         if script is None:
             return
 
         for match in re.finditer(self.urlRegex, script):
-            if not self.acceptMatch(match.group(0), contentType):
+            if not self.accept_match(match.group(0), content_type):
                 continue
 
-            sanitizedMatch = self.sanitizeMatch(match.group(0), contentType)
-            url = self.processSrc(sanitizedMatch, originUrl)
+            sanitized_match = self.sanitize_match(match.group(0), content_type)
+            url = self.process_src(sanitized_match, origin_url)
 
             if url.hostname is not None:
-                if siteRootKey is not None:
-                    self.siteKnownHosts[siteRootKey].add(url.hostname)
+                if site_root_key is not None:
+                    self.siteKnownHosts[site_root_key].add(url.hostname)
                 self.mediaUrlsQueue.append(url.geturl())
 
-    def extractUrls(self, text, contentType, originUrl, refererUrl, originKnownForReferer):
-        hashVal = hash(text)
-        if hashVal in self.processedPages:
+    def extract_urls(self, text, content_type, origin_url, referer_url, origin_known_for_referer):
+        hash_val = hash(text)
+        if hash_val in self.processedPages:
             ctx.log.info("Document hash previously seen, skipping url extraction")
             return
 
-        if originKnownForReferer:
-            siteRootUrl = refererUrl
+        if origin_known_for_referer:
+            site_root_url = referer_url
         else:
-            siteRootUrl = originUrl
-        ctx.log.info("Site root url: " + siteRootUrl.geturl())
+            site_root_url = origin_url
+        ctx.log.info("Site root url: " + site_root_url.geturl())
 
-        siteRootKey = None
+        site_root_key = None
         for urlPath in self.siteKnownHosts.keys():
-            if urlPath in siteRootUrl.geturl():
-                siteRootKey = urlPath
-        ctx.log.info("Site root key: " + str(siteRootKey))
+            if urlPath in site_root_url.geturl():
+                site_root_key = urlPath
+        ctx.log.info("Site root key: " + str(site_root_key))
 
-        if 'urlencoded' in contentType:
-            decodedText = unquote_plus(text)
+        if 'urlencoded' in content_type:
+            decoded_text = unquote_plus(text)
         else:
-            decodedText = text
+            decoded_text = text
 
-        if 'html' in contentType:
-            soup = BeautifulSoup(decodedText, 'html.parser')
+        if 'html' in content_type:
+            soup = BeautifulSoup(decoded_text, 'html.parser')
             for a in soup.find_all("a"):
-                parsedUrls = self.processTagSrc(a, siteRootUrl, siteRootKey)
-                for url in parsedUrls:
+                parsed_urls = self.process_tag_src(a, site_root_url, site_root_key)
+                for url in parsed_urls:
                     self.mediaUrlsQueue.append(url.geturl())
             for img in soup.find_all('img'):
-                parsedUrls = self.processTagSrc(img, siteRootUrl, siteRootKey)
-                for url in parsedUrls:
+                parsed_urls = self.process_tag_src(img, site_root_url, site_root_key)
+                for url in parsed_urls:
                     self.mediaUrlsQueue.append(url.geturl())
             for vid in soup.find_all('video'):
-                parsedUrls = self.processTagSrc(vid, siteRootUrl, siteRootKey)
-                for url in parsedUrls:
+                parsed_urls = self.process_tag_src(vid, site_root_url, site_root_key)
+                for url in parsed_urls:
                     self.mediaUrlsQueue.append(url.geturl())
             for link in soup.find_all('link'):
-                parsedUrls = self.processTagSrc(link, siteRootUrl, siteRootKey)
-                for url in parsedUrls:
+                parsed_urls = self.process_tag_src(link, site_root_url, site_root_key)
+                for url in parsed_urls:
                     self.mediaUrlsQueue.append(url.geturl())
             for frame in soup.find_all('iframe'):
-                self.processTagSrc(frame, siteRootUrl, siteRootKey)
+                self.process_tag_src(frame, site_root_url, site_root_key)
             for script in soup.find_all('script'):
                 if script.has_attr('src'):
-                    self.processTagSrc(script, siteRootUrl, siteRootKey)
+                    self.process_tag_src(script, site_root_url, site_root_key)
                 else:
-                    self.processFile(script.string, siteRootUrl, siteRootKey, 'text/javascript')
+                    self.process_file(script.string, site_root_url, site_root_key, 'text/javascript')
             for style in soup.find_all('style'):
                 if style.has_attr('src'):
-                    self.processTagSrc(style, siteRootUrl, siteRootKey)
+                    self.process_tag_src(style, site_root_url, site_root_key)
                 else:
-                    self.processFile(style.string, siteRootUrl, siteRootKey, 'text/css')
+                    self.process_file(style.string, site_root_url, site_root_key, 'text/css')
             for code in soup.find_all('code'):
-                self.processFile(code.string, siteRootUrl, siteRootKey, contentType)
+                self.process_file(code.string, site_root_url, site_root_key, content_type)
         else:
-            self.processFile(decodedText, siteRootUrl, siteRootKey, contentType)
+            self.process_file(decoded_text, site_root_url, site_root_key, content_type)
 
         self.discoveredSafeMediaUrls.clear()
         self.discoveredSafeMediaUrls.update(self.mediaUrlsQueue)
-        self.processedPages.add(hashVal)
+        self.processedPages.add(hash_val)
 
-    def contentTypeNonBinary(self, contentType):
+    def content_type_non_binary(self, content_type):
         for binaryType in self.binaryContentTypes:
-            if binaryType in contentType:
+            if binaryType in content_type:
                 return False  # content type is binary
         return True  # content type non binary
 
@@ -316,81 +319,79 @@ class JarvisFilter:
     #    ctx.log.info('') # always leave a blank line before next log request entry
 
     @staticmethod
-    def logEndOfResponse(startNanos: int, methodName: str):
-        finalTime = time.perf_counter_ns() - startNanos
-        ctx.log.info("Method: " + methodName + " runtime: " + str(finalTime) + " ns")
+    def log_end_of_response(start_nanos: int, method_name: str):
+        final_time = time.perf_counter_ns() - start_nanos
+        ctx.log.info("Method: " + method_name + " runtime: " + str(final_time) + " ns")
         ctx.log.info('')  # always leave a blank line before next log request entry
 
     def response(self, flow: mitmproxy.http.HTTPFlow):
-        startNanos = time.perf_counter_ns()
+        start_nanos = time.perf_counter_ns()
         ctx.log.info(time.ctime(time.time()))
-        contentType = flow.response.headers.get("Content-Type", "null").lower()
-        ctx.log.info("Content type is " + contentType + " for url: " + flow.request.pretty_url)
+        content_type = flow.response.headers.get("Content-Type", "null").lower()
+        ctx.log.info("Content type is " + content_type + " for url: " + flow.request.pretty_url)
 
-        originUrl = urlparse(flow.request.pretty_url)
-        url = self.getUrlDirPath(originUrl)
+        origin_url = urlparse(flow.request.pretty_url)
+        url = self.get_url_dir_path(origin_url)
 
         ctx.log.info("Constructed url is: " + url)
 
-        if self.isUrlPathBlocked(url):
+        if self.is_url_path_blocked(url):
             ctx.log.info("Blocking url: " + url)
             flow.response = http.HTTPResponse.make(404)
-            self.logEndOfResponse(startNanos, "response")
+            self.log_end_of_response(start_nanos, "response")
             return
 
         referer = flow.request.headers.get('referer', None)
         ctx.log.info("Got referer: " + str(referer))
-        refererUrl = None
+        referer_url = None
         if referer is not None:
-            refererUrl = urlparse(referer)
+            referer_url = urlparse(referer)
 
-        exactUrlKnown = originUrl.geturl() in self.discoveredSafeMediaUrls
-        originKnownForReferer = self.isOriginKnownForReferer(refererUrl, originUrl)
+        exact_url_known = origin_url.geturl() in self.discoveredSafeMediaUrls
+        origin_known_for_referer = self.is_origin_known_for_referer(referer_url, origin_url)
 
-        if exactUrlKnown or originKnownForReferer or self.isUrlPathWhitelisted(url):
-            if exactUrlKnown:
+        if exact_url_known or origin_known_for_referer or self.is_url_path_whitelisted(url):
+            if exact_url_known:
                 ctx.log.info("Exact url known")
-            elif originKnownForReferer:
+            elif origin_known_for_referer:
                 ctx.log.info("Referer in discovered referrers for origin")
             else:
                 ctx.log.info("Request part of whitelisted subtree")
             # don't want to slow down loading of these by invoking flow.response.text
-            if self.contentTypeNonBinary(contentType):
+            if self.content_type_non_binary(content_type):
                 try:
                     if flow.response.text:  # flow.response.text checks to make sure there is actually text (not binary)
-                        if 'css' not in contentType and 'script' not in contentType:
-                            if not self.filterPhrase(flow):
-                                self.extractUrls(flow.response.text, contentType, originUrl, refererUrl,
-                                                 originKnownForReferer)
+                        if 'css' not in content_type and 'script' not in content_type:
+                            if not self.filter_phrase(flow):
+                                self.extract_urls(flow.response.text, content_type, origin_url, referer_url,
+                                                  origin_known_for_referer)
                         else:
                             # css and scripts are always to be allowed, as most phrase matches are false positives
                             # but we have to make sure we check them for urls
-                            self.extractUrls(flow.response.text, contentType, originUrl, refererUrl,
-                                             originKnownForReferer)
+                            self.extract_urls(flow.response.text, content_type, origin_url, referer_url,
+                                              origin_known_for_referer)
                 except ValueError:  # flow.response.text can fail here, typically on woff font responses
-                    ctx.log.info("Logging exception: " + traceback.format_exc())
-                    ctx.log.info("Received message with undecipherable encoding, forwarding as-is")
+                    ctx.log.error("Received message with undecipherable encoding, forwarding as-is. " + traceback.format_exc())
         else:
-            if originKnownForReferer:
+            if origin_known_for_referer:
                 ctx.log.info("Referer not in discovered referrers for origin")
-            if 'video' in contentType or 'image' in contentType and 'svg' not in contentType:
+            if 'video' in content_type or 'image' in content_type and 'svg' not in content_type:
                 ctx.log.info("Blocking detected media, returning 404")
                 flow.response = http.HTTPResponse.make(404)
             else:
-                if self.contentTypeNonBinary(contentType) and 'woff' not in originUrl.geturl():
+                if self.content_type_non_binary(content_type) and 'woff' not in origin_url.geturl():
                     try:
                         if flow.response.text:
-                            if 'css' not in contentType and 'script' not in contentType:
-                                if not self.filterPhrase(flow):
+                            if 'css' not in content_type and 'script' not in content_type:
+                                if not self.filter_phrase(flow):
                                     match = self.dataUrlRegex.subn('', flow.response.text)
                                     if match[1] > 0:
                                         flow.response.text = match[0]
                                         ctx.log.info("Removed image data urls")
                     except ValueError:
-                        ctx.log.info("Logging exception: " + traceback.format_exc())
-                        ctx.log.info("Received message with undecipherable encoding, forwarding as-is")
+                        ctx.log.error("Received message with undecipherable encoding, forwarding as-is. " + traceback.format_exc())
 
-        self.logEndOfResponse(startNanos, "response")
+        self.log_end_of_response(start_nanos, "response")
 
     def websocket_message(self, flow: mitmproxy.websocket.WebSocketFlow):
         """

@@ -45,11 +45,4 @@ public class ConfigUtils {
         }
         return config.getBlockedHosts().stream().filter(host -> uuid.equals(host.getId())).findFirst();
     }
-
-    public static Optional<Path> findProcessById(Config config, UUID uuid) {
-        if (uuid == null) {
-            return Optional.empty();
-        }
-        return config.getWhitelistedPaths().stream().filter(process -> uuid.equals(process.getId())).findFirst();
-    }
 }

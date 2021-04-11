@@ -234,19 +234,19 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
 
     private void initBlacklistedPathsGrid() {
         Grid.Column<Path> nameColumn = blacklistedPaths.addColumn(Path::getPath).setHeader("Path");
-        blacklistedPaths.addComponentColumn(phrase -> {
+        blacklistedPaths.addComponentColumn(path -> {
             Span active = new Span();
-            if (phrase.getCurrentStatus() != null) {
-                if (phrase.getCurrentStatus() == ActivationStatus.ACTIVE) {
+            if (path.getCurrentStatus() != null) {
+                if (path.getCurrentStatus() == ActivationStatus.ACTIVE) {
                     active.setText("Active");
                     active.getElement().setAttribute("theme", "badge success");
-                } else if (phrase.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
+                } else if (path.getCurrentStatus() == ActivationStatus.NEEDS_REACTIVATION) {
                     active.setText("Reactivate");
                     active.getElement().setAttribute("theme", "badge contrast");
-                } else if (phrase.getCurrentStatus() == ActivationStatus.PENDING_DELETE) {
+                } else if (path.getCurrentStatus() == ActivationStatus.PENDING_DELETE) {
                     active.setText("Pending Delete");
                     active.getElement().setAttribute("theme", "badge contrast");
-                } else if (phrase.getCurrentStatus() == ActivationStatus.PENDING_DEACTIVATION) {
+                } else if (path.getCurrentStatus() == ActivationStatus.PENDING_DEACTIVATION) {
                     active.setText("Pending Deactivation");
                     active.getElement().setAttribute("theme", "badge contrast");
                 } else {
@@ -323,12 +323,12 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
                 add.addClickListener(e -> {
                     List<Path> items = blacklistedPaths.getDataProvider().fetch(new Query<>())
                             .filter(item -> !item.getPath().equals(addNewPathBlacklist.getPath())).collect(Collectors.toList());
-                    Path newPhrase = new Path();
-                    newPhrase.updateCurrentActivationStatus(ActivationStatus.DISABLED);
-                    items.add(newPhrase);
+                    Path newPath = new Path();
+                    newPath.updateCurrentActivationStatus(ActivationStatus.DISABLED);
+                    items.add(newPath);
                     items.add(addNewPathBlacklist);
                     blacklistedPaths.setItems(items);
-                    editor.editItem(newPhrase);
+                    editor.editItem(newPath);
                     pathName.focus();
                 });
                 add.setEnabled(!editor.isOpen());
@@ -385,7 +385,7 @@ public class WhitelistView extends VerticalLayout implements AfterNavigationObse
                 configService.withTransaction(config -> {
                     // remove old, by filtering where name != old name
                     List<Path> updated = config.getBlacklistedPaths().stream()
-                            .filter(phrase -> !phrase.getPath().equals(itemOldName)).collect(Collectors.toList());
+                            .filter(path -> !path.getPath().equals(itemOldName)).collect(Collectors.toList());
                     // item is now the new one from editor.save
                     if (!updated.contains(item)) {
                         updated.add(item);

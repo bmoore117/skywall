@@ -2,6 +2,7 @@ package com.hyperion.skywall.views.job;
 
 
 import com.hyperion.skywall.backend.model.config.BlockedHost;
+import com.hyperion.skywall.backend.model.config.Path;
 import com.hyperion.skywall.backend.model.config.Phrase;
 import com.hyperion.skywall.backend.model.config.job.ActivatableJob;
 import com.hyperion.skywall.backend.model.config.job.Job;
@@ -85,6 +86,9 @@ public class JobView extends VerticalLayout implements AfterNavigationObserver {
                                 ConfigUtils.findHostById(config, converted.getActivatableId())
                                         .ifPresent(obj -> obj.updateCurrentActivationStatus(obj.getLastActivationStatus()));
                             } else if (Phrase.class.equals(activatableClass)) {
+                                ConfigUtils.findPhraseById(config, converted.getActivatableId())
+                                        .ifPresent(obj -> obj.updateCurrentActivationStatus(obj.getLastActivationStatus()));
+                            } else if (Path.class.equals(activatableClass)) {
                                 ConfigUtils.findPhraseById(config, converted.getActivatableId())
                                         .ifPresent(obj -> obj.updateCurrentActivationStatus(obj.getLastActivationStatus()));
                             }

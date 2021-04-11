@@ -2,7 +2,6 @@ package com.hyperion.skywall.backend.model.config.job;
 
 import com.hyperion.skywall.backend.model.config.JobConstants;
 import com.hyperion.skywall.backend.model.config.Path;
-import com.hyperion.skywall.backend.model.config.Phrase;
 import com.hyperion.skywall.backend.services.ConfigService;
 import org.springframework.context.ApplicationContext;
 

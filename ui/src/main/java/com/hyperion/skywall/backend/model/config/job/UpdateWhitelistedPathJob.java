@@ -53,7 +53,7 @@ public class UpdateWhitelistedPathJob extends Job implements ActivatableJob {
 
         configService.withTransaction(config -> {
             ActivationStatus newStatus = getNewStatus();
-            ConfigUtils.findProcessById(config, getActivatableId()).ifPresent(process -> process.updateCurrentActivationStatus(newStatus));
+            ConfigUtils.findWhitelistedPathById(config, getActivatableId()).ifPresent(path -> path.updateCurrentActivationStatus(newStatus));
             if (newStatus == ActivationStatus.DISABLED) {
                 configService.withProcessTransaction(processes -> processes.getWhitelistedPaths().remove(getProcessName()));
             } else {

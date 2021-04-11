@@ -1,6 +1,5 @@
 package com.hyperion.skywall.backend.model.config.job;
 
-import com.hyperion.skywall.backend.model.config.ActivationStatus;
 import com.hyperion.skywall.backend.model.config.JobConstants;
 import com.hyperion.skywall.backend.model.config.Path;
 import com.hyperion.skywall.backend.services.ConfigService;
@@ -34,14 +33,6 @@ public class DeleteWhitelistedPathJob extends Job implements ActivatableJob {
         return (UUID) val;
     }
 
-    public ActivationStatus getNewStatus() {
-        Object val = data.get(JobConstants.NEW_ACTIVATION_STATUS);
-        if (val instanceof String) {
-            return ActivationStatus.valueOf((String) val);
-        }
-        return (ActivationStatus) val;
-    }
-
     public String getProcessName() {
         return (String) data.get(JobConstants.ACTIVATABLE_OBJECT_VAL);
     }
@@ -51,7 +42,7 @@ public class DeleteWhitelistedPathJob extends Job implements ActivatableJob {
         ConfigService configService = applicationContext.getBean(ConfigService.class);
 
         configService.withTransaction(config -> {
-            config.setWhitelistedPaths(config.getWhitelistedPaths().stream().filter(process -> !process.getPath().equals(getProcessName())).collect(Collectors.toList()));
+            config.setWhitelistedPaths(config.getWhitelistedPaths().stream().filter(path -> !path.getPath().equals(getProcessName())).collect(Collectors.toList()));
             configService.withProcessTransaction(processes -> processes.getWhitelistedPaths().remove(getProcessName()));
         });
 
