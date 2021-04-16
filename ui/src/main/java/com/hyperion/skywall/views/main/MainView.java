@@ -7,8 +7,10 @@ import com.hyperion.skywall.views.unlock.UnlockView;
 import com.hyperion.skywall.views.whitelist.WhitelistView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.H1;
@@ -20,9 +22,11 @@ import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
+import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.theme.lumo.Lumo;
 
 import java.util.Optional;
 
@@ -56,6 +60,19 @@ public class MainView extends AppLayout {
         viewTitle = new H1();
         layout.add(viewTitle);
         layout.add(new Image("images/user.svg", "Avatar"));
+
+        Button toggleButton = new Button("Toggle dark theme", click -> {
+            ThemeList themeList = UI.getCurrent().getElement().getThemeList();
+
+            if (themeList.contains(Lumo.DARK)) {
+                themeList.remove(Lumo.DARK);
+                layout.getThemeList().set("dark", true);
+            } else {
+                themeList.add(Lumo.DARK);
+                layout.getThemeList().remove(Lumo.DARK);
+            }
+        });
+        layout.add(toggleButton);
         return layout;
     }
 
