@@ -1,7 +1,7 @@
-#header {
+#header-bar {
   height: var(--lumo-size-xl);
 }
-#header img {
+#header-bar img {
   border-radius: 50%;
   height: var(--lumo-size-s);
   margin-left: auto;
@@ -9,7 +9,7 @@
   overflow: hidden;
   background-color: var(--lumo-contrast);
 }
-#header h1 {
+#header-bar h1 {
   font-size: var(--lumo-font-size-l);
   margin: 0;
 }

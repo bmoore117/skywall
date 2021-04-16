@@ -52,7 +52,7 @@ public class MainView extends AppLayout {
 
     private Component createHeaderContent() {
         HorizontalLayout layout = new HorizontalLayout();
-        layout.setId("header");
+        layout.setId("header-bar");
         layout.setWidthFull();
         layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);

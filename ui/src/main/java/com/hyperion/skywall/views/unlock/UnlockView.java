@@ -370,32 +370,43 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         toggleStrictMode.getElement().getStyle().set("width", "20%");
         page.add(toggleStrictMode);
 
-        H3 hallPass = new H3("Weekend Hall Pass");
+        /*H3 hallPass = new H3("Weekend Hall Pass");
         page.add(hallPass);
         Label hallPassLabel = new Label("On weekends, you can set delay to 0 once for free. Weekends are defined as any time past 5 pm on Friday, and before Monday. If activated, the hall pass will automatically reset on Mondays, when the delay will be raised to 2 hours, the skywall account password changed, and your PC restarted if strict mode is enabled, unless you have already raised the delay above zero by then.");
         page.add(hallPassLabel);
         page.add(new Html("<br />"));
         activate.getElement().getStyle().set("width", "20%");
-        page.add(activate);
+        page.add(activate);*/
 
         H3 timeTil = new H3("Time Til 5pm on Friday");
         page.add(timeTil);
         VerticalLayout timeLayout = new VerticalLayout();
         timeLayout.setPadding(false);
         timeLayout.setSpacing(true);
-        Label timeTilLabel = new Label("Time displays here");
+        Label timeTilLabel = new Label("Time til next Friday at 5 pm displays here");
         timeLayout.add(timeTilLabel);
+        Label timeTilAfterThat = new Label("Time til the Friday after that displays here");
+        timeLayout.add(timeTilAfterThat);
         Button getTime = new Button("Get Time");
         getTime.addClickListener(e -> {
             LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
-            LocalDateTime fivePMOnFriday = now.with(TemporalAdjusters.next(DayOfWeek.FRIDAY))
+            LocalDateTime fivePMOnNextFriday = now.with(TemporalAdjusters.next(DayOfWeek.FRIDAY))
                     .with(ChronoField.HOUR_OF_DAY, 17)
                     .with(ChronoField.MINUTE_OF_HOUR, 0)
                     .with(ChronoField.SECOND_OF_MINUTE, 0)
                     .with(ChronoField.MILLI_OF_SECOND, 0)
                     .with(ChronoField.MICRO_OF_SECOND, 0);
-            Duration d = Duration.between(now, fivePMOnFriday);
-            timeTilLabel.setText(String.format("%d days, %d hours, %d minutes", d.toDaysPart(), d.toHoursPart(), d.toMinutesPart()));
+
+            LocalDateTime fivePMOnFridayAfterThat = fivePMOnNextFriday.with(TemporalAdjusters.next(DayOfWeek.FRIDAY))
+                    .with(ChronoField.HOUR_OF_DAY, 17)
+                    .with(ChronoField.MINUTE_OF_HOUR, 0)
+                    .with(ChronoField.SECOND_OF_MINUTE, 0)
+                    .with(ChronoField.MILLI_OF_SECOND, 0)
+                    .with(ChronoField.MICRO_OF_SECOND, 0);
+            Duration d = Duration.between(now, fivePMOnNextFriday);
+            Duration d2 = Duration.between(now, fivePMOnFridayAfterThat);
+            timeTilLabel.setText(String.format("Time til next Friday at 5 pm: %d days, %d hours, %d minutes", d.toDaysPart(), d.toHoursPart(), d.toMinutesPart()));
+            timeTilAfterThat.setText(String.format("Time til the Friday after that: %d days, %d hours, %d minutes", d2.toDaysPart(), d2.toHoursPart(), d2.toMinutesPart()));
         });
         timeLayout.add(getTime);
         page.add(timeLayout);
