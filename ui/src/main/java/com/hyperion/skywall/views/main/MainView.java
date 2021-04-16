@@ -34,6 +34,7 @@ import java.util.Optional;
  * The main view is a top-level placeholder for other views.
  */
 @JsModule("./styles/shared-styles.js")
+@JsModule("./prefers-color-scheme.js")
 @CssImport("./styles/views/main/main-view.css")
 @PWA(name = "SkyWall", shortName = "SkyWall", enableInstallPrompt = false)
 @Push
@@ -52,7 +53,6 @@ public class MainView extends AppLayout {
     private Component createHeaderContent() {
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
-        layout.getThemeList().set("dark", true);
         layout.setWidthFull();
         layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
@@ -60,19 +60,6 @@ public class MainView extends AppLayout {
         viewTitle = new H1();
         layout.add(viewTitle);
         layout.add(new Image("images/user.svg", "Avatar"));
-
-        Button toggleButton = new Button("Toggle dark theme", click -> {
-            ThemeList themeList = UI.getCurrent().getElement().getThemeList();
-
-            if (themeList.contains(Lumo.DARK)) {
-                themeList.remove(Lumo.DARK);
-                layout.getThemeList().set("dark", true);
-            } else {
-                themeList.add(Lumo.DARK);
-                layout.getThemeList().remove(Lumo.DARK);
-            }
-        });
-        layout.add(toggleButton);
         return layout;
     }
 

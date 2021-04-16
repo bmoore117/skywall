@@ -623,6 +623,10 @@
                 {
                     "host" : "pcworld.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cnbcfm.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },

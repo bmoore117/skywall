@@ -161,6 +161,7 @@
         "gateway.reddit.com/desktopapi/v1/subreddits/whitepeopletwitter",
         "interviewcake.com",
         "yardhouse.com",
+        "cnbcfm.com",
         "ea.com",
         "gmail.com",
         "ricohtours.com",
@@ -256,5 +257,5 @@
         "lexxi tyler"
     ],
     "lockdownActive" : false,
-    "filterActive" : true
+    "filterActive" : false
 }
