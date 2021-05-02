@@ -123,6 +123,7 @@ public class ConfigService {
             Resource defaultFile = resourceLoader.getResource("classpath:default-config/hosts.json");
             try (InputStream content = defaultFile.getInputStream()) {
                 returnVal = mapper.readValue(content, FilterConfig.class);
+                returnVal.setFilterActive(true);
             }
             Files.createDirectories(file.getParent());
             Files.write(file.toAbsolutePath(), mapper.writer(printer).writeValueAsString(returnVal).getBytes());
