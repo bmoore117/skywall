@@ -483,6 +483,22 @@
                 {
                     "host" : "publix.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "xkcd.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "irockersup.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "square.site",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "androidauthority.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },

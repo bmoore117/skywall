@@ -356,11 +356,11 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         page.add(utilityLabel);
         HorizontalLayout utilityButtonRow = new HorizontalLayout();
         page.add(utilityButtonRow);
-        utilityButtonRow.add(toggleFilter, restartFilter);
+        utilityButtonRow.add(toggleFilter);
         toggleFilter.getElement().getStyle().set("width", "20%");
-        restartFilter.getElement().getStyle().set("width", "20%");
+        //restartFilter.getElement().getStyle().set("width", "20%");
         utilityButtonRow.setVerticalComponentAlignment(Alignment.END, toggleFilter);
-        utilityButtonRow.setVerticalComponentAlignment(Alignment.END, restartFilter);
+        //utilityButtonRow.setVerticalComponentAlignment(Alignment.END, restartFilter);
 
         H3 strictMode = new H3("Strict Mode");
         page.add(strictMode);
