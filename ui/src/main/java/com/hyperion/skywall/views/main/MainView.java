@@ -94,7 +94,7 @@ public class MainView extends AppLayout {
                 createTab("Apps & Websites", WhitelistView.class),
                 createTab("Blocking", BlockView.class),
                 createTab("Pending Jobs", JobView.class),
-                createTab("Certificate Warnings", LogView.class)
+                createTab("Filter Logs", LogView.class)
         };
     }
 

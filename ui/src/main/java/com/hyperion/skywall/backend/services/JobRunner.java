@@ -3,6 +3,7 @@ package com.hyperion.skywall.backend.services;
 import com.hyperion.skywall.backend.model.config.ActivationStatus;
 import com.hyperion.skywall.backend.model.config.Delay;
 import com.hyperion.skywall.backend.model.config.JobConstants;
+import com.hyperion.skywall.backend.model.config.job.EnableNetworkAdaptersJob;
 import com.hyperion.skywall.backend.model.config.job.Job;
 import com.hyperion.skywall.backend.model.config.job.SetDelayJob;
 import com.hyperion.skywall.backend.model.config.job.UpdateServiceJob;
@@ -376,5 +377,10 @@ public class JobRunner {
                 runJob(job);
             }
         }
+    }
+
+    public void scheduleUnlock() {
+        EnableNetworkAdaptersJob job = new EnableNetworkAdaptersJob(LocalDateTime.now().plusSeconds(configService.getDelaySeconds()), "Enable network adapters");
+        queueJob(job);
     }
 }

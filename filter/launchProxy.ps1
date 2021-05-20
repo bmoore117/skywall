@@ -1,13 +1,56 @@
-﻿
-
-$jsonLocation = "~\AppData\Local\SkyWall\filter\hosts\hosts.json"
+﻿$jsonLocation = "~\AppData\Local\SkyWall\filter\hosts\hosts.json"
 $json = Get-Content $jsonLocation | ConvertFrom-Json
 if ($json.filterActive -eq $false) {
     Write-Host "Aborting startup as filter set to OFF, re-enable from UI"
     return
 }
 
-Start-Sleep -Seconds 5
+$startupAttemptsFile = "~\AppData\Local\SkyWall\filter\startup.json"
+
+if (-not (Test-Path $startupAttemptsFile)) {
+    $file = '{"times": []}'
+    $file | Out-File $startupAttemptsFile
+}
+
+$json = Get-Content $startupAttemptsFile | ConvertFrom-Json
+$now = Get-Date
+
+# Here we attempt to determine if the user has been gaming the small filter startup delay by disconnecting
+# and reconnecting to the network. If more than 3 attempts in the last 15 minutes, disable internet and exit
+$connections = 0
+foreach ($time in $json.times) {
+    $date = [DateTime]$time
+    $span = New-TimeSpan -Start $date -End $now
+    if ($span.Minutes -lt 15) {
+        $connections = $connections + 1
+    }
+}
+
+if ($connections -ge 3) {
+    Write-Host "Filter restarts exceeded, disabling internet"
+    $adapters = Get-NetAdapter | Where Name -NotMatch "Bluetooth"
+    foreach ($adapter in $adapters) {
+        Disable-NetAdapter -Name $adapter.Name -Confirm:$false
+    }
+
+    Invoke-RestMethod -Uri http://localhost:9090/rest/scheduleUnlock -Method Post
+    return
+} else {
+    $adapters = Get-NetAdapter | Where Name -NotMatch "Bluetooth"
+    foreach ($adapter in $adapters) {
+        if ($adapter.Status -eq "Disabled") {
+            Enable-NetAdapter $adapter.Name -Confirm:$false
+        }
+    }
+
+    $dateStr = Get-Date -Format "MM/dd/yyyy HH:mm"
+    if ($json.times.Length -ge 3) {
+        $json.times = @()
+    }
+    $json.times += $dateStr
+    $jsonFile = $json | ConvertTo-Json
+    $jsonFile | Out-File $startupAttemptsFile
+}
 
 Write-Host "Checking internet connection..."
 # https://stackoverflow.com/questions/33283848/determining-internet-connection-using-powershell
@@ -17,7 +60,7 @@ $tries = 0
 while ($hasConnection -eq $false -and $tries -lt 3) {
     Write-Host "Waiting for connection, period " ($tries + 1)
     $tries = $tries + 1
-    Start-Sleep -Seconds 30
+    Start-Sleep -Seconds 5
     $results = Get-NetRoute | ? DestinationPrefix -eq '0.0.0.0/0' | Get-NetIPInterface | Where ConnectionState -eq 'Connected'
     $hasConnection = $results -ne $null
 }

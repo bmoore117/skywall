@@ -375,7 +375,7 @@ class JarvisFilter:
         else:
             if origin_known_for_referer:
                 ctx.log.info("Referer not in discovered referrers for origin")
-            if 'video' in content_type or 'image' in content_type and 'svg' not in content_type:
+            if 'video' in content_type or 'mpeg' in content_type or 'image' in content_type and 'svg' not in content_type:
                 ctx.log.info("Blocking detected media, returning 404")
                 flow.response = http.HTTPResponse.make(404)
             else:

@@ -6,6 +6,7 @@ import com.hyperion.skywall.backend.model.config.Path;
 import com.hyperion.skywall.backend.model.config.Phrase;
 import com.hyperion.skywall.backend.model.config.job.ActivatableJob;
 import com.hyperion.skywall.backend.model.config.job.Job;
+import com.hyperion.skywall.backend.model.config.job.NonCancellableJob;
 import com.hyperion.skywall.backend.model.config.service.Service;
 import com.hyperion.skywall.backend.services.ConfigService;
 import com.hyperion.skywall.backend.services.ConfigUtils;
@@ -72,6 +73,15 @@ public class JobView extends VerticalLayout implements AfterNavigationObserver {
         pendingJobs.addColumn(job -> formatter.format(job.getJobLaunchTime())).setHeader("Launch Time");
         pendingJobs.addComponentColumn(job -> {
             Button cancel = new Button("Cancel");
+
+            try {
+                if (NonCancellableJob.class.isAssignableFrom(Class.forName(job.getConcreteClass()))) {
+                    cancel.setEnabled(false);
+                }
+            } catch (ClassNotFoundException e) {
+                log.error("Class not found for " + job.getConcreteClass(), e);
+            }
+
             cancel.addClickListener(e -> {
                 try {
                     Class<?> jobConcreteClass = Class.forName(job.getConcreteClass());

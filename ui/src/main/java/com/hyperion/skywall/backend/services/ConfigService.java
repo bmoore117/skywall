@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hyperion.skywall.PathUtil;
 import com.hyperion.skywall.backend.model.config.Config;
 import com.hyperion.skywall.backend.model.config.Delay;
+import com.hyperion.skywall.backend.model.config.StartupLog;
 import com.hyperion.skywall.backend.model.config.service.Host;
 import com.hyperion.skywall.backend.model.filter.FilterConfig;
 import com.hyperion.skywall.backend.model.filter.ProcessConfig;
@@ -23,10 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -40,6 +42,7 @@ public class ConfigService {
     public static final String FILTER_HOSTS_LOCATION = "hosts";
     public static final String FILTER_PROCESSES_LOCATION = "processes";
     public static final String FILTER_PROCESSES_FILE = "processes.json";
+    public static final String STARTUP_LOG_FILE = "startup.json";
     public static final String FILE_LOCATION = "data";
     public static final String FILE_NAME = "config.json";
     public static final String STOCK_PASSWORD = "P@ssw0rd";
@@ -47,6 +50,7 @@ public class ConfigService {
     private Config config;
     private FilterConfig filterConfig;
     private ProcessConfig processConfig;
+    private StartupLog startupLog;
     public static final ObjectMapper mapper;
     private static final DefaultPrettyPrinter printer;
 
@@ -55,6 +59,7 @@ public class ConfigService {
     static {
         mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
+        mapper.setDateFormat(new SimpleDateFormat("MM/dd/yyyy HH:mm"));
         // 4 space indent for arrays and objects, as god intended
         DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter("    ", DefaultIndenter.SYS_LF);
         printer = new DefaultPrettyPrinter();
@@ -83,7 +88,7 @@ public class ConfigService {
         try {
             filterConfig = refreshFilterConfigFile();
         } catch (IOException e) {
-            log.error("Error reloading config", e);
+            log.error("Error reloading filter config", e);
         }
     }
 
@@ -91,7 +96,15 @@ public class ConfigService {
         try {
             processConfig = refreshProcessConfigFile();
         } catch (IOException e) {
-            log.error("Error reloading config", e);
+            log.error("Error reloading process config", e);
+        }
+    }
+
+    public void reloadStartupLog() {
+        try {
+            startupLog = refreshStartupLogFile();
+        } catch (IOException e) {
+            log.error("Error reloading startup log", e);
         }
     }
 
@@ -146,6 +159,18 @@ public class ConfigService {
             Files.write(file.toAbsolutePath(), mapper.writer(printer).writeValueAsString(returnVal).getBytes());
         } else {
             returnVal = mapper.readValue(Files.newInputStream(file), ProcessConfig.class);
+        }
+
+        return returnVal;
+    }
+
+    private StartupLog refreshStartupLogFile() throws IOException {
+        StartupLog returnVal;
+        Path file = PathUtil.getWindowsPath(FILTER_CONFIG_LOCATION, STARTUP_LOG_FILE);
+        if (Files.notExists(file)) {
+            returnVal = new StartupLog();
+        } else {
+            returnVal = mapper.readValue(Files.newInputStream(file), StartupLog.class);
         }
 
         return returnVal;
@@ -240,12 +265,47 @@ public class ConfigService {
         }
     }
 
+    public void writeStartupLog(StartupLog startupLog) {
+        try {
+            Path path = PathUtil.getWindowsPath(FILTER_CONFIG_LOCATION, STARTUP_LOG_FILE);
+            Files.write(path, mapper.writer(printer).writeValueAsString(startupLog).getBytes());
+        } catch (IOException e) {
+            log.error("Error writing startup log", e);
+        }
+    }
+
     public Config getConfig() {
         return config;
     }
 
     public FilterConfig getFilterConfig() {
         return filterConfig;
+    }
+
+    public StartupLog getStartupLog() {
+        return startupLog;
+    }
+
+    public long getRecentStartupCount() {
+        reloadStartupLog();
+        Instant now = Instant.now();
+        Duration fifteenMinutes = Duration.of(15, ChronoUnit.MINUTES);
+        return startupLog.getTimes().stream().filter(time -> {
+            Duration elapsed = Duration.between(time.toInstant(), now);
+            return elapsed.compareTo(fifteenMinutes) < 0;
+        }).count();
+    }
+
+    public boolean fifteenMinutesSinceLastConnectionChange() {
+        reloadStartupLog();
+
+        List<Date> sortedTimes = startupLog.getTimes().stream().sorted().collect(Collectors.toList());
+        Date mostRecent = sortedTimes.get(sortedTimes.size() - 1);
+        Date now = new Date();
+
+        Duration elapsedTime = Duration.between(mostRecent.toInstant(), now.toInstant());
+        Duration fifteenMinutes = Duration.of(15, ChronoUnit.MINUTES);
+        return elapsedTime.compareTo(fifteenMinutes) >= 0;
     }
 
     public void withTransaction(ConfigTransaction action) {
@@ -261,5 +321,10 @@ public class ConfigService {
     public void withProcessTransaction(ProcessTransaction configTransaction) {
         configTransaction.updateConfig(processConfig);
         writeProcessConfig(processConfig);
+    }
+
+    public void withStartupLogTransaction(StartupLogTransaction startupLogTransaction) {
+        startupLogTransaction.update(startupLog);
+        writeStartupLog(startupLog);
     }
 }

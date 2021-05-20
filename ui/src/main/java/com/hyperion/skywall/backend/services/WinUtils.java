@@ -178,4 +178,11 @@ public class WinUtils {
         builder.command("powershell.exe", "-File", "disableSafeBoot.ps1");
         runProc(builder);
     }
+
+    public void enableNetworkAdapters() throws IOException, InterruptedException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
+        builder.command("powershell.exe", "-File", "enableNetAdapters.ps1");
+        runProc(builder);
+    }
 }

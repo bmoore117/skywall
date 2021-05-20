@@ -28,6 +28,12 @@ public class PingController {
         jobRunner.resetHallPassForTheWeekIfEligible();
     }
 
+    @PostMapping(path = "/scheduleUnlock")
+    public void scheduleUnlock() {
+        log.info("Scheduling internet unlock job");
+        jobRunner.scheduleUnlock();
+    }
+
     @GetMapping(path = "/getStockPassword")
     public String getStockPassword() {
         return ConfigService.STOCK_PASSWORD;
