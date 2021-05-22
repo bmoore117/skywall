@@ -26,7 +26,8 @@ foreach ($time in $json.times) {
     }
 }
 
-if ($connections -ge 5) {
+$maxConnections = 5
+if ($connections -ge $maxConnections) {
     Write-Host "Filter restarts exceeded, disabling internet"
     $adapters = Get-NetAdapter | Where Name -NotMatch "Bluetooth"
     foreach ($adapter in $adapters) {
@@ -44,7 +45,7 @@ if ($connections -ge 5) {
     }
 
     $dateStr = Get-Date -Format "MM/dd/yyyy HH:mm"
-    if ($json.times.Length -ge 3) {
+    if ($json.times.Length -ge $maxConnections) {
         $json.times = @()
     }
     $json.times += $dateStr
