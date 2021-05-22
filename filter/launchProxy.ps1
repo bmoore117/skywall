@@ -26,7 +26,7 @@ foreach ($time in $json.times) {
     }
 }
 
-if ($connections -ge 3) {
+if ($connections -ge 5) {
     Write-Host "Filter restarts exceeded, disabling internet"
     $adapters = Get-NetAdapter | Where Name -NotMatch "Bluetooth"
     foreach ($adapter in $adapters) {
