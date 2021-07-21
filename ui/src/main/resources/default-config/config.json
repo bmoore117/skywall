@@ -8,7 +8,13 @@
     "pendingJobs" : [ ],
     "retryJobs" : [ ],
     "bedtimes" : null,
-    "knownLocations" : [ ],
+    "knownLocations" : [
+        {
+            "name" : "WeWork 4th floor phone room",
+            "lat" : 25.7737519320275,
+            "lon" : -80.1390121234992
+        }
+    ],
     "definedServices" : [
         {
             "currentStatus" : "ACTIVE",
@@ -40,7 +46,7 @@
         },
         {
             "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "a2f0641f-e514-45a5-b49a-fa50f77129ba",
             "name" : "Reddit",
             "hosts" : [
@@ -86,6 +92,42 @@
                 },
                 {
                     "host" : "gateway.reddit.com/desktopapi/v1/subreddits/whitepeopletwitter",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "b.thumbs.redditmedia.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "a.thumbs.redditmedia.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "reddit.com/r/cardano",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "reddit.com/r/wallstreetbets",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "reddit.com/r/satoshistreetbets",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "reddit.com/r/greentext",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "reddit.com/r/whitepeopletwitter",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gateway.reddit.com/desktopapi/v1/subreddits/cryptocurrency",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "reddit.com/r/cryptocurrency",
                     "filterMode" : "STANDARD"
                 }
             ]
@@ -499,6 +541,14 @@
                 {
                     "host" : "androidauthority.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "lasandwicherie.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "cvs.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -643,6 +693,14 @@
                 {
                     "host" : "cnbcfm.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "reason.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "theguardian.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -747,6 +805,10 @@
                 {
                     "host" : "githubusercontent.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "pypi.org",
+                    "filterMode" : "PASSTHROUGH"
                 }
             ]
         },
@@ -1265,6 +1327,34 @@
                     "filterMode" : "PASSTHROUGH"
                 }
             ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "56631ccd-b2f6-4808-9c17-d699890490d4",
+            "name" : "Work (Argus)",
+            "hosts" : [
+                {
+                    "host" : "bernieportal.com",
+                    "filterMode" : "STANDARD"
+                }
+            ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "id" : "28df2a94-34f8-415f-a2ad-78a4df535288",
+            "name" : "Crypto",
+            "hosts" : [
+                {
+                    "host" : "gate.io",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "ergoplatform.org",
+                    "filterMode" : "STANDARD"
+                }
+            ]
         }
     ],
     "definedPhrases" : [
@@ -1353,12 +1443,6 @@
             "phrase" : "goddess ling"
         },
         {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
-            "id" : "52730756-6277-48e4-a4a8-f7795cdf58c4",
-            "phrase" : "transgender(?!.safespace|bathroom)"
-        },
-        {
             "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "ACTIVE",
             "id" : "74b3796e-8ae2-4f27-b307-53a5406c8030",
@@ -1411,6 +1495,24 @@
             "lastActivationStatus" : "ACTIVE",
             "id" : "b8cd38ad-f3ba-4feb-ad87-ecc4360538e6",
             "phrase" : "lo ivy"
+        },
+        {
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "5ed416d5-fbc0-402e-9892-cc70dea34b57",
+            "phrase" : "mare"
+        },
+        {
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "94ececc2-205d-4a85-a105-6300defad366",
+            "phrase" : "\\bts\\b"
+        },
+        {
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "6562139d-00ab-433f-89db-fad506ba06ae",
+            "phrase" : "transgender(?!.safespace(s)?|bathroom(s)?|boy(s)?|girl(s)?)"
         }
     ],
     "blockedHosts" : [
@@ -1449,6 +1551,12 @@
             "lastActivationStatus" : "ACTIVE",
             "id" : "6e9f9f93-e993-4a1d-b37d-ea4a141cdabb",
             "host" : "zooville.org"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "bcdbb7a9-60f2-4f1c-88d0-c2d74994d376",
+            "host" : "play.google.com/store"
         }
     ],
     "whitelistedPaths" : [
@@ -1517,6 +1625,12 @@
             "lastActivationStatus" : "DISABLED",
             "id" : "df6a623c-13d1-45c4-aef1-4e742fe40365",
             "path" : "C:\\Program Files\\ASUS"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "15bc9646-cbca-48db-bf44-dbe6806e0595",
+            "path" : "C:\\Program Files (x86)\\Epic Games"
         }
     ],
     "blacklistedPaths" : [ ]
