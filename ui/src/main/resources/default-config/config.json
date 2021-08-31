@@ -129,6 +129,18 @@
                 {
                     "host" : "reddit.com/r/cryptocurrency",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "i.redd.it/snoovatar",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "gateway.reddit.com/desktopapi/v1/subreddits/ergonauts",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "reddit.com/r/ergonauts",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -253,8 +265,8 @@
             ]
         },
         {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "NEEDS_REACTIVATION",
+            "currentStatus" : "NEEDS_REACTIVATION",
+            "lastActivationStatus" : "ACTIVE",
             "id" : "1d884053-f52c-4b09-a29f-94ef097cdd1f",
             "name" : "General",
             "hosts" : [
@@ -549,6 +561,30 @@
                 {
                     "host" : "cvs.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "pelicanwater.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "okcupid.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "theticketclinic.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "accuweather.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "uceusa.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "walmart.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -701,6 +737,10 @@
                 {
                     "host" : "theguardian.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "nationalreview.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -809,26 +849,10 @@
                 {
                     "host" : "pypi.org",
                     "filterMode" : "PASSTHROUGH"
-                }
-            ]
-        },
-        {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
-            "id" : "0e1a15d2-03e6-447f-b2c0-8ac857ef2a6d",
-            "name" : "Origin",
-            "hosts" : [
-                {
-                    "host" : "dice.se",
-                    "filterMode" : "PASSTHROUGH"
                 },
                 {
-                    "host" : "origin.com",
-                    "filterMode" : "PASSTHROUGH"
-                },
-                {
-                    "host" : "ea.com",
-                    "filterMode" : "PASSTHROUGH"
+                    "host" : "stackoverflow.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -865,6 +889,10 @@
                 {
                     "host" : "office.net",
                     "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "spoprod-a.akamaihd.net",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -888,18 +916,6 @@
             "hosts" : [
                 {
                     "host" : "lastpass.com",
-                    "filterMode" : "PASSTHROUGH"
-                }
-            ]
-        },
-        {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
-            "id" : "5ee4f57c-fcd0-40e5-bf3a-7251adf78568",
-            "name" : "Halo MCC",
-            "hosts" : [
-                {
-                    "host" : "halowaypoint.com",
                     "filterMode" : "PASSTHROUGH"
                 }
             ]
@@ -969,6 +985,10 @@
                 {
                     "host" : "fonts.gstatic.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "docs.google.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -987,10 +1007,6 @@
                     "filterMode" : "STANDARD"
                 },
                 {
-                    "host" : "epal.gg",
-                    "filterMode" : "STANDARD"
-                },
-                {
                     "host" : "steamcontent.com",
                     "filterMode" : "PASSTHROUGH"
                 },
@@ -1004,6 +1020,10 @@
                 },
                 {
                     "host" : "ea.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "twitch.tv",
                     "filterMode" : "STANDARD"
                 }
             ]
@@ -1073,6 +1093,10 @@
                 {
                     "host" : "yoroiwallet.com",
                     "filterMode" : "PASSTHROUGH"
+                },
+                {
+                    "host" : "ideascale.com",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -1293,18 +1317,6 @@
             ]
         },
         {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
-            "id" : "4fbe816f-7620-46e8-b150-7e9c2c946d96",
-            "name" : "Hunt: Showdown",
-            "hosts" : [
-                {
-                    "host" : "huntshowdown.com",
-                    "filterMode" : "PASSTHROUGH"
-                }
-            ]
-        },
-        {
             "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "DISABLED",
             "id" : "53f8113c-0ea2-4a9a-8c3b-447e32414c23",
@@ -1355,6 +1367,18 @@
                     "filterMode" : "STANDARD"
                 }
             ]
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "DISABLED",
+            "id" : "1a6c25e8-fbba-4e4b-8e29-c0dc1e6d1a83",
+            "name" : "U.S. Government",
+            "hosts" : [
+                {
+                    "host" : "gov",
+                    "filterMode" : "STANDARD"
+                }
+            ]
         }
     ],
     "definedPhrases" : [
@@ -1363,12 +1387,6 @@
             "lastActivationStatus" : "ACTIVE",
             "id" : "685700ba-01c4-4e62-8eeb-db17ba2587ff",
             "phrase" : "age-restricted video"
-        },
-        {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "ACTIVE",
-            "id" : "262e2fab-e6c3-4257-8be9-8809c5f96f9a",
-            "phrase" : "zooier than thou"
         },
         {
             "currentStatus" : "ACTIVE",
@@ -1455,18 +1473,6 @@
             "phrase" : "lexxi tyler"
         },
         {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
-            "id" : "67073d98-c8c1-48be-917b-37dca03393e9",
-            "phrase" : "sexy"
-        },
-        {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
-            "id" : "8e92b6d4-5749-4724-af3e-47bd31609145",
-            "phrase" : "bikini"
-        },
-        {
             "currentStatus" : "ACTIVE",
             "lastActivationStatus" : "ACTIVE",
             "id" : "28a3721d-3464-43df-a850-b0829bf3a66c",
@@ -1487,32 +1493,20 @@
         {
             "currentStatus" : "DISABLED",
             "lastActivationStatus" : "ACTIVE",
-            "id" : "7dce13a3-10f7-4ebd-8a99-8f1211fdaacc",
-            "phrase" : "mare"
-        },
-        {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "ACTIVE",
             "id" : "b8cd38ad-f3ba-4feb-ad87-ecc4360538e6",
             "phrase" : "lo ivy"
         },
         {
             "currentStatus" : "DISABLED",
             "lastActivationStatus" : "ACTIVE",
-            "id" : "5ed416d5-fbc0-402e-9892-cc70dea34b57",
-            "phrase" : "mare"
-        },
-        {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
-            "id" : "94ececc2-205d-4a85-a105-6300defad366",
-            "phrase" : "\\bts\\b"
-        },
-        {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : "ACTIVE",
             "id" : "6562139d-00ab-433f-89db-fad506ba06ae",
             "phrase" : "transgender(?!.safespace(s)?|bathroom(s)?|boy(s)?|girl(s)?)"
+        },
+        {
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "ACTIVE",
+            "id" : "5ba373b9-7634-45ee-8eb6-a4be4f84bf80",
+            "phrase" : "tor browser"
         }
     ],
     "blockedHosts" : [
@@ -1633,5 +1627,12 @@
             "path" : "C:\\Program Files (x86)\\Epic Games"
         }
     ],
-    "blacklistedPaths" : [ ]
+    "blacklistedPaths" : [
+        {
+            "currentStatus" : "DISABLED",
+            "lastActivationStatus" : null,
+            "id" : "feba93c7-f084-4395-b367-33e64f8e8a3d",
+            "path" : "C:\\Windows\\System32\\mstsc.exe"
+        }
+    ]
 }

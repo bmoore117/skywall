@@ -378,35 +378,25 @@ public class UnlockView extends VerticalLayout implements AfterNavigationObserve
         activate.getElement().getStyle().set("width", "20%");
         page.add(activate);*/
 
-        H3 timeTil = new H3("Time Til 5pm on Friday");
+        H3 timeTil = new H3("Time Til 5pm on Monday");
         page.add(timeTil);
         VerticalLayout timeLayout = new VerticalLayout();
         timeLayout.setPadding(false);
         timeLayout.setSpacing(true);
-        Label timeTilLabel = new Label("Time til next Friday at 5 pm displays here");
+        Label timeTilLabel = new Label("Time til next Monday at 5 pm displays here");
         timeLayout.add(timeTilLabel);
-        Label timeTilAfterThat = new Label("Time til the Friday after that displays here");
-        timeLayout.add(timeTilAfterThat);
         Button getTime = new Button("Get Time");
         getTime.addClickListener(e -> {
             LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
-            LocalDateTime fivePMOnNextFriday = now.with(TemporalAdjusters.next(DayOfWeek.FRIDAY))
+            LocalDateTime target = now.with(TemporalAdjusters.next(DayOfWeek.MONDAY))
                     .with(ChronoField.HOUR_OF_DAY, 17)
                     .with(ChronoField.MINUTE_OF_HOUR, 0)
                     .with(ChronoField.SECOND_OF_MINUTE, 0)
                     .with(ChronoField.MILLI_OF_SECOND, 0)
                     .with(ChronoField.MICRO_OF_SECOND, 0);
 
-            LocalDateTime fivePMOnFridayAfterThat = fivePMOnNextFriday.with(TemporalAdjusters.next(DayOfWeek.FRIDAY))
-                    .with(ChronoField.HOUR_OF_DAY, 17)
-                    .with(ChronoField.MINUTE_OF_HOUR, 0)
-                    .with(ChronoField.SECOND_OF_MINUTE, 0)
-                    .with(ChronoField.MILLI_OF_SECOND, 0)
-                    .with(ChronoField.MICRO_OF_SECOND, 0);
-            Duration d = Duration.between(now, fivePMOnNextFriday);
-            Duration d2 = Duration.between(now, fivePMOnFridayAfterThat);
-            timeTilLabel.setText(String.format("Time til next Friday at 5 pm: %d days, %d hours, %d minutes", d.toDaysPart(), d.toHoursPart(), d.toMinutesPart()));
-            timeTilAfterThat.setText(String.format("Time til the Friday after that: %d days, %d hours, %d minutes", d2.toDaysPart(), d2.toHoursPart(), d2.toMinutesPart()));
+            Duration d = Duration.between(now, target);
+            timeTilLabel.setText(String.format("Time til next Monday at 5 pm: %d days, %d hours, %d minutes", d.toDaysPart(), d.toHoursPart(), d.toMinutesPart()));
         });
         timeLayout.add(getTime);
         page.add(timeLayout);
