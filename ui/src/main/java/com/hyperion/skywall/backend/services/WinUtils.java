@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,8 @@ public class WinUtils {
 
     private Pair<Process, String> runProc(ProcessBuilder builder) throws IOException, InterruptedException {
         Process p = builder.start();
+        // TODO here you are letting all the output build up before pulling any of it out, and java will only hold
+        //  so much output before deciding to silently kill the process. Beware
         p.waitFor();
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -34,8 +37,8 @@ public class WinUtils {
             }
             reader = new BufferedReader(new InputStreamReader(stdErr));
             while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line).append("\n");
                 log.error(line);
+                stringBuilder.append(line).append("\n");
             }
         }
 
@@ -183,6 +186,13 @@ public class WinUtils {
         ProcessBuilder builder = new ProcessBuilder();
         builder.directory(PathUtil.getWindowsFile(new File("scripts")));
         builder.command("powershell.exe", "-File", "enableNetAdapters.ps1");
+        runProc(builder);
+    }
+
+    public void blockTor(Path pathToNodeFile) throws IOException, InterruptedException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.directory(PathUtil.getWindowsFile(new File("scripts")));
+        builder.command("powershell.exe", "-File", "blockTor.ps1", "-NodeFilePath", pathToNodeFile.toAbsolutePath().toString());
         runProc(builder);
     }
 }
