@@ -265,8 +265,8 @@
             ]
         },
         {
-            "currentStatus" : "NEEDS_REACTIVATION",
-            "lastActivationStatus" : "ACTIVE",
+            "currentStatus" : "ACTIVE",
+            "lastActivationStatus" : "NEEDS_REACTIVATION",
             "id" : "1d884053-f52c-4b09-a29f-94ef097cdd1f",
             "name" : "General",
             "hosts" : [
@@ -584,6 +584,18 @@
                 },
                 {
                     "host" : "walmart.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "funimation.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "hulu.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "nestpick.com",
                     "filterMode" : "STANDARD"
                 }
             ]
@@ -1097,6 +1109,14 @@
                 {
                     "host" : "ideascale.com",
                     "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "thecardanofund.com",
+                    "filterMode" : "STANDARD"
+                },
+                {
+                    "host" : "missiondrivenpools.org",
+                    "filterMode" : "STANDARD"
                 }
             ]
         },
@@ -1501,12 +1521,6 @@
             "lastActivationStatus" : "ACTIVE",
             "id" : "6562139d-00ab-433f-89db-fad506ba06ae",
             "phrase" : "transgender(?!.safespace(s)?|bathroom(s)?|boy(s)?|girl(s)?)"
-        },
-        {
-            "currentStatus" : "ACTIVE",
-            "lastActivationStatus" : "ACTIVE",
-            "id" : "5ba373b9-7634-45ee-8eb6-a4be4f84bf80",
-            "phrase" : "tor browser"
         }
     ],
     "blockedHosts" : [
@@ -1627,12 +1641,5 @@
             "path" : "C:\\Program Files (x86)\\Epic Games"
         }
     ],
-    "blacklistedPaths" : [
-        {
-            "currentStatus" : "DISABLED",
-            "lastActivationStatus" : null,
-            "id" : "feba93c7-f084-4395-b367-33e64f8e8a3d",
-            "path" : "C:\\Windows\\System32\\mstsc.exe"
-        }
-    ]
+    "blacklistedPaths" : [ ]
 }
